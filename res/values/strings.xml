@@ -8,5 +8,8 @@
     <string name="submitEvent">Submit Event</string>
     <string name="eventTitle">Event Title</string>
     <string name="startDate">Start Date</string>
+    <string name="endDate">End Date</string>
+    <string name="eventDesc">Event Description</string>
+    <string name="eventActions">Action Items</string>
 
 </resources>

@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scroller"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fillViewport="true" >
+    
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -30,6 +37,31 @@
             
     </LinearLayout>
     
+    <TextView
+ 		android:layout_width="fill_parent"
+   		android:layout_height="wrap_content"
+   		android:gravity="center"
+   		android:text="@string/eventDesc"
+   		android:textSize="15.0sp" />
+            
+   	<EditText
+   	    android:id="@+id/eventDesc"
+   	    android:layout_width="fill_parent"
+   	    android:layout_height="wrap_content"/>
+   	    
+   	
+   <TextView
+ 		android:layout_width="fill_parent"
+   		android:layout_height="wrap_content"
+   		android:gravity="center"
+   		android:text="@string/eventActions"
+   		android:textSize="15.0sp" />
+          
+   	<EditText
+   	    android:id="@+id/eventActions"
+   	    android:layout_width="fill_parent"
+   	    android:layout_height="wrap_content"/> 
+    
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -40,7 +72,7 @@
         	android:layout_width="wrap_content"
         	android:layout_height="wrap_content"
         	android:onClick="showStartDateDialog"
-        	android:text="Start date"/>
+        	android:text="@string/startDate" />
     	
 		<TextView android:id="@+id/startDateDisplay" 
         	android:layout_width="wrap_content"
@@ -51,18 +83,19 @@
 	 	<Button android:id="@+id/pickEndDate"
         	android:layout_width="wrap_content"
         	android:layout_height="wrap_content"
-        	android:onClick="showEndDateDialog"
-        	android:text="End date"/>
+        	android:onClick="showEndDateDialog"        	
+        	android:text="@string/endDate" />
+        	
     	
 		<TextView android:id="@+id/endDateDisplay" 
         	android:layout_width="wrap_content"
         	android:layout_height="wrap_content"
         	android:textSize="15.0sp"
         	android:text=""/>
-
-            
+		
     </LinearLayout>        
         
+    
         
         
     <Button 
@@ -73,3 +106,5 @@
         android:onClick="onCreateEventSubmit" />
 
 </LinearLayout>
+
+</ScrollView>
