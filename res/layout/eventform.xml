@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/eventWelcome"
+        android:textSize="20.0sp"
+        android:gravity="center_horizontal" />
+    
+        
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+            
+      	<TextView
+      		android:layout_width="wrap_content"
+       		android:layout_height="wrap_content"
+       		android:text="@string/eventTitle"
+       		android:textSize="15.0sp" />
+          
+       	<EditText
+       	    android:id="@+id/eventTitle"
+       	    android:layout_width="fill_parent"
+       	    android:layout_height="wrap_content"/>
+            
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+            
+          
+    	<Button android:id="@+id/pickStartDate"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:onClick="showStartDateDialog"
+        	android:text="Start date"/>
+    	
+		<TextView android:id="@+id/startDateDisplay" 
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:textSize="15.0sp"
+        	android:text=""/>
+		
+	 	<Button android:id="@+id/pickEndDate"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:onClick="showEndDateDialog"
+        	android:text="End date"/>
+    	
+		<TextView android:id="@+id/endDateDisplay" 
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:textSize="15.0sp"
+        	android:text=""/>
+
+            
+    </LinearLayout>        
+        
+        
+        
+    <Button 
+        android:id="@+id/eventButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/submitEvent"
+        android:onClick="onCreateEventSubmit" />
+
+</LinearLayout>

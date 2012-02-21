@@ -2,6 +2,11 @@
 <resources>
 
     <string name="hello">Hello World, WhartonComputingCommunicationsActivity!</string>
-    <string name="app_name">WhartonComputingCommunications</string>
+    <string name="app_name">Wharton Computing Communications</string>
+    <string name="createEvent">Create New Event</string>
+    <string name="eventWelcome">Event Details</string>
+    <string name="submitEvent">Submit Event</string>
+    <string name="eventTitle">Event Title</string>
+    <string name="startDate">Start Date</string>
 
 </resources>
