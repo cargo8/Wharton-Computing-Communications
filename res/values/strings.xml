@@ -11,5 +11,7 @@
     <string name="endDate">End Date</string>
     <string name="eventDesc">Event Description</string>
     <string name="eventActions">Action Items</string>
+    <string name="pickAffils">Pick Affiliations</string>
+    <string name="pickSys">Pick Affected Systems</string>
 
 </resources>

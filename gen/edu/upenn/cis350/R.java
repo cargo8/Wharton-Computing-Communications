@@ -16,11 +16,13 @@ public final class R {
     public static final class id {
         public static final int endDateDisplay=0x7f050007;
         public static final int eventActions=0x7f050003;
-        public static final int eventButton=0x7f050008;
+        public static final int eventButton=0x7f05000a;
         public static final int eventDesc=0x7f050002;
         public static final int eventTitle=0x7f050001;
+        public static final int pickAffils=0x7f050008;
         public static final int pickEndDate=0x7f050006;
         public static final int pickStartDate=0x7f050004;
+        public static final int pickSys=0x7f050009;
         public static final int scroller=0x7f050000;
         public static final int startDateDisplay=0x7f050005;
     }
@@ -37,6 +39,8 @@ public final class R {
         public static final int eventTitle=0x7f040005;
         public static final int eventWelcome=0x7f040003;
         public static final int hello=0x7f040000;
+        public static final int pickAffils=0x7f04000a;
+        public static final int pickSys=0x7f04000b;
         public static final int startDate=0x7f040006;
         public static final int submitEvent=0x7f040004;
     }

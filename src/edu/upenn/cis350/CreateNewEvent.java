@@ -3,14 +3,17 @@ package edu.upenn.cis350;
 import java.util.Calendar;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class CreateNewEvent extends Activity {
 
@@ -28,8 +31,11 @@ public class CreateNewEvent extends Activity {
     private int mMonth2;
     private int mDay2;
 
+    //dialog constants
     static final int START_DATE_DIALOG_ID = 0;
     static final int END_DATE_DIALOG_ID = 1;
+	static final int PICK_AFFILS_DIALOG_ID = 2;
+	private static final int PICK_SYS_DIALOG_ID = 3;
 
     
     // the callback received when the user "sets" the date in the dialog (START DATE)
@@ -100,6 +106,15 @@ public class CreateNewEvent extends Activity {
     	showDialog(END_DATE_DIALOG_ID);
     }
     
+    // onClick function of pickAffils button
+    public void showPickAffilsDialog(View view){
+       	showDialog(PICK_AFFILS_DIALOG_ID);
+    }
+    
+    public void showPickSysDialog(View view){
+    	showDialog(PICK_SYS_DIALOG_ID);
+    }
+    
     // updates the date in the TextView
     private void updateDisplay() {
         mDateDisplay.setText(
@@ -128,6 +143,40 @@ public class CreateNewEvent extends Activity {
         		return new DatePickerDialog(this,
         					mDateSetListener2,
         					mYear2, mMonth2, mDay2);
+        case PICK_AFFILS_DIALOG_ID:
+        	final CharSequence[] items = {"Group 1", "Group 2", "Group 3"};
+
+        	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        	builder.setTitle("Pick Affiliations");
+        	builder.setMultiChoiceItems(items, null, new DialogInterface.OnMultiChoiceClickListener() {
+        	    public void onClick(DialogInterface dialog, int item, boolean isChecked) {
+        	        Toast.makeText(getApplicationContext(), items[item], Toast.LENGTH_SHORT).show();
+        	    }
+        	});
+        	builder.setPositiveButton("Finished", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                	dialog.dismiss();
+               }
+           });
+        	AlertDialog alert = builder.create();
+        	return alert;
+        case PICK_SYS_DIALOG_ID:
+        	final CharSequence[] systems = {"System 1", "System 2", "System 3"};
+
+        	AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
+        	builder2.setTitle("Pick Affected Systems");
+        	builder2.setMultiChoiceItems(systems, null, new DialogInterface.OnMultiChoiceClickListener() {
+        	    public void onClick(DialogInterface dialog, int item, boolean isChecked) {
+        	        Toast.makeText(getApplicationContext(), systems[item], Toast.LENGTH_SHORT).show();
+        	    }
+        	});
+        	builder2.setPositiveButton("Finished", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                	dialog.dismiss();
+               }
+           });
+        	AlertDialog alert2 = builder2.create();
+        	return alert2;
         }
         return null;
     }
