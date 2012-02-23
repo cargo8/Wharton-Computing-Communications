@@ -12,6 +12,7 @@ public class WhartonComputingCommunicationsActivity extends Activity {
 	
 	// fields for changing activities
 	public static final int ACTIVITY_CreateNewEvent = 1;
+	private static final int ACTIVITY_ShowEvent = 2;
 
 	
     /** Called when the activity is first created. */
@@ -24,8 +25,12 @@ public class WhartonComputingCommunicationsActivity extends Activity {
     }
     
     public void onCreateEventClick(View view){
-    	//TODO closen: transition to CreateNewEvent activity
     	Intent i = new Intent(this, CreateNewEvent.class);
     	startActivityForResult(i, ACTIVITY_CreateNewEvent);
+    }
+    
+    public void onShowEventClick(View view){
+    	Intent i = new Intent(this, ShowEvent.class);
+    	startActivityForResult(i, ACTIVITY_ShowEvent);
     }
 }

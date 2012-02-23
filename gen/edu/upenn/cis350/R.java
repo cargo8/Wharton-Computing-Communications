@@ -24,24 +24,28 @@ public final class R {
         public static final int pickStartDate=0x7f050004;
         public static final int pickSys=0x7f050009;
         public static final int scroller=0x7f050000;
+        public static final int showEventButton=0x7f05000b;
         public static final int startDateDisplay=0x7f050005;
     }
     public static final class layout {
         public static final int eventform=0x7f030000;
         public static final int main=0x7f030001;
+        public static final int showevent=0x7f030002;
     }
     public static final class string {
         public static final int app_name=0x7f040001;
+        public static final int backToHome=0x7f04000d;
         public static final int createEvent=0x7f040002;
-        public static final int endDate=0x7f040007;
-        public static final int eventActions=0x7f040009;
-        public static final int eventDesc=0x7f040008;
-        public static final int eventTitle=0x7f040005;
-        public static final int eventWelcome=0x7f040003;
+        public static final int endDate=0x7f040008;
+        public static final int eventActions=0x7f04000a;
+        public static final int eventDesc=0x7f040009;
+        public static final int eventTitle=0x7f040006;
+        public static final int eventWelcome=0x7f040004;
         public static final int hello=0x7f040000;
-        public static final int pickAffils=0x7f04000a;
-        public static final int pickSys=0x7f04000b;
-        public static final int startDate=0x7f040006;
-        public static final int submitEvent=0x7f040004;
+        public static final int pickAffils=0x7f04000b;
+        public static final int pickSys=0x7f04000c;
+        public static final int showEvent=0x7f040003;
+        public static final int startDate=0x7f040007;
+        public static final int submitEvent=0x7f040005;
     }
 }

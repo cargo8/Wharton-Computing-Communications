@@ -4,6 +4,7 @@
     <string name="hello">Hello World, WhartonComputingCommunicationsActivity!</string>
     <string name="app_name">Wharton Computing Communications</string>
     <string name="createEvent">Create New Event</string>
+    <string name="showEvent">Show Events</string>
     <string name="eventWelcome">Event Details</string>
     <string name="submitEvent">Submit Event</string>
     <string name="eventTitle">Event Title</string>
@@ -13,5 +14,7 @@
     <string name="eventActions">Action Items</string>
     <string name="pickAffils">Pick Affiliations</string>
     <string name="pickSys">Pick Affected Systems</string>
+    <string name="backToHome">Back to Home Screen</string>
+    
 
 </resources>
