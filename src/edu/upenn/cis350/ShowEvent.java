@@ -60,9 +60,8 @@ public class ShowEvent extends Activity {
         }
     }
     
-    public void onBackToHomeClick(View view){
-    	//TODO closen: transition to main activity
-    	Intent i = new Intent(this, WhartonComputingCommunicationsActivity.class);
+    public void onBackToAgendaClick(View view){
+    	Intent i = new Intent(this, Agenda.class);
     	startActivity(i);
     }
     

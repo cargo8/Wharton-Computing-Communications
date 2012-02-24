@@ -62,5 +62,7 @@
     <string name="dummyMes2">Took care of the first part.</string>
     <string name="dummyMes3">Wharton listservs are down. URGENT! Responsible 
         people please respond ASAP.</string>
+        
+    <string name="postCommentBut">Post Comment</string>
             
 </resources>

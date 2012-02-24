@@ -19,6 +19,11 @@ public class ShowComments extends Activity {
         	v.setText((String)extras.get("message"));
         }
     }
+
+    public void onPostComment(View view) {
+    	
+    	
+    }
     
     public void onBackToEventClick(View view){
     	Intent i = new Intent(this, ShowEvent.class);

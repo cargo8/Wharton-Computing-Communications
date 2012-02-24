@@ -1,27 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
-        
-        <TextView 
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:orientation="vertical" 
+        android:layout_weight="1.0">
+
+        <TextView
             android:id="@+id/message"
             android:layout_width="wrap_content"
-       		android:layout_height="wrap_content"
-       		android:padding="7sp" />
-      
-     <Button 
-	        android:id="@+id/threadButton"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="@string/backToEvent"
-	        android:onClick="onBackToEventClick" />
-                
-    </LinearLayout>
-    
+            android:layout_height="wrap_content"
+            android:padding="7sp"
+            android:textSize="19.0sp"
+            android:textStyle="bold" />
 
-</ScrollView>
+        <!--
+              Don't think we need the back button
+	     	  <Button 
+		        android:id="@+id/threadButton"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="@string/backToEvent"
+		        android:onClick="onBackToEventClick" />
+        -->
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="0dip" 
+        android:layout_weight="4.0">
+        
+        
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" 
+       >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="7sp"
+            android:textSize="19.0sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+        
+    </ScrollView>
+
+	<LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" 
+        >
+
+        <EditText
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="7.0"
+            android:inputType="text" />
+        
+        <Button
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"
+		        android:text="@string/postCommentBut"
+		        android:onClick="onPostComment" />
+        
+    </LinearLayout>
+
+</LinearLayout>
