@@ -14,6 +14,10 @@ public class ShowEvent extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.showevent);
+        Bundle extras = this.getIntent().getExtras();
+        if(extras != null){
+        	
+        }
     }
     
     public void onBackToHomeClick(View view){

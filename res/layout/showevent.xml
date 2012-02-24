@@ -28,11 +28,13 @@
       		android:layout_width="wrap_content"
        		android:layout_height="wrap_content"
        		android:text="@string/eventTitle"
+       		android:paddingRight="10dp"
        		android:textSize="15.0sp" />
           
-       	<EditText
-       	    android:id="@+id/eventTitle"
+       	<TextView
+       	    android:id="@+id/eventTitleText"
        	    android:layout_width="fill_parent"
+       	    android:text="@string/defaultTitle"
        	    android:layout_height="wrap_content"/>
             
     </LinearLayout>
@@ -44,11 +46,11 @@
    		android:text="@string/eventDesc"
    		android:textSize="15.0sp" />
             
-   	<EditText
-   	    android:id="@+id/eventDesc"
+   	<TextView
+   	    android:id="@+id/eventDescText"
    	    android:layout_width="fill_parent"
-   	    android:layout_height="wrap_content"/>
-   	    
+   	    android:layout_height="wrap_content"
+   	    android:text="@string/defaultDescText" />   	    
    	
    <TextView
  		android:layout_width="fill_parent"
@@ -57,10 +59,11 @@
    		android:text="@string/eventActions"
    		android:textSize="15.0sp" />
           
-   	<EditText
-   	    android:id="@+id/eventActions"
+   	<TextView
+   	    android:id="@+id/eventActionsText"
    	    android:layout_width="fill_parent"
-   	    android:layout_height="wrap_content"/> 
+   	    android:layout_height="wrap_content"
+   	    android:text="@string/defaultActionsText"/> 
     
     <LinearLayout
         android:layout_width="fill_parent"
@@ -68,10 +71,10 @@
         android:orientation="horizontal" >
             
           
-    	<Button android:id="@+id/pickStartDate"
+    	<TextView android:id="@+id/startDateText"
         	android:layout_width="wrap_content"
         	android:layout_height="wrap_content"
-        	android:onClick="showStartDateDialog"
+        	android:layout_weight="1"
         	android:text="@string/startDate" />
     	
 		<TextView android:id="@+id/startDateDisplay" 
@@ -80,10 +83,10 @@
         	android:textSize="15.0sp"
         	android:text=""/>
 		
-	 	<Button android:id="@+id/pickEndDate"
+	 	<TextView android:id="@+id/endDateText"
         	android:layout_width="wrap_content"
+        	android:layout_weight="1"
         	android:layout_height="wrap_content"
-        	android:onClick="showEndDateDialog"        	
         	android:text="@string/endDate" />
         	
     	
