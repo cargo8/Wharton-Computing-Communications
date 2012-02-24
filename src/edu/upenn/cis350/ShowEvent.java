@@ -65,7 +65,9 @@ public class ShowEvent extends Activity {
     
     public void onMessageClick(View view){
     	TextView v = (TextView)view;
-    	
+    	String message = v.getText().toString();
+    	Intent i = new Intent(this, ShowComments.class);
+    	i.putExtra(message, message);
     }
 	
 }
