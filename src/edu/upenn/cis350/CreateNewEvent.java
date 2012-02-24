@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -154,6 +155,15 @@ public class CreateNewEvent extends Activity {
     	i.putExtra("person1", spin1.getSelectedItem().toString());
     	spin1 = (Spinner)findViewById(R.id.personSpinner2);
     	i.putExtra("person2", spin1.getSelectedItem().toString());
+    	;
+    	if(((RadioButton)findViewById(R.id.radioRed)).isChecked())
+    		i.putExtra("sevColor", Color.RED);
+    	else if(((RadioButton)findViewById(R.id.radioYellow)).isChecked())
+    		i.putExtra("sevColor", Color.YELLOW);
+    	else if(((RadioButton)findViewById(R.id.radioGreen)).isChecked())
+    		i.putExtra("sevColor", Color.GREEN);
+    	else
+    		i.putExtra("sevColor", Color.BLACK);
     	startActivity(i);
     }
     

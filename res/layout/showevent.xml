@@ -180,39 +180,11 @@
         android:textSize="15.0sp"
         android:gravity="center_horizontal" />
         
-   <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal" >
-            
-    	<RadioGroup
-    	    android:id="@+id/radioGroup1"
-      		android:layout_width="fill_parent"
-      		android:layout_height="wrap_content"
-      		android:orientation="horizontal">
-      		<RadioButton android:id="@+id/radioRed"
-          		android:layout_width="wrap_content"
-          		android:layout_height="wrap_content"
-          		android:layout_weight="1"
-          		android:textColor="@color/Black"
-          		android:text="@string/red" />
-      		<RadioButton android:id="@+id/radioYellow"
-         		android:layout_width="wrap_content"
-          		android:layout_height="wrap_content"
-          		android:layout_weight="1"
-          		android:textColor="@color/Black"
-          		android:text="@string/yellow" />
-      		<RadioButton android:id="@+id/radioGreen"
-         		android:layout_width="wrap_content"
-          		android:layout_height="wrap_content"
-          		android:layout_weight="1"
-          		android:textColor="@color/Black"
-          		android:text="@string/green" />
-    	</RadioGroup>
-            
-    </LinearLayout>
-    
+	<TextView
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:id="@+id/severityText" />
+	    
     <Button 
         android:id="@+id/eventButton"
         android:layout_width="wrap_content"
