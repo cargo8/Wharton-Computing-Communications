@@ -4,11 +4,15 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
+    
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="0dip" 
+        android:layout_weight="4.0">
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="0dip"
-        android:orientation="vertical" 
-        android:layout_weight="1.0">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/message"
@@ -27,26 +31,34 @@
 		        android:text="@string/backToEvent"
 		        android:onClick="onBackToEventClick" />
         -->
-    </LinearLayout>
-
-    <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="0dip" 
-        android:layout_weight="4.0">
-        
-        
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" 
-       >
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="7sp"
-            android:textSize="19.0sp"
-            android:textStyle="bold" />
+            android:text="@string/comment1"
+            android:textSize="13.0sp" />
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="7sp"
+            android:text="@string/comment2"
+            android:textSize="13.0sp"/>
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="7sp"
+            android:text="@string/comment3"
+            android:textSize="13.0sp"/>
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="7sp"
+            android:text="@string/comment4"
+            android:textSize="13.0sp"/>
 
     </LinearLayout>
         

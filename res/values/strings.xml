@@ -58,11 +58,16 @@
     <string name="defaultActionsText">This is the Default Action Text</string>
     <string name="messageList">MESSAGES:</string>
     
-    <string name="dummyMes1">Everything seems to be fixed now.</string>
-    <string name="dummyMes2">Took care of the first part.</string>
-    <string name="dummyMes3">Wharton listservs are down. URGENT! Responsible 
+    <string name="dummyMes1">Wharton listservs are down. URGENT! Responsible 
         people please respond ASAP.</string>
+    <string name="dummyMes2">Took care of the first part.</string>
+    <string name="dummyMes3">Everything seems to be fixed now.</string>
         
     <string name="postCommentBut">Post Comment</string>
+    <string name="comment1">Only on AirPennNet or total outage??</string>
+    <string name="comment2">Seems to be a complete outage.</string>
+    <string name="comment3">Any other systems down?</string>
+    <string name="comment4">No, just came back up. Everything seems to be fixed now.</string>
+    
             
 </resources>
