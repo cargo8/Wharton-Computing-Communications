@@ -31,6 +31,9 @@
     <string name="red">Red</string>
     <string name="yellow">Yellow</string>
     <string name="green">Green</string>
+    <string name="pickedAffils">Affiliations:</string>
+    <string name="pickedSystems">Systems:</string>
+
 	
     <string name="agendaWelcome">Agenda</string>
     <string name="agendaEventTitle1">Instructure Canvas Maintenance Outage</string>
@@ -47,6 +50,7 @@
     <string name="agendaEventTitle1">Instrcutrure Canvas Maintenace Outage</string>
     <string name="agendaEventTitle1">Instrcutrure Canvas Maintenace Outage</string>
     <string name="agendaEventTitle1">Instrcutrure Canvas Maintenace Outage</string-->
+
 
     <string name="defaultTitle">This is the Default Event Title</string>
     <string name="defaultDescText">This is the Default Event Description.</string>
