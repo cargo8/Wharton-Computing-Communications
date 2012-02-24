@@ -26,6 +26,7 @@ public final class R {
         public static final int eventButton=0x7f06000f;
         public static final int eventDesc=0x7f060002;
         public static final int eventTitle=0x7f060001;
+        public static final int message=0x7f060011;
         public static final int personSpinner1=0x7f06000a;
         public static final int personSpinner2=0x7f06000b;
         public static final int pickAffils=0x7f060008;
@@ -42,7 +43,8 @@ public final class R {
     public static final class layout {
         public static final int eventform=0x7f030000;
         public static final int main=0x7f030001;
-        public static final int showevent=0x7f030002;
+        public static final int showcomments=0x7f030002;
+        public static final int showevent=0x7f030003;
     }
     public static final class string {
         public static final int app_name=0x7f050001;
@@ -50,6 +52,9 @@ public final class R {
         public static final int contact1=0x7f05000e;
         public static final int contact2=0x7f05000f;
         public static final int createEvent=0x7f050002;
+        public static final int dummyMes1=0x7f050015;
+        public static final int dummyMes2=0x7f050016;
+        public static final int dummyMes3=0x7f050017;
         public static final int endDate=0x7f050008;
         public static final int eventActions=0x7f05000a;
         public static final int eventDesc=0x7f050009;
@@ -57,6 +62,7 @@ public final class R {
         public static final int eventWelcome=0x7f050004;
         public static final int green=0x7f050013;
         public static final int hello=0x7f050000;
+        public static final int messageList=0x7f050014;
         public static final int pickAffils=0x7f05000b;
         public static final int pickSys=0x7f05000c;
         public static final int red=0x7f050011;
