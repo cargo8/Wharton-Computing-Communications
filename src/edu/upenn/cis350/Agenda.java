@@ -25,10 +25,7 @@ public class Agenda extends Activity {
         events[4] = (LinearLayout) findViewById(R.id.event5);
         events[5] = (LinearLayout) findViewById(R.id.event6);
         events[6] = (LinearLayout) findViewById(R.id.event7);
-        events[7] = (LinearLayout) findViewById(R.id.event8);
-        events[8] = (LinearLayout) findViewById(R.id.event9);
-        events[9] = (LinearLayout) findViewById(R.id.event10);
-        
+        events[7] = (LinearLayout) findViewById(R.id.event8);        
     }
     
     public void showEvent(View view) {

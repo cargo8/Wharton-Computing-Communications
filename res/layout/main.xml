@@ -22,18 +22,11 @@
         android:onClick="onCreateEventClick" />
     
    <Button 
-        android:id="@+id/showEventButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/showEvent"
-        android:onClick="onShowEventClick" />
-    </LinearLayout>
-    
-       <Button 
         android:id="@+id/showAgendaButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/showAgenda"
         android:onClick="onShowAgenda" />
+    </LinearLayout>
 
 </LinearLayout>
