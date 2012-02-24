@@ -38,9 +38,12 @@
     <string name="agendaEventStartDate1">2/25/12</string>
     <string name="agendaEventDivider"> - </string>
     <string name="agendaEventEndDate1">2/27/12</string>
-    <string name="agendaEventDescription1">Calendar section needs to be </string>
+    <string name="agendaEventDescription1">Calendar section needs to be reworked, so 
+        maintenance will be performed this weekend.</string>
+    <string name="agendaEventActionItem1">- Inform Canvas users of outage</string>
+    <string name="agendaEventActionItem2">- Oversee maintenance internally</string>
+    <string name="agendaEventActionItem3"> - Deadline by 12:00am 2/27/12</string>
     <!-- string name="agendaEventTitle1">Instrcutrure Canvas Maintenace Outage</string>
-    <string name="agendaEventTitle1">Instrcutrure Canvas Maintenace Outage</string>
     <string name="agendaEventTitle1">Instrcutrure Canvas Maintenace Outage</string>
     <string name="agendaEventTitle1">Instrcutrure Canvas Maintenace Outage</string>
     <string name="agendaEventTitle1">Instrcutrure Canvas Maintenace Outage</string>

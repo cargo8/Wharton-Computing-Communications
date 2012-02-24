@@ -18,6 +18,12 @@
         android:textSize="20.0sp"
         android:gravity="center_horizontal" />
     
+    <!-- Event 1 -->
+    <LinearLayout android:id="@+id/event1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:onClick="showEvent" >
 		<TextView
       		android:layout_width="wrap_content"
        		android:layout_height="wrap_content"
@@ -56,15 +62,392 @@
    		android:layout_height="wrap_content"
    		android:text="@string/agendaEventDescription1"
    		android:textSize="12.0sp" />
-   	    
-   	
-   <TextView
+	</LinearLayout>
+	
+    <!-- Event 2 -->
+    <LinearLayout android:id="@+id/event2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+		<TextView
+      		android:layout_width="wrap_content"
+       		android:layout_height="wrap_content"
+       		android:text="@string/agendaEventTitle1"
+       		android:textSize="16.0sp" />
+  
+		<LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+            
+
+                  	
+      	<TextView
+      	    android:layout_width="wrap_content"
+      	    android:layout_height="wrap_content"
+        		android:text="@string/agendaEventStartDate1"
+      	    android:textSize="12.0sp" />
+
+      	<TextView
+      	    android:layout_width="wrap_content"
+      	    android:layout_height="wrap_content"
+        		android:text="@string/agendaEventDivider"
+      	    android:textSize="12.0sp" />
+
+      		<TextView
+      	    android:layout_width="wrap_content"
+      	    android:layout_height="wrap_content"
+      	    android:text="@string/agendaEventEndDate1"
+      	    android:textSize="12.0sp" />
+
+    </LinearLayout>
+    
+    <TextView
  		android:layout_width="fill_parent"
    		android:layout_height="wrap_content"
-   		android:text="@string/eventActions"
+   		android:text="@string/agendaEventDescription1"
+   		android:textSize="12.0sp" />
+	</LinearLayout>
+	
+    
+    
+        <!-- Event 1 -->
+    <LinearLayout android:id="@+id/event3"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+		<TextView
+      		android:layout_width="wrap_content"
+       		android:layout_height="wrap_content"
+       		android:text="@string/agendaEventTitle1"
+       		android:textSize="16.0sp" />
+  
+		<LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+            
+
+                  	
+      	<TextView
+      	    android:layout_width="wrap_content"
+      	    android:layout_height="wrap_content"
+        		android:text="@string/agendaEventStartDate1"
+      	    android:textSize="12.0sp" />
+
+      	<TextView
+      	    android:layout_width="wrap_content"
+      	    android:layout_height="wrap_content"
+        		android:text="@string/agendaEventDivider"
+      	    android:textSize="12.0sp" />
+
+      		<TextView
+      	    android:layout_width="wrap_content"
+      	    android:layout_height="wrap_content"
+      	    android:text="@string/agendaEventEndDate1"
+      	    android:textSize="12.0sp" />
+
+    </LinearLayout>
+    
+    <TextView
+ 		android:layout_width="fill_parent"
+   		android:layout_height="wrap_content"
+   		android:text="@string/agendaEventDescription1"
+   		android:textSize="12.0sp" />
+	</LinearLayout>
+	    <!-- Event 1 -->
+    <LinearLayout android:id="@+id/event4"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+		<TextView
+      		android:layout_width="wrap_content"
+       		android:layout_height="wrap_content"
+       		android:text="@string/agendaEventTitle1"
+       		android:textSize="16.0sp" />
+  
+		<LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+            
+
+                  	
+    <LinearLayout android:id="@+id/event5"
+	    android:layout_width="wrap_content"
+      	    android:layout_height="wrap_content"
+        		android:text="@string/agendaEventStartDate1"
+      	    android:textSize="12.0sp" />
+
+      	<TextView
+      	    android:layout_width="wrap_content"
+      	    android:layout_height="wrap_content"
+        		android:text="@string/agendaEventDivider"
+      	    android:textSize="12.0sp" />
+
+      		<TextView
+      	    android:layout_width="wrap_content"
+      	    android:layout_height="wrap_content"
+      	    android:text="@string/agendaEventEndDate1"
+      	    android:textSize="12.0sp" />
+
+    </LinearLayout>
+    
+    <TextView
+ 		android:layout_width="fill_parent"
+   		android:layout_height="wrap_content"
+   		android:text="@string/agendaEventDescription1"
+   		android:textSize="12.0sp" />
+	</LinearLayout>
+	    <!-- Event 1 -->
+    <LinearLayout android:id="@+id/event6"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+		<TextView
+      		android:layout_width="wrap_content"
+       		android:layout_height="wrap_content"
+       		android:text="@string/agendaEventTitle1"
+       		android:textSize="16.0sp" />
+  
+		<LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+            
+
+                  	
+      	<TextView
+      	    android:layout_width="wrap_content"
+      	    android:layout_height="wrap_content"
+        		android:text="@string/agendaEventStartDate1"
+      	    android:textSize="12.0sp" />
+
+      	<TextView
+      	    android:layout_width="wrap_content"
+      	    android:layout_height="wrap_content"
+        		android:text="@string/agendaEventDivider"
+      	    android:textSize="12.0sp" />
+
+      		<TextView
+      	    android:layout_width="wrap_content"
+      	    android:layout_height="wrap_content"
+      	    android:text="@string/agendaEventEndDate1"
+      	    android:textSize="12.0sp" />
+
+    </LinearLayout>
+    
+    <TextView
+ 		android:layout_width="fill_parent"
+   		android:layout_height="wrap_content"
+   		android:text="@string/agendaEventDescription1"
+   		android:textSize="12.0sp" />
+	</LinearLayout>
+	    <!-- Event 1 -->
+    <LinearLayout android:id="@+id/event7"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+		<TextView
+      		android:layout_width="wrap_content"
+       		android:layout_height="wrap_content"
+       		android:text="@string/agendaEventTitle1"
+       		android:textSize="16.0sp" />
+  
+		<LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+            
+
+                  	
+      	<TextView
+      	    android:layout_width="wrap_content"
+      	    android:layout_height="wrap_content"
+        		android:text="@string/agendaEventStartDate1"
+      	    android:textSize="12.0sp" />
+
+      	<TextView
+      	    android:layout_width="wrap_content"
+      	    android:layout_height="wrap_content"
+        		android:text="@string/agendaEventDivider"
+      	    android:textSize="12.0sp" />
+
+      		<TextView
+      	    android:layout_width="wrap_content"
+      	    android:layout_height="wrap_content"
+      	    android:text="@string/agendaEventEndDate1"
+      	    android:textSize="12.0sp" />
+
+    </LinearLayout>
+    
+    <TextView
+ 		android:layout_width="fill_parent"
+   		android:layout_height="wrap_content"
+   		android:text="@string/agendaEventDescription1"
+   		android:textSize="12.0sp" />
+	</LinearLayout>
+	    <!-- Event 1 -->
+    <LinearLayout android:id="@+id/event8"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+		<TextView
+      		android:layout_width="wrap_content"
+       		android:layout_height="wrap_content"
+       		android:text="@string/agendaEventTitle1"
+       		android:textSize="16.0sp" />
+  
+		<LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+            
+
+                  	
+      	<TextView
+      	    android:layout_width="wrap_content"
+      	    android:layout_height="wrap_content"
+        		android:text="@string/agendaEventStartDate1"
+      	    android:textSize="12.0sp" />
+
+      	<TextView
+      	    android:layout_width="wrap_content"
+      	    android:layout_height="wrap_content"
+        		android:text="@string/agendaEventDivider"
+      	    android:textSize="12.0sp" />
+
+      		<TextView
+      	    android:layout_width="wrap_content"
+      	    android:layout_height="wrap_content"
+      	    android:text="@string/agendaEventEndDate1"
+      	    android:textSize="12.0sp" />
+
+    </LinearLayout>
+    
+    <TextView
+ 		android:layout_width="fill_parent"
+   		android:layout_height="wrap_content"
+   		android:text="@string/agendaEventDescription1"
+   		android:textSize="12.0sp" />
+	</LinearLayout>
+	    <!-- Event 1 -->
+    <LinearLayout android:id="@+id/event9"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+		<TextView
+      		android:layout_width="wrap_content"
+       		android:layout_height="wrap_content"
+       		android:text="@string/agendaEventTitle1"
+       		android:textSize="16.0sp" />
+  
+		<LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+            
+
+                  	
+      	<TextView
+      	    android:layout_width="wrap_content"
+      	    android:layout_height="wrap_content"
+        		android:text="@string/agendaEventStartDate1"
+      	    android:textSize="12.0sp" />
+
+      	<TextView
+      	    android:layout_width="wrap_content"
+      	    android:layout_height="wrap_content"
+        		android:text="@string/agendaEventDivider"
+      	    android:textSize="12.0sp" />
+
+      		<TextView
+      	    android:layout_width="wrap_content"
+      	    android:layout_height="wrap_content"
+      	    android:text="@string/agendaEventEndDate1"
+      	    android:textSize="12.0sp" />
+
+    </LinearLayout>
+    
+    <TextView
+ 		android:layout_width="fill_parent"
+   		android:layout_height="wrap_content"
+   		android:text="@string/agendaEventDescription1"
+   		android:textSize="12.0sp" />
+	</LinearLayout>
+	
+    
+    
+    
+    
+    
+    
+    
+
+    <!-- Event 3 -->
+    <LinearLayout android:id="@+id/event10"
+      		android:layout_width="wrap_content"
+       		android:layout_height="wrap_content"
+       		android:text="@string/agendaEventTitle1"
+       		android:textSize="16.0sp" />
+  
+		<LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+            
+
+                  	
+      	<TextView
+      	    android:layout_width="wrap_content"
+      	    android:layout_height="wrap_content"
+        		android:text="@string/agendaEventStartDate1"
+      	    android:textSize="12.0sp" />
+
+      	<TextView
+      	    android:layout_width="wrap_content"
+      	    android:layout_height="wrap_content"
+        		android:text="@string/agendaEventDivider"
+      	    android:textSize="12.0sp" />
+
+      		<TextView
+      	    android:layout_width="wrap_content"
+      	    android:layout_height="wrap_content"
+      	    android:text="@string/agendaEventEndDate1"
+      	    android:textSize="12.0sp" />
+
+    </LinearLayout>
+    
+    <TextView
+ 		android:layout_width="fill_parent"
+   		android:layout_height="wrap_content"
+   		android:text="@string/agendaEventDescription1"
    		android:textSize="12.0sp" />
     
-    <LinearLayout
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/eventActions"
+            android:textSize="12.0sp" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/agendaEventActionItem1"
+            android:textSize="12.0sp" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/agendaEventActionItem2"
+            android:textSize="12.0sp" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/agendaEventActionItem2"
+            android:textSize="12.0sp" />
+<LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
