@@ -22,10 +22,14 @@ public final class R {
     }
     public static final class id {
         public static final int endDateDisplay=0x7f060007;
+        public static final int endDateText=0x7f060016;
         public static final int eventActions=0x7f060003;
+        public static final int eventActionsText=0x7f060014;
         public static final int eventButton=0x7f06000f;
         public static final int eventDesc=0x7f060002;
+        public static final int eventDescText=0x7f060013;
         public static final int eventTitle=0x7f060001;
+        public static final int eventTitleText=0x7f060012;
         public static final int message=0x7f060011;
         public static final int personSpinner1=0x7f06000a;
         public static final int personSpinner2=0x7f06000b;
@@ -39,6 +43,7 @@ public final class R {
         public static final int scroller=0x7f060000;
         public static final int showEventButton=0x7f060010;
         public static final int startDateDisplay=0x7f060005;
+        public static final int startDateText=0x7f060015;
     }
     public static final class layout {
         public static final int eventform=0x7f030000;
@@ -52,9 +57,12 @@ public final class R {
         public static final int contact1=0x7f05000e;
         public static final int contact2=0x7f05000f;
         public static final int createEvent=0x7f050002;
-        public static final int dummyMes1=0x7f050015;
-        public static final int dummyMes2=0x7f050016;
-        public static final int dummyMes3=0x7f050017;
+        public static final int defaultActionsText=0x7f050016;
+        public static final int defaultDescText=0x7f050015;
+        public static final int defaultTitle=0x7f050014;
+        public static final int dummyMes1=0x7f050018;
+        public static final int dummyMes2=0x7f050019;
+        public static final int dummyMes3=0x7f05001a;
         public static final int endDate=0x7f050008;
         public static final int eventActions=0x7f05000a;
         public static final int eventDesc=0x7f050009;
@@ -62,7 +70,7 @@ public final class R {
         public static final int eventWelcome=0x7f050004;
         public static final int green=0x7f050013;
         public static final int hello=0x7f050000;
-        public static final int messageList=0x7f050014;
+        public static final int messageList=0x7f050017;
         public static final int pickAffils=0x7f05000b;
         public static final int pickSys=0x7f05000c;
         public static final int red=0x7f050011;
