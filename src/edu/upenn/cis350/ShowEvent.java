@@ -70,8 +70,8 @@ public class ShowEvent extends Activity {
     	TextView v = (TextView)view;
     	String message = v.getText().toString();
     	Intent i = new Intent(this, ShowComments.class);
-    	i.putExtra(message, "message");
-    	startActivityForResult(i, WhartonComputingCommunicationsActivity.ACTIVITY_SHOWCOMMENTS);
+    	i.putExtra("message", message);
+    	startActivity(i);
     }
 	
 }
