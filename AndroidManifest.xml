@@ -21,6 +21,7 @@
         
         <activity android:name=".CreateNewEvent" />
         <activity android:name=".ShowEvent" />
+        <activity android:name=".Agenda" />
         
     </application>
 
