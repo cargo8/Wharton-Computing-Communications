@@ -35,6 +35,10 @@ public class CreateNewEvent extends Activity {
     private int mYear2;
     private int mMonth2;
     private int mDay2;
+    private CharSequence[] affils;
+    private boolean[] affilsChecked;
+    private CharSequence[] systems;
+    private boolean[] systemsChecked;
 
     //dialog constants
     static final int START_DATE_DIALOG_ID = 0;
@@ -142,6 +146,14 @@ public class CreateNewEvent extends Activity {
     	i.putExtra("startDate", temp2.getText().toString());
     	temp2 = (TextView)findViewById(R.id.endDateDisplay);
     	i.putExtra("endDate", temp2.getText().toString());
+    	i.putExtra("affils", affils);
+    	i.putExtra("affilsChecked", affilsChecked);
+    	i.putExtra("systems", systems);
+    	i.putExtra("systemsChecked", systemsChecked);
+    	Spinner spin1 = (Spinner)findViewById(R.id.personSpinner1);
+    	i.putExtra("person1", spin1.getSelectedItem().toString());
+    	spin1 = (Spinner)findViewById(R.id.personSpinner2);
+    	i.putExtra("person2", spin1.getSelectedItem().toString());
     	startActivity(i);
     }
     
@@ -194,12 +206,15 @@ public class CreateNewEvent extends Activity {
         					mYear2, mMonth2, mDay2);
         case PICK_AFFILS_DIALOG_ID:
         	final CharSequence[] items = {"Group 1", "Group 2", "Group 3"};
+        	affils = items;
+        	affilsChecked = new boolean[items.length];
 
         	AlertDialog.Builder builder = new AlertDialog.Builder(this);
         	builder.setTitle("Pick Affiliations");
         	builder.setMultiChoiceItems(items, null, new DialogInterface.OnMultiChoiceClickListener() {
         	    public void onClick(DialogInterface dialog, int item, boolean isChecked) {
         	        Toast.makeText(getApplicationContext(), items[item], Toast.LENGTH_SHORT).show();
+        	        affilsChecked[item] = isChecked;
         	    }
         	});
         	builder.setPositiveButton("Finished", new DialogInterface.OnClickListener() {
@@ -210,13 +225,16 @@ public class CreateNewEvent extends Activity {
         	AlertDialog alert = builder.create();
         	return alert;
         case PICK_SYS_DIALOG_ID:
-        	final CharSequence[] systems = {"System 1", "System 2", "System 3"};
+        	final CharSequence[] items2 = {"System 1", "System 2", "System 3"};
+        	systems = items2;
+        	systemsChecked = new boolean[items2.length];
 
         	AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
         	builder2.setTitle("Pick Affected Systems");
-        	builder2.setMultiChoiceItems(systems, null, new DialogInterface.OnMultiChoiceClickListener() {
+        	builder2.setMultiChoiceItems(items2, null, new DialogInterface.OnMultiChoiceClickListener() {
         	    public void onClick(DialogInterface dialog, int item, boolean isChecked) {
-        	        Toast.makeText(getApplicationContext(), systems[item], Toast.LENGTH_SHORT).show();
+        	        Toast.makeText(getApplicationContext(), items2[item], Toast.LENGTH_SHORT).show();
+        	        systemsChecked[item] = isChecked;
         	    }
         	});
         	builder2.setPositiveButton("Finished", new DialogInterface.OnClickListener() {

@@ -100,20 +100,38 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
     
-    	<Button android:id="@+id/pickAffils"
+    	<TextView
        		android:layout_width="wrap_content"
      	  	android:layout_height="wrap_content"
      	  	android:layout_weight="1"
-       		android:onClick="showPickAffilsDialog"        	
-       		android:text="@string/pickAffils" />
+       		android:text="@string/pickedAffils" />
 
-    	<Button
-    	    android:id="@+id/pickSys"
+    	<TextView
+    	    android:id="@+id/affilsText"
     	    android:layout_width="wrap_content"
     	    android:layout_height="wrap_content"
     	    android:layout_weight="1"
-    	    android:onClick="showPickSysDialog"
-    	    android:text="@string/pickSys" />
+    	    android:text="" />
+       		
+    </LinearLayout>
+    
+        <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+    
+    	<TextView
+       		android:layout_width="wrap_content"
+     	  	android:layout_height="wrap_content"
+     	  	android:layout_weight="1"
+       		android:text="@string/pickedSystems" />
+
+    	<TextView
+    	    android:id="@+id/systemsText"
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:layout_weight="1"
+    	    android:text="" />
        		
     </LinearLayout>
     
@@ -126,13 +144,13 @@
       		android:layout_width="wrap_content"
        		android:layout_height="wrap_content"
        		android:text="@string/contact1"
+       		android:paddingRight="10dp" 
        		android:textSize="15.0sp" />
           
-       	<Spinner
-       	    android:id="@+id/personSpinner1"
+       	<TextView
+       	    android:id="@+id/personText1"
        	    android:layout_width="fill_parent"
-       	    android:layout_height="wrap_content"
-       	    android:prompt="@string/contact1" />
+       	    android:layout_height="wrap_content" />
             
     </LinearLayout>
     
@@ -145,13 +163,13 @@
       		android:layout_width="wrap_content"
        		android:layout_height="wrap_content"
        		android:text="@string/contact2"
+       		android:paddingRight="10dp"       		
        		android:textSize="15.0sp" />
           
-       	<Spinner
-       	    android:id="@+id/personSpinner2"
+       	<TextView
+       	    android:id="@+id/personText2"
        	    android:layout_width="fill_parent"
-       	    android:layout_height="wrap_content"
-       	    android:prompt="@string/contact2" />
+       	    android:layout_height="wrap_content" />
             
     </LinearLayout>
 
