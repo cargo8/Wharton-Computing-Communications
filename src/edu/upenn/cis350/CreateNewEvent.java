@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -129,7 +130,18 @@ public class CreateNewEvent extends Activity {
 	// onClick function of submit button
     public void onCreateEventSubmit(View view){
     	//TODO closen: transition to main activity
-    	Intent i = new Intent(this, WhartonComputingCommunicationsActivity.class);
+    	//Intent i = new Intent(this, WhartonComputingCommunicationsActivity.class);
+    	Intent i = new Intent(this, ShowEvent.class);
+    	EditText temp = (EditText)findViewById(R.id.eventTitle);
+    	i.putExtra("eventTitle", temp.getText().toString());
+    	temp = (EditText)findViewById(R.id.eventDesc);
+    	i.putExtra("eventDesc", temp.getText().toString());
+    	temp = (EditText)findViewById(R.id.eventActions);
+    	i.putExtra("eventActions", temp.getText().toString());
+    	TextView temp2 = (TextView)findViewById(R.id.startDateDisplay);
+    	i.putExtra("startDate", temp2.getText().toString());
+    	temp2 = (TextView)findViewById(R.id.endDateDisplay);
+    	i.putExtra("endDate", temp2.getText().toString());
     	startActivity(i);
     }
     

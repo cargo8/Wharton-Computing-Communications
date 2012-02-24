@@ -12,8 +12,7 @@
     <!--  Event Strings -->
     <string name="eventWelcome">Event Details</string>
     <string name="submitEvent">Submit Event</string>
-    <string name="eventTitle">Event Title</string>
-    
+    <string name="eventTitle">Event Title:</string>
     <string name="startDate">Start Date</string>
     <string name="endDate">End Date</string>
     
@@ -48,5 +47,15 @@
     <string name="agendaEventTitle1">Instrcutrure Canvas Maintenace Outage</string>
     <string name="agendaEventTitle1">Instrcutrure Canvas Maintenace Outage</string>
     <string name="agendaEventTitle1">Instrcutrure Canvas Maintenace Outage</string-->
+
+    <string name="defaultTitle">This is the Default Event Title</string>
+    <string name="defaultDescText">This is the Default Event Description.</string>
+    <string name="defaultActionsText">This is the Default Action Text</string>
+    <string name="messageList">MESSAGES:</string>
     
+    <string name="dummyMes1">Everything seems to be fixed now.</string>
+    <string name="dummyMes2">Took care of the first part.</string>
+    <string name="dummyMes3">Wharton listservs are down. URGENT! Responsible 
+        people please respond ASAP.</string>
+            
 </resources>
