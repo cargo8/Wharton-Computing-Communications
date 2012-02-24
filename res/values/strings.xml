@@ -21,6 +21,12 @@
     <string name="red">Red</string>
     <string name="yellow">Yellow</string>
     <string name="green">Green</string>
+    <string name="messageList">MESSAGES:</string>
+    
+    <string name="dummyMes1">Everything seems to be fixed now.</string>
+    <string name="dummyMes2">Took care of the first part.</string>
+    <string name="dummyMes3">Wharton listservs are down. URGENT! Responsible 
+        people please respond ASAP.</string>
         
     
     
