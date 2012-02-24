@@ -77,7 +77,7 @@
         	android:layout_weight="1"
         	android:text="@string/startDate" />
     	
-		<TextView android:id="@+id/startDateDisplay" 
+		<TextView android:id="@+id/startDateDisplay2" 
         	android:layout_width="wrap_content"
         	android:layout_height="wrap_content"
         	android:textSize="15.0sp"
@@ -90,7 +90,7 @@
         	android:text="@string/endDate" />
         	
     	
-		<TextView android:id="@+id/endDateDisplay" 
+		<TextView android:id="@+id/endDateDisplay2" 
         	android:layout_width="wrap_content"
         	android:layout_height="wrap_content"
         	android:textSize="15.0sp"

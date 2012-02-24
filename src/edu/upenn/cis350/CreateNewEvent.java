@@ -138,10 +138,10 @@ public class CreateNewEvent extends Activity {
     	i.putExtra("eventDesc", temp.getText().toString());
     	temp = (EditText)findViewById(R.id.eventActions);
     	i.putExtra("eventActions", temp.getText().toString());
-    	temp = (EditText)findViewById(R.id.startDateDisplay);
-    	i.putExtra("startDate", temp.getText().toString());
-    	temp = (EditText)findViewById(R.id.endDateDisplay);
-    	i.putExtra("endDate", temp.getText().toString());
+    	TextView temp2 = (TextView)findViewById(R.id.startDateDisplay);
+    	i.putExtra("startDate", temp2.getText().toString());
+    	temp2 = (TextView)findViewById(R.id.endDateDisplay);
+    	i.putExtra("endDate", temp2.getText().toString());
     	startActivity(i);
     }
     
