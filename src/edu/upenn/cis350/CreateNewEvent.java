@@ -96,6 +96,7 @@ public class CreateNewEvent extends Activity {
         populateSpinners();
         
         //set up severity buttons
+        //TODO closen: add listeners
         final RadioButton radioRed = (RadioButton) findViewById(R.id.radioRed);
         radioRed.setBackgroundColor(Color.RED);
         final RadioButton radioYellow = (RadioButton) findViewById(R.id.radioYellow);
@@ -167,7 +168,7 @@ public class CreateNewEvent extends Activity {
                         .append(mYear2).append(" "));
     }
     
-    // creates dialog for datePicker
+    // creates dialogs
     @Override
     protected Dialog onCreateDialog(int id) {
         switch (id) {

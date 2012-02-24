@@ -11,6 +11,189 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
     
+        <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/eventWelcome"
+        android:textSize="20.0sp"
+        android:gravity="center_horizontal" />
+    
+        
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+            
+      	<TextView
+      		android:layout_width="wrap_content"
+       		android:layout_height="wrap_content"
+       		android:text="@string/eventTitle"
+       		android:textSize="15.0sp" />
+          
+       	<EditText
+       	    android:id="@+id/eventTitle"
+       	    android:layout_width="fill_parent"
+       	    android:layout_height="wrap_content"/>
+            
+    </LinearLayout>
+    
+    <TextView
+ 		android:layout_width="fill_parent"
+   		android:layout_height="wrap_content"
+   		android:gravity="center"
+   		android:text="@string/eventDesc"
+   		android:textSize="15.0sp" />
+            
+   	<EditText
+   	    android:id="@+id/eventDesc"
+   	    android:layout_width="fill_parent"
+   	    android:layout_height="wrap_content"/>
+   	    
+   	
+   <TextView
+ 		android:layout_width="fill_parent"
+   		android:layout_height="wrap_content"
+   		android:gravity="center"
+   		android:text="@string/eventActions"
+   		android:textSize="15.0sp" />
+          
+   	<EditText
+   	    android:id="@+id/eventActions"
+   	    android:layout_width="fill_parent"
+   	    android:layout_height="wrap_content"/> 
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+            
+          
+    	<Button android:id="@+id/pickStartDate"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:onClick="showStartDateDialog"
+        	android:text="@string/startDate" />
+    	
+		<TextView android:id="@+id/startDateDisplay" 
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:textSize="15.0sp"
+        	android:text=""/>
+		
+	 	<Button android:id="@+id/pickEndDate"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:onClick="showEndDateDialog"        	
+        	android:text="@string/endDate" />
+        	
+    	
+		<TextView android:id="@+id/endDateDisplay" 
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:textSize="15.0sp"
+        	android:text=""/>
+		
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+    
+    	<Button android:id="@+id/pickAffils"
+       		android:layout_width="wrap_content"
+     	  	android:layout_height="wrap_content"
+     	  	android:layout_weight="1"
+       		android:onClick="showPickAffilsDialog"        	
+       		android:text="@string/pickAffils" />
+
+    	<Button
+    	    android:id="@+id/pickSys"
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:layout_weight="1"
+    	    android:onClick="showPickSysDialog"
+    	    android:text="@string/pickSys" />
+       		
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+            
+      	<TextView
+      		android:layout_width="wrap_content"
+       		android:layout_height="wrap_content"
+       		android:text="@string/contact1"
+       		android:textSize="15.0sp" />
+          
+       	<Spinner
+       	    android:id="@+id/personSpinner1"
+       	    android:layout_width="fill_parent"
+       	    android:layout_height="wrap_content"
+       	    android:prompt="@string/contact1" />
+            
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+            
+      	<TextView
+      		android:layout_width="wrap_content"
+       		android:layout_height="wrap_content"
+       		android:text="@string/contact2"
+       		android:textSize="15.0sp" />
+          
+       	<Spinner
+       	    android:id="@+id/personSpinner2"
+       	    android:layout_width="fill_parent"
+       	    android:layout_height="wrap_content"
+       	    android:prompt="@string/contact2" />
+            
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/severity"
+        android:textSize="15.0sp"
+        android:gravity="center_horizontal" />
+        
+   <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal" >
+            
+    	<RadioGroup
+      		android:layout_width="fill_parent"
+      		android:layout_height="wrap_content"
+      		android:orientation="horizontal">
+      		<RadioButton android:id="@+id/radioRed"
+          		android:layout_width="wrap_content"
+          		android:layout_height="wrap_content"
+          		android:layout_weight="1"
+          		android:textColor="@color/Black"
+          		android:text="@string/red" />
+      		<RadioButton android:id="@+id/radioYellow"
+         		android:layout_width="wrap_content"
+          		android:layout_height="wrap_content"
+          		android:layout_weight="1"
+          		android:textColor="@color/Black"
+          		android:text="@string/yellow" />
+      		<RadioButton android:id="@+id/radioGreen"
+         		android:layout_width="wrap_content"
+          		android:layout_height="wrap_content"
+          		android:layout_weight="1"
+          		android:textColor="@color/Black"
+          		android:text="@string/green" />
+    	</RadioGroup>
+            
+    </LinearLayout>
+    
     <Button 
         android:id="@+id/eventButton"
         android:layout_width="wrap_content"
