@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 //TODO (kuyumcu) Half of this activity will consist of the messages related to a particular event
 public class ShowEvent extends Activity {
+	
 
     /** Called when the activity is first created. */
     @Override
@@ -53,6 +54,8 @@ public class ShowEvent extends Activity {
         	temp.setText((String)extras.get("person1"));
         	temp = (TextView)findViewById(R.id.personText2);
         	temp.setText((String)extras.get("person2"));
+        	temp = (TextView)findViewById(R.id.severityText);
+        	temp.setBackgroundColor(extras.getInt("sevColor"));
         	
         }
     }
