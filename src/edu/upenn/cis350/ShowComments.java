@@ -1,7 +1,9 @@
 package edu.upenn.cis350;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 public class ShowComments extends Activity {
@@ -16,6 +18,11 @@ public class ShowComments extends Activity {
         if(extras != null){
         	v.setText((String)extras.get("message"));
         }
+    }
+    
+    public void onBackToEventClick(View view){
+    	Intent i = new Intent(this, ShowEvent.class);
+    	startActivity(i);
     }
     
 }

@@ -205,7 +205,8 @@
        		android:layout_height="wrap_content"
        		android:text="@string/dummyMes1"
        		android:padding="7sp"
-       		android:onClick="onMessageClick" />
+       		android:onClick="onMessageClick"
+       		android:clickable="true" />
     
     <TextView
         	android:id="@+id/mes2"
@@ -213,7 +214,8 @@
        		android:layout_height="wrap_content"
        		android:text="@string/dummyMes2"
        		android:padding="7sp"
-       		android:onClick="onMessageClick" />
+       		android:onClick="onMessageClick"
+       		android:clickable="true" />
     
     <TextView
         	android:id="@+id/mes3"
@@ -221,7 +223,8 @@
        		android:layout_height="wrap_content"
        		android:text="@string/dummyMes3"
        		android:padding="7sp"
-       		android:onClick="onMessageClick" />
+       		android:onClick="onMessageClick"
+       		android:clickable="true" />
     
 </LinearLayout>
 

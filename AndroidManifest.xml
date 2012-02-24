@@ -22,6 +22,7 @@
         <activity android:name=".CreateNewEvent" />
         <activity android:name=".ShowEvent" />
         <activity android:name=".Agenda" />
+        <activity android:name=".ShowComments" />
         
     </application>
 
