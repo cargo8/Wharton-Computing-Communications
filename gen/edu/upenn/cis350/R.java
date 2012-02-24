@@ -22,11 +22,8 @@ public final class R {
     }
     public static final class id {
         public static final int endDateDisplay=0x7f060007;
-<<<<<<< HEAD
-        public static final int endDateDisplay2=0x7f060017;
-=======
->>>>>>> 675ed61a8250f0df676ddac75b4b70dcc7581d55
-        public static final int endDateText=0x7f060016;
+        public static final int endDateDisplay2=0x7f060018;
+        public static final int endDateText=0x7f060017;
         public static final int eventActions=0x7f060003;
         public static final int eventActionsText=0x7f060014;
         public static final int eventButton=0x7f06000f;
@@ -47,12 +44,8 @@ public final class R {
         public static final int scroller=0x7f060000;
         public static final int showEventButton=0x7f060010;
         public static final int startDateDisplay=0x7f060005;
-<<<<<<< HEAD
-        public static final int startDateDisplay2=0x7f060015;
-        public static final int startDateText=0x7f060014;
-=======
+        public static final int startDateDisplay2=0x7f060016;
         public static final int startDateText=0x7f060015;
->>>>>>> 675ed61a8250f0df676ddac75b4b70dcc7581d55
     }
     public static final class layout {
         public static final int eventform=0x7f030000;
