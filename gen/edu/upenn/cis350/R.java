@@ -39,6 +39,7 @@ public final class R {
         public static final int pickStartDate=0x7f060004;
         public static final int pickSys=0x7f060009;
         public static final int radioGreen=0x7f06000e;
+        public static final int radioGroup1=0x7f060019;
         public static final int radioRed=0x7f06000c;
         public static final int radioYellow=0x7f06000d;
         public static final int scroller=0x7f060000;
