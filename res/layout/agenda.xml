@@ -24,6 +24,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:padding="1sp"
         android:onClick="showEvent" >
 		<TextView
       		android:layout_width="wrap_content"
@@ -71,6 +72,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:padding="1sp"
         android:onClick="showEvent" >
 
 		<TextView
@@ -119,6 +121,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:padding="1sp"
         android:onClick="showEvent" >
 		<TextView
       		android:layout_width="wrap_content"
@@ -167,6 +170,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:padding="1sp"
         android:onClick="showEvent" >
 		<TextView
       		android:layout_width="wrap_content"
@@ -215,6 +219,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:padding="1sp"
         android:onClick="showEvent" >
 		<TextView
       		android:layout_width="wrap_content"
@@ -263,6 +268,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:padding="1sp"
         android:onClick="showEvent" >
 		<TextView
       		android:layout_width="wrap_content"
@@ -311,6 +317,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:padding="1sp"
         android:onClick="showEvent" >
 		<TextView
       		android:layout_width="wrap_content"
@@ -359,7 +366,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:onClick="showEvent" >
+        android:padding="1sp"
+		 android:onClick="showEvent" >
 		<TextView
       		android:layout_width="wrap_content"
        		android:layout_height="wrap_content"

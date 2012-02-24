@@ -184,14 +184,16 @@
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
 	    android:id="@+id/severityText" />
-	    
+
+	<!-- 
     <Button 
         android:id="@+id/eventButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/backToHome"
         android:onClick="onBackToAgendaClick" />
-	
+	 -->
+	 
     <TextView
       		android:layout_width="wrap_content"
        		android:layout_height="wrap_content"
