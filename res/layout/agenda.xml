@@ -8,42 +8,61 @@
     
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical" >
     
         <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/eventWelcome"
+        android:text="@string/agendaWelcome"
         android:textSize="20.0sp"
         android:gravity="center_horizontal" />
     
-        
-    <LinearLayout
+		<TextView
+      		android:layout_width="wrap_content"
+       		android:layout_height="wrap_content"
+       		android:text="@string/agendaEventTitle1"
+       		android:textSize="16.0sp" />
+  
+		<LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
             
+
+                  	
       	<TextView
-      		android:layout_width="wrap_content"
-       		android:layout_height="wrap_content"
-       		android:text="@string/eventTitle"
-       		android:textSize="15.0sp" />
-            
+      	    android:layout_width="wrap_content"
+      	    android:layout_height="wrap_content"
+        		android:text="@string/agendaEventStartDate1"
+      	    android:textSize="12.0sp" />
+
+      	<TextView
+      	    android:layout_width="wrap_content"
+      	    android:layout_height="wrap_content"
+        		android:text="@string/agendaEventDivider"
+      	    android:textSize="12.0sp" />
+
+      		<TextView
+      	    android:layout_width="wrap_content"
+      	    android:layout_height="wrap_content"
+      	    android:text="@string/agendaEventEndDate1"
+      	    android:textSize="12.0sp" />
+
     </LinearLayout>
     
     <TextView
  		android:layout_width="fill_parent"
    		android:layout_height="wrap_content"
-   		android:text="@string/eventDesc"
-   		android:textSize="15.0sp" />
+   		android:text="@string/agendaEventDescription1"
+   		android:textSize="12.0sp" />
    	    
    	
    <TextView
  		android:layout_width="fill_parent"
    		android:layout_height="wrap_content"
    		android:text="@string/eventActions"
-   		android:textSize="15.0sp" />
+   		android:textSize="12.0sp" />
     
     <LinearLayout
         android:layout_width="fill_parent"

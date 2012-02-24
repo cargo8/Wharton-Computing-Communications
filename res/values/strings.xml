@@ -1,28 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+	
+    <!-- General Strings -->
     <string name="hello">Hello World, WhartonComputingCommunicationsActivity!</string>
     <string name="app_name">Wharton Computing Communications</string>
     <string name="createEvent">Create New Event</string>
     <string name="showEvent">Show Events</string>
+    <string name="showAgenda">Show Agenda</string>
+    
+    
+    <!--  Event Strings -->
     <string name="eventWelcome">Event Details</string>
     <string name="submitEvent">Submit Event</string>
     <string name="eventTitle">Event Title</string>
+    
     <string name="startDate">Start Date</string>
     <string name="endDate">End Date</string>
+    
     <string name="eventDesc">Event Description</string>
     <string name="eventActions">Action Items</string>
+    
     <string name="pickAffils">Pick Affiliations</string>
     <string name="pickSys">Pick Affected Systems</string>
+    
     <string name="backToHome">Back to Home Screen</string>
+    
     <string name="contact1">Contact 1</string>
     <string name="contact2">Contact 2</string>
+    
     <string name="severity">Severity</string>
     <string name="red">Red</string>
     <string name="yellow">Yellow</string>
     <string name="green">Green</string>
-        
+	
+    <string name="agendaWelcome">Agenda</string>
+    <string name="agendaEventTitle1">Instructure Canvas Maintenance Outage</string>
+    <string name="agendaEventStartDate1">2/25/12</string>
+    <string name="agendaEventDivider"> - </string>
+    <string name="agendaEventEndDate1">2/27/12</string>
+    <string name="agendaEventDescription1">Calendar section needs to be </string>
+    <!-- string name="agendaEventTitle1">Instrcutrure Canvas Maintenace Outage</string>
+    <string name="agendaEventTitle1">Instrcutrure Canvas Maintenace Outage</string>
+    <string name="agendaEventTitle1">Instrcutrure Canvas Maintenace Outage</string>
+    <string name="agendaEventTitle1">Instrcutrure Canvas Maintenace Outage</string>
+    <string name="agendaEventTitle1">Instrcutrure Canvas Maintenace Outage</string>
+    <string name="agendaEventTitle1">Instrcutrure Canvas Maintenace Outage</string-->
     
-    
-
 </resources>

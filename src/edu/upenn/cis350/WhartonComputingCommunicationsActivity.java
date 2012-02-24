@@ -13,6 +13,7 @@ public class WhartonComputingCommunicationsActivity extends Activity {
 	// fields for changing activities
 	public static final int ACTIVITY_CreateNewEvent = 1;
 	private static final int ACTIVITY_ShowEvent = 2;
+	private static final int ACTIVITY_AGENDA = 3;
 
 	
     /** Called when the activity is first created. */
@@ -32,5 +33,10 @@ public class WhartonComputingCommunicationsActivity extends Activity {
     public void onShowEventClick(View view){
     	Intent i = new Intent(this, ShowEvent.class);
     	startActivityForResult(i, ACTIVITY_ShowEvent);
+    }
+    
+    public void onShowAgenda(View view) {
+    	Intent i = new Intent(this, Agenda.class);
+    	startActivityForResult(i, ACTIVITY_AGENDA);
     }
 }
