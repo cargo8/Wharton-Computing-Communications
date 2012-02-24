@@ -8,10 +8,14 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.RadioButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -87,9 +91,41 @@ public class CreateNewEvent extends Activity {
         mDay2 = mDay;
         // display the current date (this method is below)
         updateDisplay();
+        
+        //populate spinner
+        populateSpinners();
+        
+        //set up severity buttons
+        final RadioButton radioRed = (RadioButton) findViewById(R.id.radioRed);
+        radioRed.setBackgroundColor(Color.RED);
+        final RadioButton radioYellow = (RadioButton) findViewById(R.id.radioYellow);
+        radioYellow.setBackgroundColor(Color.YELLOW);
+        final RadioButton radioGreen = (RadioButton) findViewById(R.id.radioGreen);
+        radioGreen.setBackgroundColor(Color.GREEN);
+
     }
     
-    // onClick function of submit button
+    private void populateSpinners() {
+        Spinner spinner = (Spinner) findViewById(R.id.personSpinner1);
+        ArrayAdapter <CharSequence> adapter =
+        	  new ArrayAdapter <CharSequence> (this, android.R.layout.simple_spinner_item );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        for(int i = 1; i <= 10; i++){
+        	adapter.add("Person " + i);
+        }
+        spinner.setAdapter(adapter);
+        
+        Spinner spinner2 = (Spinner) findViewById(R.id.personSpinner2);
+        ArrayAdapter <CharSequence> adapter2 =
+        	  new ArrayAdapter <CharSequence> (this, android.R.layout.simple_spinner_item );
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        for(int i = 1; i <= 10; i++){
+        	adapter2.add("Person " + i);
+        }
+        spinner2.setAdapter(adapter2);
+	}
+
+	// onClick function of submit button
     public void onCreateEventSubmit(View view){
     	//TODO closen: transition to main activity
     	Intent i = new Intent(this, WhartonComputingCommunicationsActivity.class);

@@ -15,6 +15,14 @@
     <string name="pickAffils">Pick Affiliations</string>
     <string name="pickSys">Pick Affected Systems</string>
     <string name="backToHome">Back to Home Screen</string>
+    <string name="contact1">Contact 1</string>
+    <string name="contact2">Contact 2</string>
+    <string name="severity">Severity</string>
+    <string name="red">Red</string>
+    <string name="yellow">Yellow</string>
+    <string name="green">Green</string>
+        
+    
     
 
 </resources>
