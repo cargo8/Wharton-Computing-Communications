@@ -210,6 +210,7 @@
        		android:textStyle="bold" />
     
     <TextView
+        	android:id="@+id/mes1"
       		android:layout_width="wrap_content"
        		android:layout_height="wrap_content"
        		android:text="@string/dummyMes1"
@@ -217,6 +218,7 @@
        		android:onClick="onMessageClick" />
     
     <TextView
+        	android:id="@+id/mes2"
       		android:layout_width="wrap_content"
        		android:layout_height="wrap_content"
        		android:text="@string/dummyMes2"
@@ -224,6 +226,7 @@
        		android:onClick="onMessageClick" />
     
     <TextView
+        	android:id="@+id/mes3"
       		android:layout_width="wrap_content"
        		android:layout_height="wrap_content"
        		android:text="@string/dummyMes3"
