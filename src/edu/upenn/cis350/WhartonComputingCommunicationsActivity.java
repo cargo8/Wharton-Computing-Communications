@@ -14,7 +14,7 @@ public class WhartonComputingCommunicationsActivity extends Activity {
 	public static final int ACTIVITY_CreateNewEvent = 1;
 	private static final int ACTIVITY_ShowEvent = 2;
 	private static final int ACTIVITY_AGENDA = 3;
-	private static final int ACTIVITY_SHOWCOMMENTS = 4;
+	public static final int ACTIVITY_SHOWCOMMENTS = 4;
 
 	
     /** Called when the activity is first created. */
