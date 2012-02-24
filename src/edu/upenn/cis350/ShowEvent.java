@@ -62,5 +62,10 @@ public class ShowEvent extends Activity {
     	Intent i = new Intent(this, WhartonComputingCommunicationsActivity.class);
     	startActivity(i);
     }
+    
+    public void onMessageClick(View view){
+    	TextView v = (TextView)view;
+    	
+    }
 	
 }
