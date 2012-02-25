@@ -7,11 +7,11 @@ import java.util.List;
 // POJO to hold all event data, eventually to be put into a sqlite DB
 public class EventPOJO {
 	
-	private String eventName;
+	private String eventTitle;
 	private String eventDesc;
 	private String eventActions;
-	private String startTime; //TODO timestamp?
-	private String endTime;
+	private String start; //TODO timestamp?
+	private String end;
 	private List<String> affils;
 	private List<String> systems;
 	private int severity;
@@ -27,8 +27,8 @@ public class EventPOJO {
 	
 	///////// SETTER METHODS /////////////
 	
-	public void setEventName(String name){
-		eventName = name;
+	public void setEventTitle(String name){
+		eventTitle = name;
 	}
 	
 	public void setEventDesc(String desc){
@@ -39,12 +39,12 @@ public class EventPOJO {
 		eventActions = actions;
 	}
 	
-	public void setStartTime(String time){
-		startTime = time;
+	public void setStart(String time){
+		start = time;
 	}
 
-	public void setEndTime(String time){
-		endTime = time;
+	public void setEnd(String time){
+		end = time;
 	}
 	
 	public void addToAffils(String affil){
@@ -73,8 +73,8 @@ public class EventPOJO {
 	
 	//////////// GETTER METHODS /////////////
 	
-	public String getEventName(){
-		return eventName;
+	public String getEventTitle(){
+		return eventTitle;
 	}
 	
 	public String getEventDesc(){
@@ -85,12 +85,12 @@ public class EventPOJO {
 		return eventActions;
 	}
 	
-	public String getStartTime(){
-		return startTime;
+	public String getStart(){
+		return start;
 	}
 	
-	public String getEndTime(){
-		return endTime;
+	public String getEnd(){
+		return end;
 	}
 	
 	public List<String> getAffils(){

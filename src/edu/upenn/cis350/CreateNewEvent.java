@@ -136,34 +136,58 @@ public class CreateNewEvent extends Activity {
     public void onCreateEventSubmit(View view){
     	//TODO closen: transition to main activity
     	//Intent i = new Intent(this, WhartonComputingCommunicationsActivity.class);
+    	EventPOJO event = new EventPOJO();
     	Intent i = new Intent(this, ShowEvent.class);
     	EditText temp = (EditText)findViewById(R.id.eventTitle);
+    	event.setEventTitle(temp.getText().toString());		// EVENT
     	i.putExtra("eventTitle", temp.getText().toString());
     	temp = (EditText)findViewById(R.id.eventDesc);
+    	event.setEventDesc(temp.getText().toString());		// EVENT
     	i.putExtra("eventDesc", temp.getText().toString());
     	temp = (EditText)findViewById(R.id.eventActions);
+    	event.setEventActions(temp.getText().toString());	// EVENT
     	i.putExtra("eventActions", temp.getText().toString());
     	TextView temp2 = (TextView)findViewById(R.id.startDateDisplay);
+    	event.setStart(temp2.getText().toString());			// EVENT
     	i.putExtra("startDate", temp2.getText().toString());
     	temp2 = (TextView)findViewById(R.id.endDateDisplay);
+    	event.setEnd(temp2.getText().toString());			// EVENT
     	i.putExtra("endDate", temp2.getText().toString());
+    	for(int x = 0; x < affils.length; x++){				// EVENT
+    		if(affilsChecked[x])
+    			event.addToAffils(affils[x].toString());
+    	}
+    	for(int x = 0; x < systems.length; x++){
+    		if(systemsChecked[x])
+    			event.addToSystems(systems[x].toString());
+    	}													// EVENT
     	i.putExtra("affils", affils);
     	i.putExtra("affilsChecked", affilsChecked);
     	i.putExtra("systems", systems);
     	i.putExtra("systemsChecked", systemsChecked);
     	Spinner spin1 = (Spinner)findViewById(R.id.personSpinner1);
+    	event.setContact1(spin1.getSelectedItem().toString());	// EVENT
     	i.putExtra("person1", spin1.getSelectedItem().toString());
     	spin1 = (Spinner)findViewById(R.id.personSpinner2);
+    	event.setContact2(spin1.getSelectedItem().toString());	// EVENT
     	i.putExtra("person2", spin1.getSelectedItem().toString());
     	;
-    	if(((RadioButton)findViewById(R.id.radioRed)).isChecked())
+    	if(((RadioButton)findViewById(R.id.radioRed)).isChecked()){
     		i.putExtra("sevColor", Color.RED);
-    	else if(((RadioButton)findViewById(R.id.radioYellow)).isChecked())
+    		event.setSeverity(Color.RED);						// EVENT
+    	}
+    	else if(((RadioButton)findViewById(R.id.radioYellow)).isChecked()){
     		i.putExtra("sevColor", Color.YELLOW);
-    	else if(((RadioButton)findViewById(R.id.radioGreen)).isChecked())
+    		event.setSeverity(Color.YELLOW);					// EVENT
+    	}
+    	else if(((RadioButton)findViewById(R.id.radioGreen)).isChecked()){
     		i.putExtra("sevColor", Color.GREEN);
-    	else
+    		event.setSeverity(Color.GREEN);						// EVENT
+    	}
+    	else {
     		i.putExtra("sevColor", Color.BLACK);
+    		event.setSeverity(Color.BLACK);						// EVENT
+    	}
     	startActivity(i);
     }
     
