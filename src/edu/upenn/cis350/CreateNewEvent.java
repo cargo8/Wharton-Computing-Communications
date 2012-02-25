@@ -188,6 +188,7 @@ public class CreateNewEvent extends Activity {
     		i.putExtra("sevColor", Color.BLACK);
     		event.setSeverity(Color.BLACK);						// EVENT
     	}
+    	//i.putExtra("eventPOJO", event);
     	startActivity(i);
     }
     
