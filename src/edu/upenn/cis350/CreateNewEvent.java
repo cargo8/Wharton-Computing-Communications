@@ -290,12 +290,30 @@ public class CreateNewEvent extends Activity {
 		contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_EVENT_TITLE, event.getEventTitle());
 		contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_EVENT_DESC, event.getEventDesc());
 		contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_EVENT_ACTIONS, event.getEventActions());
+		contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_EVENT_START, event.getStart());
+		contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_EVENT_END, event.getEnd());
+		StringBuffer temp = new StringBuffer();
+		for(String s : event.getAffils()){
+			temp.append(s + "\t");
+		}
+		contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_EVENT_AFFILS, temp.toString());
+		temp = new StringBuffer();
+		for(String s : event.getSystems()){
+			temp.append(s + "\t");
+		}
+		contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_EVENT_SYSTEMS, temp.toString());
+		contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_EVENT_CONTACT1, event.getContact1());
+		contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_EVENT_CONTACT2, event.getContact2());
+		contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_EVENT_SEVERITY, event.getSeverity());
+
+
 
 		// Now we can insert the data in to relevant table
 		// I am going pass the id value, which is going to change because of our insert method, to a long variable to show in Toast
 		long affectedColumnId = sqliteDatabase.insert(AndroidOpenDbHelper.TABLE_NAME_EVENTS, null, contentValues);
 
 		// It is a good practice to close the database connections after you have done with it
+		//sqliteDatabase.delete(AndroidOpenDbHelper.TABLE_NAME_EVENTS, null, null);
 		sqliteDatabase.close();
 
 		// I am not going to do the retrieve part in this post. So this is just a notification for satisfaction 

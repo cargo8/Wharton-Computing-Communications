@@ -103,11 +103,13 @@ public class Agenda extends Activity {
 			event.setEventActions(eventActions);
 			String[] affils = eventAffils.split("\t");
 			for (String s : affils) {
-				event.addToAffils(s);
+				if(!s.equals(""))
+					event.addToAffils(s);
 			}
 			String[] systems = eventSystems.split("\t");
 			for (String s : systems) {
-				event.addToSystems(s);
+				if(!s.equals(""))
+					event.addToSystems(s);
 			}
 			
 			eventList.add(event);
