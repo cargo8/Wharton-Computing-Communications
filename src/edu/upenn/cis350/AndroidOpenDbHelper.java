@@ -12,10 +12,17 @@ public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 	public static final int DB_VERSION = 1;
 
 	// Table attributes
-	public static final String TABLE_NAME = "events_table";
+	public static final String TABLE_NAME_EVENTS = "events_table";
 	public static final String COLUMN_NAME_EVENT_TITLE = "event_title_column";
 	public static final String COLUMN_NAME_EVENT_DESC = "event_desc_column";
 	public static final String COLUMN_NAME_EVENT_ACTIONS = "event_actions_column";
+	public static final String COLUMN_NAME_EVENT_START = "event_start_column";
+	public static final String COLUMN_NAME_EVENT_END = "event_end_column";
+	public static final String COLUMN_NAME_EVENT_AFFILS = "event_affils_column";
+	public static final String COLUMN_NAME_EVENT_SYSTEMS = "event_systems_column";
+	public static final String COLUMN_NAME_EVENT_CONTACT1 = "event_contact1_column";
+	public static final String COLUMN_NAME_EVENT_CONTACT2 = "event_contact2_column";
+	public static final String COLUMN_NAME_EVENT_SEVERITY = "event_severity_column";
 	//TODO (closen) add more columns
 
 	public AndroidOpenDbHelper(Context context) {
@@ -29,10 +36,17 @@ public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 		// We need to check whether table that we are going to create already exists.
 		// This method gets executed every time we creat an object of this class.
 		//"create table if not exists TABLE_NAME ( BaseColumns._ID integer primary key autoincrement, FIRST_COLUMN_NAME text not null, SECOND_COLUMN_NAME integer not null);"
-		String sqlQueryToCreateUndergraduateDetailsTable = "create table if not exists " + TABLE_NAME + " ( " + BaseColumns._ID + " integer primary key autoincrement, "
+		String sqlQueryToCreateUndergraduateDetailsTable = "create table if not exists " + TABLE_NAME_EVENTS + " ( " + BaseColumns._ID + " integer primary key autoincrement, "
 																+ COLUMN_NAME_EVENT_TITLE + " text not null, "
 																+ COLUMN_NAME_EVENT_DESC + " text not null, "
-																+ COLUMN_NAME_EVENT_ACTIONS + " real not null);";
+																+ COLUMN_NAME_EVENT_ACTIONS + " text not null, "
+																+ COLUMN_NAME_EVENT_START + " text not null, "
+																+ COLUMN_NAME_EVENT_END + " text not null, "
+																+ COLUMN_NAME_EVENT_AFFILS + " text not null, "
+																+ COLUMN_NAME_EVENT_SYSTEMS + " text not null, "
+																+ COLUMN_NAME_EVENT_CONTACT1 + " text not null, "
+																+ COLUMN_NAME_EVENT_CONTACT2 + " text not null, "
+																+ COLUMN_NAME_EVENT_SEVERITY + " integer);";
 		// Execute a single SQL statement that is NOT a SELECT or any other SQL statement that returns data.
 		db.execSQL(sqlQueryToCreateUndergraduateDetailsTable);
 	}

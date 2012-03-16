@@ -23,19 +23,14 @@ public class ShowEvent extends Activity {
         	EventPOJO event = (EventPOJO)extras.get("eventPOJO");
         	System.out.println(event.getEventTitle());
         	TextView temp = (TextView)findViewById(R.id.eventTitleText);
-        	//temp.setText((String)extras.get("eventTitle"));
         	temp.setText(event.getEventTitle());
         	temp = (TextView)findViewById(R.id.eventDescText);
-        	//temp.setText((String)extras.get("eventDesc"));
         	temp.setText(event.getEventDesc());
         	temp = (TextView)findViewById(R.id.eventActionsText);
-        	//temp.setText((String)extras.get("eventActions"));
         	temp.setText(event.getEventActions());
         	temp = (TextView)findViewById(R.id.startDateDisplay2);
-        	//temp.setText((String)extras.get("startDate"));
         	temp.setText(event.getStart());
         	temp = (TextView)findViewById(R.id.endDateDisplay2);
-        	//temp.setText((String)extras.get("endDate"));
         	temp.setText(event.getEnd());
         	temp = (TextView)findViewById(R.id.affilsText);
         	/*
@@ -74,13 +69,10 @@ public class ShowEvent extends Activity {
         	}
         	temp.setText(systemText.toString());
         	temp = (TextView)findViewById(R.id.personText1);
-        	//temp.setText((String)extras.get("person1"));
         	temp.setText(event.getContact1());
         	temp = (TextView)findViewById(R.id.personText2);
-        	//temp.setText((String)extras.get("person2"));
         	temp.setText(event.getContact2());
         	temp = (TextView)findViewById(R.id.severityText);
-        	//temp.setBackgroundColor(extras.getInt("sevColor"));
         	temp.setBackgroundColor(event.getSeverity());
         	
         }

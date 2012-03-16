@@ -6,8 +6,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -140,19 +142,14 @@ public class CreateNewEvent extends Activity {
     	Intent i = new Intent(this, ShowEvent.class);
     	EditText temp = (EditText)findViewById(R.id.eventTitle);
     	event.setEventTitle(temp.getText().toString());		// EVENT
-    	//i.putExtra("eventTitle", temp.getText().toString());
     	temp = (EditText)findViewById(R.id.eventDesc);
     	event.setEventDesc(temp.getText().toString());		// EVENT
-    	//i.putExtra("eventDesc", temp.getText().toString());
     	temp = (EditText)findViewById(R.id.eventActions);
     	event.setEventActions(temp.getText().toString());	// EVENT
-    	//i.putExtra("eventActions", temp.getText().toString());
     	TextView temp2 = (TextView)findViewById(R.id.startDateDisplay);
     	event.setStart(temp2.getText().toString());			// EVENT
-    	//i.putExtra("startDate", temp2.getText().toString());
     	temp2 = (TextView)findViewById(R.id.endDateDisplay);
     	event.setEnd(temp2.getText().toString());			// EVENT
-    	//i.putExtra("endDate", temp2.getText().toString());
     	if(affils != null){
     		for(int x = 0; x < affils.length; x++){				// EVENT
     			if(affilsChecked[x])
@@ -165,34 +162,24 @@ public class CreateNewEvent extends Activity {
     				event.addToSystems(systems[x].toString());
     		}
     	}														// EVENT
-    	//i.putExtra("affils", affils);
-    	//i.putExtra("affilsChecked", affilsChecked);
-    	//i.putExtra("systems", systems);
-    	//i.putExtra("systemsChecked", systemsChecked);
     	Spinner spin1 = (Spinner)findViewById(R.id.personSpinner1);
     	event.setContact1(spin1.getSelectedItem().toString());	// EVENT
-    	//i.putExtra("person1", spin1.getSelectedItem().toString());
     	spin1 = (Spinner)findViewById(R.id.personSpinner2);
     	event.setContact2(spin1.getSelectedItem().toString());	// EVENT
-    	//i.putExtra("person2", spin1.getSelectedItem().toString());
-    	;
     	if(((RadioButton)findViewById(R.id.radioRed)).isChecked()){
-    		//i.putExtra("sevColor", Color.RED);
     		event.setSeverity(Color.RED);						// EVENT
     	}
     	else if(((RadioButton)findViewById(R.id.radioYellow)).isChecked()){
-    		//i.putExtra("sevColor", Color.YELLOW);
     		event.setSeverity(Color.YELLOW);					// EVENT
     	}
     	else if(((RadioButton)findViewById(R.id.radioGreen)).isChecked()){
-    		//i.putExtra("sevColor", Color.GREEN);
     		event.setSeverity(Color.GREEN);						// EVENT
     	}
     	else {
-    		//i.putExtra("sevColor", Color.BLACK);
     		event.setSeverity(Color.BLACK);						// EVENT
     	}
-    	//i.putExtra("eventPOJO", event);
+    	i.putExtra("eventPOJO", event);
+    	insertEvent(event);
     	startActivity(i);
     }
     
@@ -286,5 +273,34 @@ public class CreateNewEvent extends Activity {
         }
         return null;
     }
+    
+    public void insertEvent(EventPOJO event){
+
+		// First we have to open our DbHelper class by creating a new object of that
+		AndroidOpenDbHelper androidOpenDbHelperObj = new AndroidOpenDbHelper(this);
+
+		// Then we need to get a writable SQLite database, because we are going to insert some values
+		// SQLiteDatabase has methods to create, delete, execute SQL commands, and perform other common database management tasks.
+		SQLiteDatabase sqliteDatabase = androidOpenDbHelperObj.getWritableDatabase();
+
+		// ContentValues class is used to store a set of values that the ContentResolver can process.
+		ContentValues contentValues = new ContentValues();
+
+		// Get values from the POJO class and passing them to the ContentValues class
+		contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_EVENT_TITLE, event.getEventTitle());
+		contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_EVENT_DESC, event.getEventDesc());
+		contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_EVENT_ACTIONS, event.getEventDesc());
+
+		// Now we can insert the data in to relevant table
+		// I am going pass the id value, which is going to change because of our insert method, to a long variable to show in Toast
+		long affectedColumnId = sqliteDatabase.insert(AndroidOpenDbHelper.TABLE_NAME_EVENTS, null, contentValues);
+
+		// It is a good practice to close the database connections after you have done with it
+		sqliteDatabase.close();
+
+		// I am not going to do the retrieve part in this post. So this is just a notification for satisfaction 
+		Toast.makeText(this, "Values inserted column ID is :" + affectedColumnId, Toast.LENGTH_SHORT).show();
+
+	}
     
 }
