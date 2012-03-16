@@ -23,9 +23,37 @@ public class EventPOJO implements Parcelable{
 	private String type;
 	//TODO List of messages as Strings or Message objects?
 	
+	//Used to regenerate object
+	public static final Parcelable.Creator<EventPOJO> CREATOR = new Parcelable.Creator<EventPOJO>() {
+        public EventPOJO createFromParcel(Parcel in) {
+            return new EventPOJO(in);
+        }
+
+        public EventPOJO[] newArray(int size) {
+            return new EventPOJO[size];
+        }
+    };
+
+	
 	public EventPOJO(){
 		affils = new ArrayList<String>();
 		systems = new ArrayList<String>();
+	}
+	
+	public EventPOJO(Parcel in){
+		eventTitle = in.readString();
+		eventDesc = in.readString();
+		eventActions = in.readString();
+		start = in.readString();
+		end = in.readString();
+		affils = new ArrayList<String>();
+		in.readList(affils, null);
+		systems = new ArrayList<String>();
+		in.readList(systems, null);
+		severity = in.readInt();
+		contact1 = in.readString();
+		contact2 = in.readString();
+		type = in.readString();
 	}
 	
 	///////// SETTER METHODS /////////////

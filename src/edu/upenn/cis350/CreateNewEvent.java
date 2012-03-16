@@ -153,14 +153,18 @@ public class CreateNewEvent extends Activity {
     	temp2 = (TextView)findViewById(R.id.endDateDisplay);
     	event.setEnd(temp2.getText().toString());			// EVENT
     	i.putExtra("endDate", temp2.getText().toString());
-    	for(int x = 0; x < affils.length; x++){				// EVENT
-    		if(affilsChecked[x])
-    			event.addToAffils(affils[x].toString());
+    	if(affils != null){
+    		for(int x = 0; x < affils.length; x++){				// EVENT
+    			if(affilsChecked[x])
+    				event.addToAffils(affils[x].toString());
+    		}
     	}
-    	for(int x = 0; x < systems.length; x++){
-    		if(systemsChecked[x])
-    			event.addToSystems(systems[x].toString());
-    	}													// EVENT
+    	if(systems != null){
+    		for(int x = 0; x < systems.length; x++){
+    			if(systemsChecked[x])
+    				event.addToSystems(systems[x].toString());
+    		}
+    	}														// EVENT
     	i.putExtra("affils", affils);
     	i.putExtra("affilsChecked", affilsChecked);
     	i.putExtra("systems", systems);
@@ -188,7 +192,7 @@ public class CreateNewEvent extends Activity {
     		i.putExtra("sevColor", Color.BLACK);
     		event.setSeverity(Color.BLACK);						// EVENT
     	}
-    	//i.putExtra("eventPOJO", event);
+    	i.putExtra("eventPOJO", event);
     	startActivity(i);
     }
     

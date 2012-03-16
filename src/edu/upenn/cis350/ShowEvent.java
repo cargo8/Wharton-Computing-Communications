@@ -18,6 +18,8 @@ public class ShowEvent extends Activity {
         setContentView(R.layout.showevent);
         Bundle extras = this.getIntent().getExtras();
         if(extras != null){
+        	EventPOJO event = (EventPOJO)extras.get("eventPOJO");
+        	System.out.println(event.getEventTitle());
         	TextView temp = (TextView)findViewById(R.id.eventTitleText);
         	temp.setText((String)extras.get("eventTitle"));
         	temp = (TextView)findViewById(R.id.eventDescText);
