@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.TextView;
 
 
-//TODO (kuyumcu) Half of this activity will consist of the messages related to a particular event
 public class ShowEvent extends Activity {
 	
 

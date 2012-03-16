@@ -289,7 +289,7 @@ public class CreateNewEvent extends Activity {
 		// Get values from the POJO class and passing them to the ContentValues class
 		contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_EVENT_TITLE, event.getEventTitle());
 		contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_EVENT_DESC, event.getEventDesc());
-		contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_EVENT_ACTIONS, event.getEventDesc());
+		contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_EVENT_ACTIONS, event.getEventActions());
 
 		// Now we can insert the data in to relevant table
 		// I am going pass the id value, which is going to change because of our insert method, to a long variable to show in Toast
