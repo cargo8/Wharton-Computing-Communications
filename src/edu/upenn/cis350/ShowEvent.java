@@ -1,5 +1,7 @@
 package edu.upenn.cis350;
 
+import java.util.List;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,16 +23,22 @@ public class ShowEvent extends Activity {
         	EventPOJO event = (EventPOJO)extras.get("eventPOJO");
         	System.out.println(event.getEventTitle());
         	TextView temp = (TextView)findViewById(R.id.eventTitleText);
-        	temp.setText((String)extras.get("eventTitle"));
+        	//temp.setText((String)extras.get("eventTitle"));
+        	temp.setText(event.getEventTitle());
         	temp = (TextView)findViewById(R.id.eventDescText);
-        	temp.setText((String)extras.get("eventDesc"));
+        	//temp.setText((String)extras.get("eventDesc"));
+        	temp.setText(event.getEventDesc());
         	temp = (TextView)findViewById(R.id.eventActionsText);
-        	temp.setText((String)extras.get("eventActions"));
+        	//temp.setText((String)extras.get("eventActions"));
+        	temp.setText(event.getEventActions());
         	temp = (TextView)findViewById(R.id.startDateDisplay2);
-        	temp.setText((String)extras.get("startDate"));
+        	//temp.setText((String)extras.get("startDate"));
+        	temp.setText(event.getStart());
         	temp = (TextView)findViewById(R.id.endDateDisplay2);
-        	temp.setText((String)extras.get("endDate"));
+        	//temp.setText((String)extras.get("endDate"));
+        	temp.setText(event.getEnd());
         	temp = (TextView)findViewById(R.id.affilsText);
+        	/*
         	CharSequence[] temp2 = extras.getCharSequenceArray("affils");
         	boolean[] temp3 = extras.getBooleanArray("affilsChecked");
         	StringBuilder affilText = new StringBuilder();
@@ -40,8 +48,15 @@ public class ShowEvent extends Activity {
         				affilText.append(temp2[i] + "\t");
         		}
         	}
+        	*/
+        	List<String> affilList = event.getAffils();
+        	StringBuilder affilText = new StringBuilder();
+        	for(String s : affilList){
+        		affilText.append(s + "\t");
+        	}
         	temp.setText(affilText.toString());
         	temp = (TextView)findViewById(R.id.systemsText);
+        	/*
         	temp2 = extras.getCharSequenceArray("systems");
         	temp3 = extras.getBooleanArray("systemsChecked");
         	StringBuilder systemText = new StringBuilder();
@@ -51,13 +66,22 @@ public class ShowEvent extends Activity {
         				systemText.append(temp2[i] + "\t");
         		}
         	}
+        	*/
+        	List<String> systemList = event.getSystems();
+        	StringBuilder systemText = new StringBuilder();
+        	for(String s : systemList){
+        		systemText.append(s + "\t");
+        	}
         	temp.setText(systemText.toString());
         	temp = (TextView)findViewById(R.id.personText1);
-        	temp.setText((String)extras.get("person1"));
+        	//temp.setText((String)extras.get("person1"));
+        	temp.setText(event.getContact1());
         	temp = (TextView)findViewById(R.id.personText2);
-        	temp.setText((String)extras.get("person2"));
+        	//temp.setText((String)extras.get("person2"));
+        	temp.setText(event.getContact2());
         	temp = (TextView)findViewById(R.id.severityText);
-        	temp.setBackgroundColor(extras.getInt("sevColor"));
+        	//temp.setBackgroundColor(extras.getInt("sevColor"));
+        	temp.setBackgroundColor(event.getSeverity());
         	
         }
     }
