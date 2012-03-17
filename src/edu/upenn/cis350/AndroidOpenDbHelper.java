@@ -8,7 +8,7 @@ import android.provider.BaseColumns;
 // A helper class to manage database creation and version management.
 public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 	// Database attributes
-	public static final String DB_NAME = "events_db";
+	public static final String DB_NAME = "wcomm_db";
 	public static final int DB_VERSION = 1;
 
 	// Table attributes
@@ -25,6 +25,12 @@ public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 	public static final String COLUMN_NAME_EVENT_SEVERITY = "event_severity_column";
 	//TODO (closen) add more columns
 
+	public static final String TABLE_NAME_COMMENTS = "comments_table";
+	public static final String COLUMN_NAME_COMMENT_TEXT = "comment_text_column";
+	public static final String COLUMN_NAME_COMMENT_AUTHOR = "comment_author_column";
+	public static final String COLUMN_NAME_COMMENT_TIMESTAMP = "comment_timestamp_column";
+	
+	
 	public AndroidOpenDbHelper(Context context) {
 		super(context, DB_NAME, null, DB_VERSION);
 	}
@@ -36,7 +42,7 @@ public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 		// We need to check whether table that we are going to create already exists.
 		// This method gets executed every time we creat an object of this class.
 		//"create table if not exists TABLE_NAME ( BaseColumns._ID integer primary key autoincrement, FIRST_COLUMN_NAME text not null, SECOND_COLUMN_NAME integer not null);"
-		String sqlQueryToCreateUndergraduateDetailsTable = "create table if not exists " + TABLE_NAME_EVENTS + " ( " + BaseColumns._ID + " integer primary key autoincrement, "
+		String sqlCreateEventsTable = "create table if not exists " + TABLE_NAME_EVENTS + " ( " + BaseColumns._ID + " integer primary key autoincrement, "
 																+ COLUMN_NAME_EVENT_TITLE + " text not null, "
 																+ COLUMN_NAME_EVENT_DESC + " text not null, "
 																+ COLUMN_NAME_EVENT_ACTIONS + " text not null, "
@@ -47,8 +53,14 @@ public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 																+ COLUMN_NAME_EVENT_CONTACT1 + " text not null, "
 																+ COLUMN_NAME_EVENT_CONTACT2 + " text not null, "
 																+ COLUMN_NAME_EVENT_SEVERITY + " integer);";
+		String sqlCreateCommentsTable = "create table if not exists " + TABLE_NAME_COMMENTS + " ( " + BaseColumns._ID + " integer primary key autoincrement, "
+																+ COLUMN_NAME_COMMENT_TEXT + " text not null, "
+																+ COLUMN_NAME_COMMENT_AUTHOR + " text not null, "
+																+ COLUMN_NAME_COMMENT_TIMESTAMP + " text not null);";
+		
 		// Execute a single SQL statement that is NOT a SELECT or any other SQL statement that returns data.
-		db.execSQL(sqlQueryToCreateUndergraduateDetailsTable);
+		db.execSQL(sqlCreateEventsTable
+				 + sqlCreateCommentsTable);
 	}
 
 	// onUpgrade method is used when we need to upgrade the database to a new version

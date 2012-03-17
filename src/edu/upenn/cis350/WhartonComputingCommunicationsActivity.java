@@ -2,6 +2,7 @@ package edu.upenn.cis350;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -46,4 +47,17 @@ public class WhartonComputingCommunicationsActivity extends Activity {
     	Intent i = new Intent(this, ShowComments.class);
     	startActivityForResult(i, ACTIVITY_SHOWCOMMENTS);
     }
+    
+    public void nuke(View view) {
+		AndroidOpenDbHelper androidOpenDbHelperObj = new AndroidOpenDbHelper(this);
+
+		// Then we need to get a writable SQLite database, because we are going to insert some values
+		// SQLiteDatabase has methods to create, delete, execute SQL commands, and perform other common database management tasks.
+		SQLiteDatabase sqliteDatabase = androidOpenDbHelperObj.getWritableDatabase();
+		
+		sqliteDatabase.delete(AndroidOpenDbHelper.TABLE_NAME_EVENTS, null, null);
+		sqliteDatabase.delete(AndroidOpenDbHelper.TABLE_NAME_COMMENTS, null, null);	
+		
+		sqliteDatabase.close();
+	}
 }
