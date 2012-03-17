@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,6 +27,9 @@ public class Agenda extends Activity {
         setContentView(R.layout.agenda);
         List<EventPOJO> eventList = getEvents();
         LinearLayout eventPane = (LinearLayout) findViewById(R.id.agendaEvents);
+        LinearLayout emergencyPane = (LinearLayout) findViewById(R.id.agendaEmergency);
+        
+        //TODO(jmow): Add events to separate emergency vs. event pane
         
         for (EventPOJO event : eventList) {
         	LinearLayout eventFrame = new LinearLayout(this);
@@ -33,16 +37,37 @@ public class Agenda extends Activity {
         	eventFrame.setOrientation(1);
         	eventFrame.setPadding(1, 1, 1, 1);
         	
+        	LinearLayout titleFrame = new LinearLayout(this);
+        	titleFrame.setOrientation(0);
+        	
+        	TextView severity = new TextView(this);
+        	severity.setWidth(25);
+        	severity.setHeight(25);
+        	severity.setText("    ");
+        	severity.setBackgroundColor(event.getSeverity());
+        	
         	TextView title = new TextView(this);
         	title.setText(event.getEventTitle());
-        	eventFrame.addView(title);
+        	// textSize="16.0sp"
+        	title.setTextSize((float)16.0);
+        	// gravity="center_horizontal"
+        	//title.setGravity(0x01);
+        	// textStyle="bold"
+        	title.setTypeface(Typeface.DEFAULT_BOLD);
+        	
+        	titleFrame.addView(severity);
+        	titleFrame.addView(title);
+        	eventFrame.addView(titleFrame);
         	
         	TextView timeframe = new TextView(this);
-        	timeframe.setText(event.getStart() + " - " + event.getEnd());
+        	timeframe.setText("Start: " + event.getStart() + 
+        			", Est. Finish: " + event.getEnd());
+        	timeframe.setTextSize((float)12.0);
         	eventFrame.addView(timeframe);
         	
         	TextView description = new TextView(this);
         	description.setText(event.getEventDesc());
+        	description.setTextSize((float)12.0);
         	eventFrame.addView(description);
         	
 			final Intent i = new Intent(this, ShowEvent.class);
@@ -56,7 +81,7 @@ public class Agenda extends Activity {
 				}
         		
         	});
-        	eventPane.addView(eventFrame);
+        	emergencyPane.addView(eventFrame);
         }
     }
     
