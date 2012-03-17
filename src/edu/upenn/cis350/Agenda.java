@@ -9,10 +9,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,7 +35,7 @@ public class Agenda extends Activity {
         //TODO(jmow): Add events to separate emergency vs. event pane
         
         for (EventPOJO event : eventList) {
-        	LinearLayout eventFrame = new LinearLayout(this);
+        	final LinearLayout eventFrame = new LinearLayout(this);
         	// Vertical Orientation
         	eventFrame.setOrientation(1);
         	eventFrame.setPadding(1, 1, 1, 1);
@@ -77,6 +80,8 @@ public class Agenda extends Activity {
 
 				@Override
 				public void onClick(View v) {
+					//TODO(jmow): Change background on click
+//					eventFrame.setBackgroundColor(Color.GRAY);
 					startActivity(i);
 				}
         		
