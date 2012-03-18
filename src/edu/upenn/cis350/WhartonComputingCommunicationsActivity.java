@@ -69,5 +69,5 @@ public class WhartonComputingCommunicationsActivity extends Activity {
     public void clickRegister(View view) {
     	Intent i = new Intent(this, Register.class);
     	startActivityForResult(i, ACTIVITY_ShowComments);
-    }
+    } 
 }
