@@ -75,6 +75,7 @@ public class ShowComments extends Activity {
     	comment.setTimestamp(System.currentTimeMillis() + "");
     	
     	insertComment(comment);
+    	commentText.setText("");
     	populateComments();
     }
     
@@ -149,13 +150,14 @@ public class ShowComments extends Activity {
     	List<CommentPOJO> commentList = new ArrayList<CommentPOJO>();
     	
     	// First we have to open our DbHelper class by creating a new object of that
-    	AndroidOpenDbHelper androidOpenDbHelperObj = new AndroidOpenDbHelper(this);
+    	AndroidOpenDbHelper dbHelper = new AndroidOpenDbHelper(this);
 
     	// Then we need to get a writable SQLite database, because we are going to insert some values
     	// SQLiteDatabase has methods to create, delete, execute SQL commands, and perform other common database management tasks.
-    	SQLiteDatabase sqliteDatabase = androidOpenDbHelperObj.getReadableDatabase();
+    	SQLiteDatabase db = dbHelper.getReadableDatabase();
+    	dbHelper.createCommentsTable(db);
     	
-    	Cursor cursor = sqliteDatabase.query(AndroidOpenDbHelper.TABLE_NAME_COMMENTS, null, null, null, null, null, null);
+    	Cursor cursor = db.query(AndroidOpenDbHelper.TABLE_NAME_COMMENTS, null, null, null, null, null, null);
     	startManagingCursor(cursor);
     	
     	while (cursor.moveToNext()) {
@@ -170,7 +172,7 @@ public class ShowComments extends Activity {
     		commentList.add(comment);
     	}
     	
-    	sqliteDatabase.close();
+    	db.close();
     	return commentList;
     }
     

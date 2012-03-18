@@ -23,6 +23,8 @@
         <activity android:name=".ShowEvent" />
         <activity android:name=".Agenda" />
         <activity android:name=".ShowComments" />
+        <activity android:name=".Home" />
+        <activity android:name=".Register" />
         
     </application>
 

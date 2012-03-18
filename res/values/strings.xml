@@ -2,7 +2,7 @@
 <resources>
 	
     <!-- General Strings -->
-    <string name="hello">Hello World, WhartonComputingCommunicationsActivity!</string>
+    <string name="hello">Welcome to Wharton Computing Communications. Please login:</string>
     <string name="app_name">Wharton Computing Communications</string>
     <string name="createEvent">Create New Event</string>
     <string name="showEvent">Show Events</string>
