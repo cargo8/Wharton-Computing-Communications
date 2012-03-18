@@ -60,6 +60,7 @@
     <string name="defaultDescText">This is the Default Event Description.</string>
     <string name="defaultActionsText">This is the Default Action Text</string>
     <string name="messageList">MESSAGES AND UPDATES:</string>
+    <string name="postMessageBut">Post Message</string>
     
     <string name="dummyMes1">Wharton listservs are down. URGENT! Responsible 
         people please respond ASAP.</string>

@@ -219,13 +219,26 @@
         android:text="@string/backToHome"
         android:onClick="onBackToAgendaClick" />
 	 -->
-	 
-    <TextView
-      		android:layout_width="wrap_content"
-       		android:layout_height="wrap_content"
-       		android:text="@string/messageList"
-       		android:padding="10sp"
-       		android:textStyle="bold" />
+	<LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+       	
+	    <TextView
+	      		android:layout_width="wrap_content"
+	       		android:layout_height="wrap_content"
+	       		android:text="@string/messageList"
+	       		android:padding="6sp"
+	       		android:textStyle="bold" />
+	    
+	     <Button 
+	        android:id="@+id/postMessage"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/postMessageBut"
+	        android:onClick="onPostMessage" />
+    
+    </LinearLayout>
     
     <TextView
         	android:id="@+id/mes1"
