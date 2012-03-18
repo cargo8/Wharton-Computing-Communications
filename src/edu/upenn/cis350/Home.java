@@ -46,6 +46,12 @@ public class Home extends Activity {
     	startActivity(i);
     }
     
+    @Override
+    public void onBackPressed() {
+       Intent i = new Intent(this, WhartonComputingCommunicationsActivity.class);
+       startActivity(i);
+    }    
+    
     public void nuke(View view) {
  		AndroidOpenDbHelper androidOpenDbHelperObj = new AndroidOpenDbHelper(this);
 
