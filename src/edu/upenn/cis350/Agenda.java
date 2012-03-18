@@ -38,6 +38,7 @@ public class Agenda extends Activity {
         List<EventPOJO> eventList = getEvents();
         LinearLayout eventPane = (LinearLayout) findViewById(R.id.agendaEvents);
         LinearLayout emergencyPane = (LinearLayout) findViewById(R.id.agendaEmergency);
+        LinearLayout miscPane = (LinearLayout) findViewById(R.id.miscEvents);
         
         //TODO(jmow): Add events to separate emergency vs. event pane
         
@@ -94,7 +95,14 @@ public class Agenda extends Activity {
 				}
         		
         	});
-        	emergencyPane.addView(eventFrame);
+        	
+        	if (event.getType().equals("Emergency")) {
+            	emergencyPane.addView(eventFrame);
+        	} else if (event.getType().equals("Scheduled")) {
+        		eventPane.addView(eventFrame);
+        	} else {
+        		miscPane.addView(eventFrame);
+        	}
         }
     }
     

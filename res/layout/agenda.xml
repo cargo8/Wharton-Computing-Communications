@@ -48,6 +48,21 @@
 		        android:textStyle="bold" />
         
     </LinearLayout>
+     <LinearLayout android:id="@+id/miscEvents"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+			<TextView
+		 		android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:text="OTHER (UNCLASSIFIED) EVENTS"
+		        android:textSize="10.0sp"
+		        android:background="#fff"
+		        android:textColor="#000"
+		        android:textStyle="bold" />
+        
+    </LinearLayout>
+    
 
 </LinearLayout>
 </ScrollView>
