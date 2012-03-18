@@ -98,13 +98,14 @@ public class Agenda extends Activity {
     public List<EventPOJO> getEvents(){
     	List<EventPOJO> eventList = new ArrayList<EventPOJO>();
     	
-		AndroidOpenDbHelper androidOpenDbHelperObj = new AndroidOpenDbHelper(this);
+		AndroidOpenDbHelper dbHelper = new AndroidOpenDbHelper(this);
 
 		// Get a readable SQLite database, because we are going to read all scheduled tasks from the DB
-		SQLiteDatabase sqliteDatabase = androidOpenDbHelperObj.getReadableDatabase();
-
+		SQLiteDatabase db = dbHelper.getReadableDatabase();
+		dbHelper.createEventsTable(db);
+		
 		//(String table, String[] columns, String selection, String[] selectionArgs, String groupBy, String having, String orderBy)
-		Cursor cursor = sqliteDatabase.query(AndroidOpenDbHelper.TABLE_NAME_EVENTS, null, null, null, null, null, null);
+		Cursor cursor = db.query(AndroidOpenDbHelper.TABLE_NAME_EVENTS, null, null, null, null, null, null);
 		startManagingCursor(cursor);
 		
 		while (cursor.moveToNext()) {
@@ -145,7 +146,7 @@ public class Agenda extends Activity {
 			eventList.add(event);
 		}
 		
-		sqliteDatabase.close();
+		db.close();
 		
 //		Toast.makeText(this, "Values inserted column ID is :" + affectedColumnId, Toast.LENGTH_SHORT).show();
 		return eventList;

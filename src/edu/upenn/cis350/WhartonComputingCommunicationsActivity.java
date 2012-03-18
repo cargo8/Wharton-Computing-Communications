@@ -69,22 +69,4 @@ public class WhartonComputingCommunicationsActivity extends Activity {
     	Intent i = new Intent(this, Register.class);
     	startActivityForResult(i, ACTIVITY_ShowComments);
     }
-        
-    public void nuke(View view) {
-		AndroidOpenDbHelper androidOpenDbHelperObj = new AndroidOpenDbHelper(this);
-
-		// Then we need to get a writable SQLite database, because we are going to insert some values
-		// SQLiteDatabase has methods to create, delete, execute SQL commands, and perform other common database management tasks.
-		SQLiteDatabase db = androidOpenDbHelperObj.getWritableDatabase();
-		
-//		db.delete(AndroidOpenDbHelper.TABLE_NAME_EVENTS, null, null);
-//		db.delete(AndroidOpenDbHelper.TABLE_NAME_COMMENTS, null, null);	
-
-		String deleteEventsTable = "drop table events_table;";
-		String deleteCommentsTable = "drop table comments_table;";
-		String deleteUsersTable = "drop table users_table;";
-		
-		db.execSQL(deleteEventsTable + deleteCommentsTable + deleteUsersTable);
-		db.close();
-	}
 }
