@@ -39,30 +39,39 @@ public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 	//This is where the creation of tables and the initial population of the tables should happen.
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		// We need to check whether table that we are going to create already exists.
-		// This method gets executed every time we creat an object of this class.
-		//"create table if not exists TABLE_NAME ( BaseColumns._ID integer primary key autoincrement, FIRST_COLUMN_NAME text not null, SECOND_COLUMN_NAME integer not null);"
-		String sqlCreateEventsTable = "create table if not exists " + TABLE_NAME_EVENTS + " ( " + BaseColumns._ID + " integer primary key autoincrement, "
-																+ COLUMN_NAME_EVENT_TITLE + " text not null, "
-																+ COLUMN_NAME_EVENT_DESC + " text not null, "
-																+ COLUMN_NAME_EVENT_ACTIONS + " text not null, "
-																+ COLUMN_NAME_EVENT_START + " text not null, "
-																+ COLUMN_NAME_EVENT_END + " text not null, "
-																+ COLUMN_NAME_EVENT_AFFILS + " text not null, "
-																+ COLUMN_NAME_EVENT_SYSTEMS + " text not null, "
-																+ COLUMN_NAME_EVENT_CONTACT1 + " text not null, "
-																+ COLUMN_NAME_EVENT_CONTACT2 + " text not null, "
-																+ COLUMN_NAME_EVENT_SEVERITY + " integer);";
-		String sqlCreateCommentsTable = "create table if not exists " + TABLE_NAME_COMMENTS + " ( " + BaseColumns._ID + " integer primary key autoincrement, "
-																+ COLUMN_NAME_COMMENT_TEXT + " text not null, "
-																+ COLUMN_NAME_COMMENT_AUTHOR + " text not null, "
-																+ COLUMN_NAME_COMMENT_TIMESTAMP + " text not null);";
-		
-		// Execute a single SQL statement that is NOT a SELECT or any other SQL statement that returns data.
-		db.execSQL(sqlCreateEventsTable
-				 + sqlCreateCommentsTable);
+		createEventsTable(db);
+		createCommentsTable(db);
 	}
 
+	public void createEventsTable(SQLiteDatabase db) {
+		// We need to check whether table that we are going to create already exists.
+				// This method gets executed every time we creat an object of this class.
+				//"create table if not exists TABLE_NAME ( BaseColumns._ID integer primary key autoincrement, FIRST_COLUMN_NAME text not null, SECOND_COLUMN_NAME integer not null);"
+				String sqlCreateEventsTable = "create table if not exists " + TABLE_NAME_EVENTS + " ( " + BaseColumns._ID + " integer primary key autoincrement, "
+																		+ COLUMN_NAME_EVENT_TITLE + " text not null, "
+																		+ COLUMN_NAME_EVENT_DESC + " text not null, "
+																		+ COLUMN_NAME_EVENT_ACTIONS + " text not null, "
+																		+ COLUMN_NAME_EVENT_START + " text not null, "
+																		+ COLUMN_NAME_EVENT_END + " text not null, "
+																		+ COLUMN_NAME_EVENT_AFFILS + " text not null, "
+																		+ COLUMN_NAME_EVENT_SYSTEMS + " text not null, "
+																		+ COLUMN_NAME_EVENT_CONTACT1 + " text not null, "
+																		+ COLUMN_NAME_EVENT_CONTACT2 + " text not null, "
+																		+ COLUMN_NAME_EVENT_SEVERITY + " integer);";
+				
+				// Execute a single SQL statement that is NOT a SELECT or any other SQL statement that returns data.
+				db.execSQL(sqlCreateEventsTable);
+	}
+	
+	public void createCommentsTable(SQLiteDatabase db) {
+		String sqlCreateCommentsTable = "create table if not exists " + TABLE_NAME_COMMENTS + " ( " + BaseColumns._ID + " integer primary key autoincrement, "
+				+ COLUMN_NAME_COMMENT_TEXT + " text not null, "
+				+ COLUMN_NAME_COMMENT_AUTHOR + " text not null, "
+				+ COLUMN_NAME_COMMENT_TIMESTAMP + " text not null);";
+
+		db.execSQL(sqlCreateCommentsTable);
+	}
+	
 	// onUpgrade method is used when we need to upgrade the database to a new version
 	//As an example, the first release of the app contains DB_VERSION = 1
 	//Then, the second release of the same app contains DB_VERSION = 2

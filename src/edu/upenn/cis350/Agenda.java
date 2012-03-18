@@ -44,8 +44,8 @@ public class Agenda extends Activity {
         	titleFrame.setOrientation(0);
         	
         	TextView severity = new TextView(this);
-        	severity.setWidth(25);
-        	severity.setHeight(25);
+        	severity.setWidth(35);
+        	severity.setHeight(35);
         	severity.setText("    ");
         	severity.setBackgroundColor(event.getSeverity());
         	

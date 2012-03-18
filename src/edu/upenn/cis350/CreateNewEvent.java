@@ -283,6 +283,8 @@ public class CreateNewEvent extends Activity {
 		// SQLiteDatabase has methods to create, delete, execute SQL commands, and perform other common database management tasks.
 		SQLiteDatabase sqliteDatabase = androidOpenDbHelperObj.getWritableDatabase();
 
+		androidOpenDbHelperObj.createEventsTable(sqliteDatabase);
+
 		// ContentValues class is used to store a set of values that the ContentResolver can process.
 		ContentValues contentValues = new ContentValues();
 

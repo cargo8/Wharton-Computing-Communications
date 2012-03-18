@@ -8,6 +8,7 @@ import java.util.List;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -22,13 +23,15 @@ public class ShowComments extends Activity {
 
 	//TODO(kuyumcu)
 //	MessagePOJO msg;
+	private Bundle extras;
 	
 	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.showcomments);
-        Bundle extras = this.getIntent().getExtras();
+        extras = this.getIntent().getExtras();
+        
         if (extras != null){
         	// TODO(kuyumcu): Swap in Message data when implemented
         	/* Message Object Start */
@@ -42,20 +45,80 @@ public class ShowComments extends Activity {
 
             TextView temp = (TextView)findViewById(R.id.messageText);
             temp.setTextColor(Color.WHITE);
-            temp.setText((String)extras.get("message"));
+            temp.setText(extras.getString("message"));
             
-        	temp = (TextView) findViewById(R.id.messageTimestamp);
-        	temp.setTextColor(Color.WHITE);
-        	
         	temp = (TextView) findViewById(R.id.messageAuthor);
         	temp.setTextColor(Color.WHITE);
-        	temp.setText("Joe Cruz");
+        	temp.setText("Posted by Joe Cruz at ");
         	
+        	temp = (TextView) findViewById(R.id.messageTimestamp);
+        	temp.setTextColor(Color.WHITE);
         	SimpleDateFormat formatter = new SimpleDateFormat();
         	temp.setText(formatter.format(new Date(System.currentTimeMillis()-86400000)));
         }
         
-        List<CommentPOJO> comments = new ArrayList<CommentPOJO>();
+        populateComments();
+    }
+
+    public void onPostComment(View view) {
+    	CommentPOJO comment = new CommentPOJO();
+    	
+    	EditText commentText = (EditText) findViewById(R.id.newCommentText);
+    	if (commentText.getText().toString().equals("")) {
+    		Toast.makeText(this, "Please enter a comment.", Toast.LENGTH_SHORT).show();
+    		return;
+    	}
+    	comment.setText(commentText.getText().toString());
+    	
+    	//TODO(jmow): Save author name when logins are enabled
+    	comment.setAuthor("Joe Cruz");
+    	comment.setTimestamp(System.currentTimeMillis() + "");
+    	
+    	insertComment(comment);
+    	populateComments();
+    	//TODO(jmow): how do I refresh the view?
+//    	Intent i = new Intent(this, ShowComments.class);
+//    	i.putExtra("message", extras.getString("message"));
+//    	startActivity(i);
+    	//findViewById(R.id.commentsPane).invalidate();
+    }
+    
+    public void insertComment(CommentPOJO comment) {
+    	// First we have to open our DbHelper class by creating a new object of that
+    	AndroidOpenDbHelper androidOpenDbHelperObj = new AndroidOpenDbHelper(this);
+
+    	// Then we need to get a writable SQLite database, because we are going to insert some values
+    	// SQLiteDatabase has methods to create, delete, execute SQL commands, and perform other common database management tasks.
+    	SQLiteDatabase sqliteDatabase = androidOpenDbHelperObj.getWritableDatabase();
+    	// Try to create database for comments if not already there
+    	androidOpenDbHelperObj.createCommentsTable(sqliteDatabase);
+
+    	// ContentValues class is used to store a set of values that the ContentResolver can process.
+    	ContentValues contentValues = new ContentValues();
+
+    	// Get values from the POJO class and passing them to the ContentValues class
+    	contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_COMMENT_TEXT, comment.getText());
+    	contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_COMMENT_AUTHOR, comment.getAuthor());
+    	contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_COMMENT_TIMESTAMP, comment.getTimestamp());
+
+
+    	// Now we can insert the data in to relevant table
+    	// I am going pass the id value, which is going to change because of our insert method, to a long variable to show in Toast
+    	long affectedColumnId = sqliteDatabase.insert(AndroidOpenDbHelper.TABLE_NAME_COMMENTS, null, contentValues);
+
+    	// It is a good practice to close the database connections after you have done with it
+    	sqliteDatabase.close();
+
+    	// I am not going to do the retrieve part in this post. So this is just a notification for satisfaction 
+    	Toast.makeText(this, "Comment Posted. DB Column ID :" + affectedColumnId, Toast.LENGTH_SHORT).show();
+
+    }
+    
+    public void populateComments() {
+    	List<CommentPOJO> comments = getComments();
+        
+        LinearLayout commentsPane = (LinearLayout) findViewById(R.id.commentsPane);
+        commentsPane.removeAllViews();
         for (CommentPOJO c : comments) {
         	LinearLayout commentFrame = new LinearLayout(this);
         	commentFrame.setOrientation(1);
@@ -69,7 +132,9 @@ public class ShowComments extends Activity {
         	author.setTypeface(Typeface.DEFAULT_BOLD);
         	
         	TextView timestamp = new TextView(this);
-        	timestamp.setText(" at " + c.getTimestamp());
+        	long time = Long.parseLong(c.getTimestamp());
+        	SimpleDateFormat formatter = new SimpleDateFormat();
+        	timestamp.setText(" at " + formatter.format(new Date(time)));
         	
         	header.addView(author);
         	header.addView(timestamp);
@@ -79,55 +144,39 @@ public class ShowComments extends Activity {
         	
         	commentFrame.addView(header);
         	commentFrame.addView(commentText);
+        	
+        	commentsPane.addView(commentFrame);
         }
     }
-
-    public void onPostComment(View view) {
-    	CommentPOJO comment = new CommentPOJO();
-    	Intent intent = new Intent(this, ShowComments.class);
-    	
-    	EditText commentText = (EditText) findViewById(R.id.newCommentText);
-    	if (commentText.getText().toString() == "") {
-    		Toast.makeText(this, "Please enter a comment.", Toast.LENGTH_SHORT);
-    		return;
-    	}
-    	comment.setText(commentText.getText().toString());
-    	
-    	//TODO(jmow): Save author name when logins are enabled
-    	comment.setAuthor("Joe Cruz");
-    	comment.setTimestamp(System.currentTimeMillis() + "");
-    	
-    	insertComment(comment);
-    	view.invalidate();
-    }
     
-    public void insertComment(CommentPOJO comment) {
+    // For Testing
+    public List<CommentPOJO> getComments() {
+    	List<CommentPOJO> commentList = new ArrayList<CommentPOJO>();
+    	
     	// First we have to open our DbHelper class by creating a new object of that
-    			AndroidOpenDbHelper androidOpenDbHelperObj = new AndroidOpenDbHelper(this);
+    	AndroidOpenDbHelper androidOpenDbHelperObj = new AndroidOpenDbHelper(this);
 
-    			// Then we need to get a writable SQLite database, because we are going to insert some values
-    			// SQLiteDatabase has methods to create, delete, execute SQL commands, and perform other common database management tasks.
-    			SQLiteDatabase sqliteDatabase = androidOpenDbHelperObj.getWritableDatabase();
-
-    			// ContentValues class is used to store a set of values that the ContentResolver can process.
-    			ContentValues contentValues = new ContentValues();
-
-    			// Get values from the POJO class and passing them to the ContentValues class
-    			contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_COMMENT_TEXT, comment.getText());
-    			contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_COMMENT_AUTHOR, comment.getAuthor());
-    			contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_COMMENT_TIMESTAMP, comment.getTimestamp());
-
-
-    			// Now we can insert the data in to relevant table
-    			// I am going pass the id value, which is going to change because of our insert method, to a long variable to show in Toast
-    			long affectedColumnId = sqliteDatabase.insert(AndroidOpenDbHelper.TABLE_NAME_COMMENTS, null, contentValues);
-
-    			// It is a good practice to close the database connections after you have done with it
-    			sqliteDatabase.close();
-
-    			// I am not going to do the retrieve part in this post. So this is just a notification for satisfaction 
-    			Toast.makeText(this, "Comment Posted. DB Column ID :" + affectedColumnId, Toast.LENGTH_SHORT).show();
-
+    	// Then we need to get a writable SQLite database, because we are going to insert some values
+    	// SQLiteDatabase has methods to create, delete, execute SQL commands, and perform other common database management tasks.
+    	SQLiteDatabase sqliteDatabase = androidOpenDbHelperObj.getReadableDatabase();
+    	
+    	Cursor cursor = sqliteDatabase.query(AndroidOpenDbHelper.TABLE_NAME_COMMENTS, null, null, null, null, null, null);
+    	startManagingCursor(cursor);
+    	
+    	while (cursor.moveToNext()) {
+    		String text = cursor.getString(cursor.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_COMMENT_TEXT));
+    		String author = cursor.getString(cursor.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_COMMENT_AUTHOR));
+    		String timestamp = cursor.getString(cursor.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_COMMENT_TIMESTAMP));
+    		
+    		CommentPOJO comment = new CommentPOJO();
+    		comment.setText(text);
+    		comment.setAuthor(author);
+    		comment.setTimestamp(timestamp);
+    		commentList.add(comment);
+    	}
+    	
+    	sqliteDatabase.close();
+    	return commentList;
     }
     
 }

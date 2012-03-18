@@ -53,11 +53,15 @@ public class WhartonComputingCommunicationsActivity extends Activity {
 
 		// Then we need to get a writable SQLite database, because we are going to insert some values
 		// SQLiteDatabase has methods to create, delete, execute SQL commands, and perform other common database management tasks.
-		SQLiteDatabase sqliteDatabase = androidOpenDbHelperObj.getWritableDatabase();
+		SQLiteDatabase db = androidOpenDbHelperObj.getWritableDatabase();
 		
-		sqliteDatabase.delete(AndroidOpenDbHelper.TABLE_NAME_EVENTS, null, null);
-		sqliteDatabase.delete(AndroidOpenDbHelper.TABLE_NAME_COMMENTS, null, null);	
+//		db.delete(AndroidOpenDbHelper.TABLE_NAME_EVENTS, null, null);
+//		db.delete(AndroidOpenDbHelper.TABLE_NAME_COMMENTS, null, null);	
+
+		String deleteEventsTable = "drop table events_table;";
+		String deleteCommentsTable = "drop table comments_table;";
 		
-		sqliteDatabase.close();
+		db.execSQL(deleteEventsTable + deleteCommentsTable);
+		db.close();
 	}
 }
