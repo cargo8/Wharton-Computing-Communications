@@ -21,6 +21,7 @@ public class WhartonComputingCommunicationsActivity extends Activity {
 	private static final int ACTIVITY_ShowEvent = 2;
 	private static final int ACTIVITY_Agenda = 3;
 	public static final int ACTIVITY_ShowComments = 4;
+	public static final int ACTIVITY_Register = 5;
 
 
 	
@@ -77,12 +78,18 @@ public class WhartonComputingCommunicationsActivity extends Activity {
 		
 		if(count > 0) {
 			db.close();
+    		Toast.makeText(this, "Login Successful.", Toast.LENGTH_SHORT).show();
 			Intent i = new Intent(this, Home.class);
 			startActivityForResult(i, ACTIVITY_Home);
 		} else {
 			db.close();
 			Toast.makeText(this, "Login failed.", Toast.LENGTH_SHORT).show();
 		}
+    }
+    
+    public void clickRegister(View view) {
+    	Intent i = new Intent(this, Register.class);
+    	startActivityForResult(i, ACTIVITY_ShowComments);
     }
         
     public void nuke(View view) {
