@@ -73,6 +73,8 @@ public class ShowEvent extends Activity {
         	temp.setText(event.getContact2());
         	temp = (TextView)findViewById(R.id.severityText);
         	temp.setBackgroundColor(event.getSeverity());
+        	temp = (TextView)findViewById(R.id.typeText);
+        	temp.setText(event.getType());
         	
         }
     }

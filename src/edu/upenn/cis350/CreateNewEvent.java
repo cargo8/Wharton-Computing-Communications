@@ -178,6 +178,13 @@ public class CreateNewEvent extends Activity {
     	else {
     		event.setSeverity(Color.BLACK);						// EVENT
     	}
+    	
+    	if(((RadioButton)findViewById(R.id.radioEmergency)).isChecked()){
+    		event.setType("Emergency");
+    	}
+    	else if(((RadioButton)findViewById(R.id.radioScheduled)).isChecked()){
+    		event.setType("Scheduled");					// EVENT
+    	}
     	i.putExtra("eventPOJO", event);
     	insertEvent(event);
     	startActivity(i);
@@ -307,6 +314,8 @@ public class CreateNewEvent extends Activity {
 		contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_EVENT_CONTACT1, event.getContact1());
 		contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_EVENT_CONTACT2, event.getContact2());
 		contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_EVENT_SEVERITY, event.getSeverity());
+		contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_EVENT_TYPE, event.getType());
+
 
 
 
