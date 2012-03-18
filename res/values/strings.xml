@@ -34,6 +34,9 @@
     <string name="green">Green</string>
     <string name="pickedAffils">Affiliations:</string>
     <string name="pickedSystems">Systems:</string>
+    <string name="type">Maintenance Type</string>
+    <string name="emergency">Emergency</string>
+    <string name="scheduled">Scheduled</string>
 
 	
     <string name="agendaWelcome">Agenda</string>

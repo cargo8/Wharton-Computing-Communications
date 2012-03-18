@@ -23,6 +23,8 @@ public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 	public static final String COLUMN_NAME_EVENT_CONTACT1 = "event_contact1_column";
 	public static final String COLUMN_NAME_EVENT_CONTACT2 = "event_contact2_column";
 	public static final String COLUMN_NAME_EVENT_SEVERITY = "event_severity_column";
+	public static final String COLUMN_NAME_EVENT_TYPE = "event_type_column";
+
 	//TODO (closen) add more columns
 
 	public static final String TABLE_NAME_COMMENTS = "comments_table";
@@ -72,6 +74,7 @@ public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 																		+ COLUMN_NAME_EVENT_SYSTEMS + " text not null, "
 																		+ COLUMN_NAME_EVENT_CONTACT1 + " text not null, "
 																		+ COLUMN_NAME_EVENT_CONTACT2 + " text not null, "
+																		+ COLUMN_NAME_EVENT_TYPE + " text not null, "
 																		+ COLUMN_NAME_EVENT_SEVERITY + " integer);";
 				
 				// Execute a single SQL statement that is NOT a SELECT or any other SQL statement that returns data.
