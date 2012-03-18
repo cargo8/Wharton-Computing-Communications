@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 
 public class ShowEvent extends Activity {
-	
+	private String uname;
 
     /** Called when the activity is first created. */
     @Override
@@ -19,7 +19,9 @@ public class ShowEvent extends Activity {
         setContentView(R.layout.showevent);
         Bundle extras = this.getIntent().getExtras();
         if(extras != null){
-        	EventPOJO event = (EventPOJO)extras.get("eventPOJO");
+           	uname = extras.getString("user");
+
+           	EventPOJO event = (EventPOJO)extras.get("eventPOJO");
         	System.out.println(event.getEventTitle());
         	TextView temp = (TextView)findViewById(R.id.eventTitleText);
         	temp.setText(event.getEventTitle());
@@ -77,16 +79,12 @@ public class ShowEvent extends Activity {
         }
     }
     
-    public void onBackToAgendaClick(View view){
-    	Intent i = new Intent(this, Agenda.class);
-    	startActivity(i);
-    }
-    
     public void onMessageClick(View view){
     	TextView v = (TextView)view;
     	String message = v.getText().toString();
     	Intent i = new Intent(this, ShowComments.class);
     	i.putExtra("message", message);
+    	i.putExtra("user", uname);
     	startActivity(i);
     }
 	

@@ -24,6 +24,7 @@ public class ShowComments extends Activity {
 	//TODO(kuyumcu)
 //	MessagePOJO msg;
 	private Bundle extras;
+	private String uname;
 	
 	/** Called when the activity is first created. */
     @Override
@@ -33,6 +34,7 @@ public class ShowComments extends Activity {
         extras = this.getIntent().getExtras();
         
         if (extras != null){
+        	uname = extras.getString("user");
         	// TODO(kuyumcu): Swap in Message data when implemented
         	/* Message Object Start */
 //        	MessagePOJO msg = (MessagePOJO)extras.get("messagePOJO");
@@ -71,7 +73,7 @@ public class ShowComments extends Activity {
     	comment.setText(commentText.getText().toString());
     	
     	//TODO(jmow): Save author name when logins are enabled
-    	comment.setAuthor("Joe Cruz");
+    	comment.setAuthor(uname);
     	comment.setTimestamp(System.currentTimeMillis() + "");
     	
     	insertComment(comment);

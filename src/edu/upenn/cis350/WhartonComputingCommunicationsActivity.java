@@ -58,6 +58,7 @@ public class WhartonComputingCommunicationsActivity extends Activity {
 			db.close();
     		Toast.makeText(this, "Login Successful.", Toast.LENGTH_SHORT).show();
 			Intent i = new Intent(this, Home.class);
+			i.putExtra("user", uname);
 			startActivityForResult(i, ACTIVITY_Home);
 		} else {
 			db.close();
