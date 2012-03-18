@@ -4,37 +4,59 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
+    
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/hello" />
     
-    <LinearLayout 
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
-        
-   <Button 
-        android:id="@+id/eventButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/createEvent"
-        android:onClick="onCreateEventClick" />
-    
-   <Button 
-        android:id="@+id/showAgendaButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/showAgenda"
-        android:onClick="onShowAgenda" />
-   
-   <Button
-       android:id="@+id/nukeDB"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:text="Nuke ALL the Databases!"
-       android:onClick="nuke" />
-   
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Username: "
+            android:textSize="12.0sp" />
+
+        <EditText
+            android:id="@+id/loginUsername"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Password: "
+            android:textSize="12.0sp" />
+
+        <EditText
+            android:id="@+id/loginPassword"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+    </LinearLayout>
+    
+    <Button
+        android:id="@+id/loginButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Login"
+        android:onClick="login" />
+    
+    <Button 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Register"
+        android:onClick="newUser" />
 
 </LinearLayout>

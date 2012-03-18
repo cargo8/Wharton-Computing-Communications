@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+        <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/eventButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onCreateEventClick"
+            android:text="@string/createEvent" />
+
+        <Button
+            android:id="@+id/showAgendaButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onShowAgenda"
+            android:text="@string/showAgenda" />
+
+        <Button
+            android:id="@+id/nukeDB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="nuke"
+            android:text="Nuke ALL the Databases!" />
+    </LinearLayout>
+
+</LinearLayout>

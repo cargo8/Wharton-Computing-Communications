@@ -30,6 +30,11 @@ public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 	public static final String COLUMN_NAME_COMMENT_AUTHOR = "comment_author_column";
 	public static final String COLUMN_NAME_COMMENT_TIMESTAMP = "comment_timestamp_column";
 	
+	public static final String TABLE_NAME_USERS = "users_table";
+	public static final String COLUMN_NAME_USER_NAME = "user_name_column";
+	public static final String COLUMN_NAME_USER_PW = "user_pw_column";
+	public static final String COLUMN_NAME_USER_SIGNUP_TIMESTAMP = "user_signup_timestamp_column";
+
 	
 	public AndroidOpenDbHelper(Context context) {
 		super(context, DB_NAME, null, DB_VERSION);
@@ -39,10 +44,20 @@ public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 	//This is where the creation of tables and the initial population of the tables should happen.
 	@Override
 	public void onCreate(SQLiteDatabase db) {
+		createUsersTable(db);
 		createEventsTable(db);
 		createCommentsTable(db);
 	}
 
+	public void createUsersTable(SQLiteDatabase db) {
+		String sqlCreateCommentsTable = "create table if not exists " + TABLE_NAME_USERS + " ( " + BaseColumns._ID + " integer primary key autoincrement, "
+				+ COLUMN_NAME_USER_NAME + " text not null, "
+				+ COLUMN_NAME_USER_PW + " text not null, "
+				+ COLUMN_NAME_USER_SIGNUP_TIMESTAMP + " text not null);";
+
+		db.execSQL(sqlCreateCommentsTable);
+	}
+	
 	public void createEventsTable(SQLiteDatabase db) {
 		// We need to check whether table that we are going to create already exists.
 				// This method gets executed every time we creat an object of this class.
