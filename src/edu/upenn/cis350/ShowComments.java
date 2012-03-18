@@ -23,7 +23,6 @@ public class ShowComments extends Activity {
 
 	//TODO(kuyumcu)
 	private MessagePOJO message;
-	private Bundle extras;
 	private String uname;
 	
 	/** Called when the activity is first created. */
@@ -31,7 +30,7 @@ public class ShowComments extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.showcomments);
-        extras = this.getIntent().getExtras();
+        Bundle extras = this.getIntent().getExtras();
         
         if (extras != null){
         	uname = extras.getString("user");
@@ -55,7 +54,7 @@ public class ShowComments extends Activity {
         	temp = (TextView) findViewById(R.id.messageTimestamp);
         	temp.setTextColor(Color.WHITE);
         	SimpleDateFormat formatter = new SimpleDateFormat();
-        	temp.setText(formatter.format(new Date(System.currentTimeMillis()-86400000)));
+        	temp.setText(formatter.format(new Date(message.getTimestamp())));
         }
         
         populateComments();
@@ -149,7 +148,7 @@ public class ShowComments extends Activity {
     // For Testing
     public List<CommentPOJO> getComments() {
     	List<CommentPOJO> commentList = new ArrayList<CommentPOJO>();
-    	
+
     	// First we have to open our DbHelper class by creating a new object of that
     	AndroidOpenDbHelper dbHelper = new AndroidOpenDbHelper(this);
 

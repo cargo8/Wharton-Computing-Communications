@@ -157,7 +157,7 @@ public class ShowEvent extends Activity {
     	SQLiteDatabase db = dbHelper.getReadableDatabase();
     	dbHelper.createCommentsTable(db);
     	
-    	Cursor cursor = db.query(AndroidOpenDbHelper.TABLE_NAME_COMMENTS, null, null, null, null, null, null);
+    	Cursor cursor = db.query(AndroidOpenDbHelper.TABLE_NAME_MESSAGES, null, null, null, null, null, null);
     	startManagingCursor(cursor);
     	
     	while (cursor.moveToNext()) {
