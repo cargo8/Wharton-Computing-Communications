@@ -22,7 +22,7 @@ import android.widget.Toast;
 public class ShowComments extends Activity {
 
 	//TODO(kuyumcu)
-//	MessagePOJO msg;
+	private MessagePOJO message;
 	private Bundle extras;
 	private String uname;
 	
@@ -37,9 +37,7 @@ public class ShowComments extends Activity {
         	uname = extras.getString("user");
         	// TODO(kuyumcu): Swap in Message data when implemented
         	/* Message Object Start */
-//        	MessagePOJO msg = (MessagePOJO)extras.get("messagePOJO");
-//        	TextView temp = (TextView)findViewById(R.id.commentText);
-//        	temp.setText(msg.getText());
+        	message = (MessagePOJO)extras.get("messagePOJO");
         	
         	/* Dummy Code */
         	LinearLayout layout = (LinearLayout) findViewById(R.id.commentMessagePane);
@@ -47,11 +45,12 @@ public class ShowComments extends Activity {
 
             TextView temp = (TextView)findViewById(R.id.messageText);
             temp.setTextColor(Color.WHITE);
-            temp.setText(extras.getString("message"));
+            temp.setText(message.getText());
             
         	temp = (TextView) findViewById(R.id.messageAuthor);
         	temp.setTextColor(Color.WHITE);
-        	temp.setText("Posted by Joe Cruz at ");
+        	String author = message.getAuthor();
+        	temp.setText("Posted by " + author + " at ");
         	
         	temp = (TextView) findViewById(R.id.messageTimestamp);
         	temp.setTextColor(Color.WHITE);
