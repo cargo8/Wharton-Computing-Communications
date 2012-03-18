@@ -167,4 +167,11 @@ public class Agenda extends Activity {
 //		Toast.makeText(this, "Values inserted column ID is :" + affectedColumnId, Toast.LENGTH_SHORT).show();
 		return eventList;
 	}
+    
+    @Override
+    public void onBackPressed() {
+       Intent i = new Intent(this, Home.class);
+       i.putExtra("user", uname);
+       startActivity(i);
+    }
 }
