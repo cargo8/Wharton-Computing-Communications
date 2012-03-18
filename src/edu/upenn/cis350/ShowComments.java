@@ -76,11 +76,6 @@ public class ShowComments extends Activity {
     	
     	insertComment(comment);
     	populateComments();
-    	//TODO(jmow): how do I refresh the view?
-//    	Intent i = new Intent(this, ShowComments.class);
-//    	i.putExtra("message", extras.getString("message"));
-//    	startActivity(i);
-    	//findViewById(R.id.commentsPane).invalidate();
     }
     
     public void insertComment(CommentPOJO comment) {
