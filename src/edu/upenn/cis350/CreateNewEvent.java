@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,6 +22,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 public class CreateNewEvent extends Activity {
@@ -32,12 +34,16 @@ public class CreateNewEvent extends Activity {
     private int mYear;
     private int mMonth;
     private int mDay;
+    private int mHour;
+    private int mMinute;
 	// fields for dateDisplay popup (END DATE FIELDS)
     private TextView mDateDisplay2;
     private Button mPickDate2;
     private int mYear2;
     private int mMonth2;
     private int mDay2;
+    private int mHour2;
+    private int mMinute2;
     private CharSequence[] affils;
     private boolean[] affilsChecked;
     private CharSequence[] systems;
@@ -50,6 +56,8 @@ public class CreateNewEvent extends Activity {
     static final int END_DATE_DIALOG_ID = 1;
 	static final int PICK_AFFILS_DIALOG_ID = 2;
 	private static final int PICK_SYS_DIALOG_ID = 3;
+	static final int START_TIME_DIALOG_ID = 4;
+	static final int END_TIME_DIALOG_ID = 5;
 
     
     // the callback received when the user "sets" the date in the dialog (START DATE)
@@ -61,6 +69,7 @@ public class CreateNewEvent extends Activity {
                     mYear = year;
                     mMonth = monthOfYear;
                     mDay = dayOfMonth;
+                    showDialog(START_TIME_DIALOG_ID);
                     updateDisplay();
                 }
             };
@@ -73,9 +82,28 @@ public class CreateNewEvent extends Activity {
                    mYear2 = year;
                    mMonth2 = monthOfYear;
                    mDay2 = dayOfMonth;
+                   showDialog(END_TIME_DIALOG_ID);
                    updateDisplay();
                }
            };
+           
+     private TimePickerDialog.OnTimeSetListener mTimeSetListener =
+    	 	new TimePickerDialog.OnTimeSetListener() {
+    	 		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        	        mHour = hourOfDay;
+        	        mMinute = minute;
+        	        updateDisplay();
+        	    }
+        	};
+        	
+     private TimePickerDialog.OnTimeSetListener mTimeSetListener2 =
+    	 	new TimePickerDialog.OnTimeSetListener() {
+         		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+           	        mHour2 = hourOfDay;
+           	        mMinute2 = minute;
+           	        updateDisplay();
+           	    }
+           	};           	
 	
     /** Called when the activity is first created. */
     @Override
@@ -97,6 +125,8 @@ public class CreateNewEvent extends Activity {
         mYear = c.get(Calendar.YEAR);
         mMonth = c.get(Calendar.MONTH);
         mDay = c.get(Calendar.DAY_OF_MONTH);
+        mHour = c.get(Calendar.HOUR_OF_DAY);
+        mMinute = c.get(Calendar.MINUTE);
         
         mDateDisplay2 = (TextView) findViewById(R.id.endDateDisplay);
         mPickDate2 = (Button) findViewById(R.id.pickEndDate);
@@ -104,6 +134,8 @@ public class CreateNewEvent extends Activity {
         mYear2 = mYear;
         mMonth2 = mMonth;
         mDay2 = mDay;
+        mHour2 = mHour;
+        mMinute2 = mMinute;
         // display the current date (this method is below)
         updateDisplay();
         
@@ -221,6 +253,14 @@ public class CreateNewEvent extends Activity {
     	showDialog(PICK_SYS_DIALOG_ID);
     }
     
+    public void showStartTimeDialog(View view){
+    	showDialog(START_TIME_DIALOG_ID);
+    }
+    
+    public void showEndTimeDialog(View view){
+    	showDialog(END_TIME_DIALOG_ID);
+    }
+    
     // updates the date in the TextView
     private void updateDisplay() {
         mDateDisplay.setText(
@@ -228,13 +268,17 @@ public class CreateNewEvent extends Activity {
                     // Month is 0 based so add 1
                     .append(mMonth + 1).append("-")
                     .append(mDay).append("-")
-                    .append(mYear).append(" "));
+                    .append(mYear).append(" ")
+                    .append(mHour).append(":")
+                    .append(mMinute).append(" "));
         mDateDisplay2.setText(
                 new StringBuilder()
                         // Month is 0 based so add 1
                         .append(mMonth2 + 1).append("-")
                         .append(mDay2).append("-")
-                        .append(mYear2).append(" "));
+                        .append(mYear2).append(" ")
+                        .append(mHour2).append(":")
+                        .append(mMinute2).append(" "));
     }
     
     // creates dialogs
@@ -249,6 +293,12 @@ public class CreateNewEvent extends Activity {
         		return new DatePickerDialog(this,
         					mDateSetListener2,
         					mYear2, mMonth2, mDay2);
+        case START_TIME_DIALOG_ID:
+        		return new TimePickerDialog(this,
+                    mTimeSetListener, mHour, mMinute, false);
+        case END_TIME_DIALOG_ID:
+    		return new TimePickerDialog(this,
+                mTimeSetListener2, mHour2, mMinute2, false);
         case PICK_AFFILS_DIALOG_ID:
         	final CharSequence[] items = {"Group 1", "Group 2", "Group 3"};
         	affils = items;
