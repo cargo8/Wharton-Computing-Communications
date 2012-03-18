@@ -75,6 +75,7 @@ public class ShowComments extends Activity {
     	comment.setTimestamp(System.currentTimeMillis() + "");
     	
     	insertComment(comment);
+    	commentText.setText("");
     	populateComments();
     }
     
