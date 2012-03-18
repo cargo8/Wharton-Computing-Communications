@@ -42,6 +42,8 @@ public class CreateNewEvent extends Activity {
     private boolean[] affilsChecked;
     private CharSequence[] systems;
     private boolean[] systemsChecked;
+    
+    private String uname;
 
     //dialog constants
     static final int START_DATE_DIALOG_ID = 0;
@@ -80,6 +82,11 @@ public class CreateNewEvent extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.eventform);
+        
+        Bundle extras = this.getIntent().getExtras();
+        if(extras != null){
+           	uname = extras.getString("user");
+        }
         
         // capture our View elements
         mDateDisplay = (TextView) findViewById(R.id.startDateDisplay);
@@ -186,6 +193,7 @@ public class CreateNewEvent extends Activity {
     		event.setType("Scheduled");					// EVENT
     	}
     	i.putExtra("eventPOJO", event);
+    	i.putExtra("user", uname);
     	insertEvent(event);
     	startActivity(i);
     }

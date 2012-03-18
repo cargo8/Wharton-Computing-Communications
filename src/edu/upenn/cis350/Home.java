@@ -8,32 +8,41 @@ import android.view.View;
 
 public class Home extends Activity {
 
+	private String uname;
+	
 	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
         Bundle extras = this.getIntent().getExtras();
+        if (extras != null) {
+        	uname = extras.getString("user");
+        }
 
     }
     
     public void onCreateEventClick(View view){
     	Intent i = new Intent(this, CreateNewEvent.class);
+		i.putExtra("user", uname);
     	startActivity(i);
     }
     
     public void onShowEventClick(View view){
     	Intent i = new Intent(this, ShowEvent.class);
+		i.putExtra("user", uname);
     	startActivity(i);
     }
     
     public void onShowAgenda(View view) {
     	Intent i = new Intent(this, Agenda.class);
+		i.putExtra("user", uname);
     	startActivity(i);
     }
     
     public void onShowComments(View view) {
     	Intent i = new Intent(this, ShowComments.class);
+		i.putExtra("user", uname);
     	startActivity(i);
     }
     

@@ -23,11 +23,18 @@ import android.widget.Toast;
 
 public class Agenda extends Activity {
 	
+	private String uname;
+	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.agenda);
+        Bundle extras = this.getIntent().getExtras();
+        if (extras != null) {
+        	uname = extras.getString("user");
+        }
+        
         List<EventPOJO> eventList = getEvents();
         LinearLayout eventPane = (LinearLayout) findViewById(R.id.agendaEvents);
         LinearLayout emergencyPane = (LinearLayout) findViewById(R.id.agendaEmergency);
@@ -75,6 +82,7 @@ public class Agenda extends Activity {
         	
 			final Intent i = new Intent(this, ShowEvent.class);
 			i.putExtra("eventPOJO", event);
+			i.putExtra("user", uname);
 
         	eventFrame.setOnClickListener(new OnClickListener() {
 
