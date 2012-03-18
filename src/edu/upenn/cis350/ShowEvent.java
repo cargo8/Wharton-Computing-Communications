@@ -89,6 +89,7 @@ public class ShowEvent extends Activity {
        Intent i = new Intent(this, Agenda.class);
        if(event != null)
     	   i.putExtra("eventPOJO", event);
+       i.putExtra("user", uname);
        startActivity(i);
     }
     
