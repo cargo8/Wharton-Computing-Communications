@@ -44,7 +44,7 @@ public class Register extends Activity {
     		long affectedRow = db.insert(dbHelper.TABLE_NAME_USERS, null, values);
     		db.close();
     		
-    		Toast.makeText(this, "User created. Row: " + affectedRow, Toast.LENGTH_SHORT).show();
+    		Toast.makeText(this, "User " + uname + " created.", Toast.LENGTH_SHORT).show();
     		Intent i = new Intent(this, WhartonComputingCommunicationsActivity.class);
     		startActivity(i);
     	} else {

@@ -29,29 +29,7 @@ public class WhartonComputingCommunicationsActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
-        
-        
-    }
-    
-    public void onCreateEventClick(View view){
-    	Intent i = new Intent(this, CreateNewEvent.class);
-    	startActivityForResult(i, ACTIVITY_CreateNewEvent);
-    }
-    
-    public void onShowEventClick(View view){
-    	Intent i = new Intent(this, ShowEvent.class);
-    	startActivityForResult(i, ACTIVITY_ShowEvent);
-    }
-    
-    public void onShowAgenda(View view) {
-    	Intent i = new Intent(this, Agenda.class);
-    	startActivityForResult(i, ACTIVITY_Agenda);
-    }
-    
-    public void onShowComments(View view) {
-    	Intent i = new Intent(this, ShowComments.class);
-    	startActivityForResult(i, ACTIVITY_ShowComments);
+        setContentView(R.layout.main);   
     }
     
     public void login(View view) {
