@@ -55,13 +55,11 @@ public class WhartonComputingCommunicationsActivity extends Activity {
 		db.close();
 		
 		if(count > 0) {
-			db.close();
     		Toast.makeText(this, "Login Successful.", Toast.LENGTH_SHORT).show();
 			Intent i = new Intent(this, Home.class);
 			i.putExtra("user", uname);
 			startActivityForResult(i, ACTIVITY_Home);
 		} else {
-			db.close();
 			Toast.makeText(this, "Login failed.", Toast.LENGTH_SHORT).show();
 		}
     }
@@ -70,4 +68,9 @@ public class WhartonComputingCommunicationsActivity extends Activity {
     	Intent i = new Intent(this, Register.class);
     	startActivityForResult(i, ACTIVITY_ShowComments);
     }
-}
+    
+    @Override
+    public void onBackPressed() {
+       Intent i = new Intent(this, WhartonComputingCommunicationsActivity.class);
+       startActivity(i);
+    }   }
