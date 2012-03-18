@@ -1,5 +1,8 @@
 package edu.upenn.cis350;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -8,6 +11,7 @@ public class MessagePOJO implements Parcelable {
 	private String message;
 	private String author; // should this be authorID?
 	private String timestamp;
+	private List<CommentPOJO> comments;
 	
 	// Do I need this?
 	public static final Parcelable.Creator<MessagePOJO> CREATOR = new Parcelable.Creator<MessagePOJO>() {
@@ -21,7 +25,7 @@ public class MessagePOJO implements Parcelable {
     };
     
     public MessagePOJO() {
-    	
+    	comments = new ArrayList<CommentPOJO>();
     }
     
 	public MessagePOJO(Parcel in) {
@@ -29,6 +33,7 @@ public class MessagePOJO implements Parcelable {
 		message = in.readString();
 		author = in.readString();
 		timestamp = in.readString();
+    	comments = new ArrayList<CommentPOJO>();
 	}
 	
 	@Override
@@ -51,6 +56,14 @@ public class MessagePOJO implements Parcelable {
 	
 	public String getTimestamp() {
 		return timestamp;
+	}
+	
+	public List<CommentPOJO> getComments() {
+		return comments;
+	}
+	
+	public void addToComments(CommentPOJO comment) {
+		comments.add(comment);
 	}
 	
 	public void setText(String msg) {
