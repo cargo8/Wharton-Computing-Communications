@@ -94,7 +94,14 @@ public class Agenda extends Activity {
 				}
         		
         	});
-        	emergencyPane.addView(eventFrame);
+        	        	
+        	if (event.getType().equals("Emergency")) {
+            	emergencyPane.addView(eventFrame);
+        	} else if (event.getType().equals("Scheduled")) {
+        		eventPane.addView(eventFrame);
+        	} else {
+        		eventPane.addView(eventFrame);
+        	}
         }
     }
     
@@ -130,7 +137,8 @@ public class Agenda extends Activity {
 			String eventActions = cursor.getString(cursor.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_EVENT_ACTIONS));
 			String eventAffils = cursor.getString(cursor.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_EVENT_AFFILS));
 			String eventSystems = cursor.getString(cursor.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_EVENT_SYSTEMS));
-
+			String eventType = cursor.getString(cursor.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_EVENT_TYPE));
+			
 			EventPOJO event = new EventPOJO();
 			event.setEventTitle(eventTitle);
 			event.setEventDesc(eventDesc);
@@ -140,6 +148,7 @@ public class Agenda extends Activity {
 			event.setContact1(eventContact1);
 			event.setContact2(eventContact2);
 			event.setEventActions(eventActions);
+			event.setType(eventType);
 			String[] affils = eventAffils.split("\t");
 			for (String s : affils) {
 				if(!s.equals(""))

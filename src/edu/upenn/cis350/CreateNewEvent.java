@@ -183,7 +183,8 @@ public class CreateNewEvent extends Activity {
     		event.setSeverity(Color.GREEN);						// EVENT
     	}
     	else {
-    		event.setSeverity(Color.BLACK);						// EVENT
+    		Toast.makeText(this, "Select an severity code.", Toast.LENGTH_SHORT).show();
+    		return;
     	}
     	
     	if(((RadioButton)findViewById(R.id.radioEmergency)).isChecked()){
@@ -191,6 +192,9 @@ public class CreateNewEvent extends Activity {
     	}
     	else if(((RadioButton)findViewById(R.id.radioScheduled)).isChecked()){
     		event.setType("Scheduled");					// EVENT
+    	} else  {
+    		Toast.makeText(this, "Select an event type.", Toast.LENGTH_SHORT).show();
+    		return;
     	}
     	i.putExtra("eventPOJO", event);
     	i.putExtra("user", uname);
