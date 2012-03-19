@@ -197,7 +197,7 @@ public class ShowEvent extends Activity {
     public void onPostMessage(View view){
     	Intent i = new Intent(this, PostMessage.class);
     	i.putExtra("user", uname);
-    	i.putExtra("eventPOJO", event);
+		i.putExtra("eventPOJO", event);
     	startActivity(i);
     }
 	

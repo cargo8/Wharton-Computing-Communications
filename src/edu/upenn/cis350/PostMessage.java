@@ -30,7 +30,8 @@ public class PostMessage extends Activity {
 		msg.setAuthor(uname);
 		msg.setText(tv.getText().toString());
 		msg.setTimestamp(System.currentTimeMillis() + "");
-		event.getMessages().add(msg);
+		event.addToMessages(msg);
+		insertMessage(msg);
 		Intent i = new Intent(this, ShowEvent.class);
 		i.putExtra("eventPOJO", event);
 		i.putExtra("message", msg);
