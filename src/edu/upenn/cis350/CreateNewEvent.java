@@ -269,18 +269,25 @@ public class CreateNewEvent extends Activity {
                     .append(mMonth + 1).append("-")
                     .append(mDay).append("-")
                     .append(mYear).append(" ")
-                    .append(mHour).append(":")
-                    .append(mMinute).append(" "));
+                    .append(pad(mHour)).append(":")
+                    .append(pad(mMinute)).append(" "));
         mDateDisplay2.setText(
                 new StringBuilder()
                         // Month is 0 based so add 1
                         .append(mMonth2 + 1).append("-")
                         .append(mDay2).append("-")
                         .append(mYear2).append(" ")
-                        .append(mHour2).append(":")
-                        .append(mMinute2).append(" "));
+                        .append(pad(mHour2)).append(":")
+                        .append(pad(mMinute2)).append(" "));
     }
     
+    private static String pad(int c) {
+        if (c >= 10)
+            return String.valueOf(c);
+        else
+            return "0" + String.valueOf(c);
+    }
+
     // creates dialogs
     @Override
     protected Dialog onCreateDialog(int id) {
