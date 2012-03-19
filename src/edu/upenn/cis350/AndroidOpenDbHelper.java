@@ -13,6 +13,7 @@ public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 
 	// Table attributes
 	public static final String TABLE_NAME_EVENTS = "events_table";
+	public static final String COLUMN_NAME_EVENT_ID = "event_id_column";
 	public static final String COLUMN_NAME_EVENT_TITLE = "event_title_column";
 	public static final String COLUMN_NAME_EVENT_DESC = "event_desc_column";
 	public static final String COLUMN_NAME_EVENT_ACTIONS = "event_actions_column";
@@ -41,6 +42,7 @@ public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 	public static final String COLUMN_NAME_MESSAGE_TEXT = "message_text_column";
 	public static final String COLUMN_NAME_MESSAGE_AUTHOR = "message_author_column";
 	public static final String COLUMN_NAME_MESSAGE_TIMESTAMP = "message_timestamp_column";
+	public static final String COLUMN_NAME_MESSAGE_EVENT = "message_event_column";
 
 	
 	public AndroidOpenDbHelper(Context context) {
@@ -69,18 +71,19 @@ public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 		// We need to check whether table that we are going to create already exists.
 				// This method gets executed every time we creat an object of this class.
 				//"create table if not exists TABLE_NAME ( BaseColumns._ID integer primary key autoincrement, FIRST_COLUMN_NAME text not null, SECOND_COLUMN_NAME integer not null);"
-				String sqlCreateEventsTable = "create table if not exists " + TABLE_NAME_EVENTS + " ( " + BaseColumns._ID + " integer primary key autoincrement, "
-																		+ COLUMN_NAME_EVENT_TITLE + " text not null, "
-																		+ COLUMN_NAME_EVENT_DESC + " text not null, "
-																		+ COLUMN_NAME_EVENT_ACTIONS + " text not null, "
-																		+ COLUMN_NAME_EVENT_START + " text not null, "
-																		+ COLUMN_NAME_EVENT_END + " text not null, "
-																		+ COLUMN_NAME_EVENT_AFFILS + " text not null, "
-																		+ COLUMN_NAME_EVENT_SYSTEMS + " text not null, "
-																		+ COLUMN_NAME_EVENT_CONTACT1 + " text not null, "
-																		+ COLUMN_NAME_EVENT_CONTACT2 + " text not null, "
-																		+ COLUMN_NAME_EVENT_TYPE + " text not null, "
-																		+ COLUMN_NAME_EVENT_SEVERITY + " integer);";
+				String sqlCreateEventsTable = "create table if not exists " + TABLE_NAME_EVENTS + " ( " 
+						+ COLUMN_NAME_EVENT_ID + " integer primary key autoincrement, "
+						+ COLUMN_NAME_EVENT_TITLE + " text not null, "
+						+ COLUMN_NAME_EVENT_DESC + " text not null, "
+						+ COLUMN_NAME_EVENT_ACTIONS + " text not null, "
+						+ COLUMN_NAME_EVENT_START + " text not null, "
+						+ COLUMN_NAME_EVENT_END + " text not null, "
+						+ COLUMN_NAME_EVENT_AFFILS + " text not null, "
+						+ COLUMN_NAME_EVENT_SYSTEMS + " text not null, "
+						+ COLUMN_NAME_EVENT_CONTACT1 + " text not null, "
+						+ COLUMN_NAME_EVENT_CONTACT2 + " text not null, "
+						+ COLUMN_NAME_EVENT_TYPE + " text not null, "
+						+ COLUMN_NAME_EVENT_SEVERITY + " integer);";
 				
 				// Execute a single SQL statement that is NOT a SELECT or any other SQL statement that returns data.
 				db.execSQL(sqlCreateEventsTable);
@@ -99,7 +102,8 @@ public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 		String sqlCreateCommentsTable = "create table if not exists " + TABLE_NAME_MESSAGES + " ( " + BaseColumns._ID + " integer primary key autoincrement, "
 				+ COLUMN_NAME_MESSAGE_TEXT + " text not null, "
 				+ COLUMN_NAME_MESSAGE_AUTHOR + " text not null, "
-				+ COLUMN_NAME_MESSAGE_TIMESTAMP + " text not null);";
+				+ COLUMN_NAME_MESSAGE_TIMESTAMP + " text not null," 
+				+ COLUMN_NAME_MESSAGE_EVENT + " text not null);";
 
 		db.execSQL(sqlCreateCommentsTable);
 	}

@@ -56,6 +56,7 @@ public class PostMessage extends Activity {
     	contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_MESSAGE_TEXT, message.getText());
     	contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_MESSAGE_AUTHOR, message.getAuthor());
     	contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_MESSAGE_TIMESTAMP, message.getTimestamp());
+    	contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_MESSAGE_EVENT, event.getEventID());
 
 
     	// Now we can insert the data in to relevant table

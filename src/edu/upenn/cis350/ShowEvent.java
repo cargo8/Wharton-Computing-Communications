@@ -163,8 +163,10 @@ public class ShowEvent extends Activity {
     	// SQLiteDatabase has methods to create, delete, execute SQL commands, and perform other common database management tasks.
     	SQLiteDatabase db = dbHelper.getReadableDatabase();
     	dbHelper.createCommentsTable(db);
-    	
-    	Cursor cursor = db.query(AndroidOpenDbHelper.TABLE_NAME_MESSAGES, null, null, null, null, null, null);
+    	dbHelper.createMessagesTable(db);
+   
+    	Cursor cursor = db.query(AndroidOpenDbHelper.TABLE_NAME_MESSAGES, null, 
+    			AndroidOpenDbHelper.COLUMN_NAME_MESSAGE_EVENT + "=" + event.getEventID(), null, null, null, null);
     	startManagingCursor(cursor);
     	
     	while (cursor.moveToNext()) {
