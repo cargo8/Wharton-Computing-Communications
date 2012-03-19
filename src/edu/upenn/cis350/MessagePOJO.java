@@ -33,7 +33,7 @@ public class MessagePOJO implements Parcelable {
 		message = in.readString();
 		author = in.readString();
 		timestamp = in.readString();
-    	comments = new ArrayList<CommentPOJO>();
+    	in.readList(comments, null);
 	}
 	
 	@Override
@@ -83,6 +83,7 @@ public class MessagePOJO implements Parcelable {
 		dest.writeString(message);
 		dest.writeString(author);
 		dest.writeString(timestamp);
+		dest.writeList(comments);
 	}
 
 }
