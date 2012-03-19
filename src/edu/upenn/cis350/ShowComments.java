@@ -22,8 +22,7 @@ import android.widget.Toast;
 public class ShowComments extends Activity {
 
 	//TODO(kuyumcu)
-//	MessagePOJO msg;
-	private Bundle extras;
+	private MessagePOJO message;
 	private String uname;
 	
 	/** Called when the activity is first created. */
@@ -31,15 +30,13 @@ public class ShowComments extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.showcomments);
-        extras = this.getIntent().getExtras();
+        Bundle extras = this.getIntent().getExtras();
         
         if (extras != null){
         	uname = extras.getString("user");
         	// TODO(kuyumcu): Swap in Message data when implemented
         	/* Message Object Start */
-//        	MessagePOJO msg = (MessagePOJO)extras.get("messagePOJO");
-//        	TextView temp = (TextView)findViewById(R.id.commentText);
-//        	temp.setText(msg.getText());
+        	message = (MessagePOJO)extras.get("messagePOJO");
         	
         	/* Dummy Code */
         	LinearLayout layout = (LinearLayout) findViewById(R.id.commentMessagePane);
@@ -47,16 +44,17 @@ public class ShowComments extends Activity {
 
             TextView temp = (TextView)findViewById(R.id.messageText);
             temp.setTextColor(Color.WHITE);
-            temp.setText(extras.getString("message"));
+            temp.setText(message.getText());
             
         	temp = (TextView) findViewById(R.id.messageAuthor);
         	temp.setTextColor(Color.WHITE);
-        	temp.setText("Posted by Joe Cruz at ");
+        	String author = message.getAuthor();
+        	temp.setText("Posted by " + author + " at ");
         	
         	temp = (TextView) findViewById(R.id.messageTimestamp);
         	temp.setTextColor(Color.WHITE);
         	SimpleDateFormat formatter = new SimpleDateFormat();
-        	temp.setText(formatter.format(new Date(System.currentTimeMillis()-86400000)));
+        	temp.setText(formatter.format(new Date(message.getTimestamp())));
         }
         
         populateComments();
@@ -150,7 +148,7 @@ public class ShowComments extends Activity {
     // For Testing
     public List<CommentPOJO> getComments() {
     	List<CommentPOJO> commentList = new ArrayList<CommentPOJO>();
-    	
+
     	// First we have to open our DbHelper class by creating a new object of that
     	AndroidOpenDbHelper dbHelper = new AndroidOpenDbHelper(this);
 

@@ -36,6 +36,11 @@ public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 	public static final String COLUMN_NAME_USER_NAME = "user_name_column";
 	public static final String COLUMN_NAME_USER_PW = "user_pw_column";
 	public static final String COLUMN_NAME_USER_SIGNUP_TIMESTAMP = "user_signup_timestamp_column";
+	
+	public static final String TABLE_NAME_MESSAGES = "messages_table";
+	public static final String COLUMN_NAME_MESSAGE_TEXT = "message_text_column";
+	public static final String COLUMN_NAME_MESSAGE_AUTHOR = "message_author_column";
+	public static final String COLUMN_NAME_MESSAGE_TIMESTAMP = "message_timestamp_column";
 
 	
 	public AndroidOpenDbHelper(Context context) {

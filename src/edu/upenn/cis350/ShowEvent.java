@@ -1,11 +1,19 @@
 package edu.upenn.cis350;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
@@ -98,11 +106,90 @@ public class ShowEvent extends Activity {
     	startActivity(i);
     }
     
-    public void onMessageClick(View view){
-    	TextView v = (TextView)view;
-    	String message = v.getText().toString();
+    public void populateMessages() {
+    	List<MessagePOJO> messages = getMessages();
+        
+        LinearLayout messagesPane = (LinearLayout) findViewById(R.id.messagesPane);
+        messagesPane.removeAllViews();
+        for (final MessagePOJO m : messages) {
+        	LinearLayout messageFrame = new LinearLayout(this);
+        	messageFrame.setOrientation(1);
+        	messageFrame.setPadding(1, 1, 1, 1);
+        	
+        	LinearLayout header = new LinearLayout(this);
+        	header.setOrientation(0);
+        	
+        	TextView author = new TextView(this);
+        	author.setText(m.getAuthor());
+        	author.setTypeface(Typeface.DEFAULT_BOLD);
+        	
+        	TextView timestamp = new TextView(this);
+        	Long time = Long.parseLong(m.getTimestamp());
+        	SimpleDateFormat formatter = new SimpleDateFormat();
+        	timestamp.setText(" at " + formatter.format(new Date(time)));
+        	
+        	header.addView(author);
+        	header.addView(timestamp);
+        	
+        	TextView messageText = new TextView(this);
+        	messageText.setText(m.getText());
+        	
+        	messageFrame.addView(header);
+        	messageFrame.addView(messageText);
+        	messageFrame.setOnClickListener(new LinearLayout.OnClickListener() {  
+                public void onClick(View v){
+                    onMessageClick(m);
+                }
+             });
+        	
+        	messagesPane.addView(messageFrame);
+        }
+    }
+    
+    public List<MessagePOJO> getMessages() {
+    	List<MessagePOJO> messageList = new ArrayList<MessagePOJO>();
+    	
+    	// First we have to open our DbHelper class by creating a new object of that
+    	AndroidOpenDbHelper dbHelper = new AndroidOpenDbHelper(this);
+
+    	// Then we need to get a writable SQLite database, because we are going to insert some values
+    	// SQLiteDatabase has methods to create, delete, execute SQL commands, and perform other common database management tasks.
+    	SQLiteDatabase db = dbHelper.getReadableDatabase();
+    	dbHelper.createCommentsTable(db);
+    	
+    	Cursor cursor = db.query(AndroidOpenDbHelper.TABLE_NAME_MESSAGES, null, null, null, null, null, null);
+    	startManagingCursor(cursor);
+    	
+    	while (cursor.moveToNext()) {
+    		String text = cursor.getString(cursor.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_MESSAGE_TEXT));
+    		String author = cursor.getString(cursor.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_MESSAGE_AUTHOR));
+    		String timestamp = cursor.getString(cursor.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_MESSAGE_TIMESTAMP));
+    		
+    		MessagePOJO message = new MessagePOJO();
+    		message.setText(text);
+    		message.setAuthor(author);
+    		message.setTimestamp(timestamp);
+    		messageList.add(message);
+    	}
+    	
+    	db.close();
+    	return messageList;
+    }
+    
+    public void onMessageClick(View view) {
     	Intent i = new Intent(this, ShowComments.class);
-    	i.putExtra("message", message);
+    	MessagePOJO message = new MessagePOJO();
+    	message.setText("Message");
+    	message.setAuthor("Joe Cruz");
+    	message.setTimestamp("March 18, 2012");
+    	i.putExtra("messagePOJO", message);
+    	i.putExtra("user", uname);
+    	startActivity(i);
+    }
+    
+    public void onMessageClick(MessagePOJO message){
+    	Intent i = new Intent(this, ShowComments.class);
+    	i.putExtra("messagePOJO", message);
     	i.putExtra("user", uname);
     	startActivity(i);
     }
