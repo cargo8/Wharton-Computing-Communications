@@ -55,7 +55,7 @@ public class EventPOJO implements Parcelable{
 		contact1 = in.readString();
 		contact2 = in.readString();
 		type = in.readString();
-		in.readList(messages, null);
+		in.readList(messages, EventPOJO.class.getClassLoader());
 	}
 	
 	///////// SETTER METHODS /////////////
