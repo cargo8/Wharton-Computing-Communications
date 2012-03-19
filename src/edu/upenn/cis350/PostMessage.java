@@ -32,7 +32,7 @@ public class PostMessage extends Activity {
 		msg.setText(tv.getText().toString());
 		msg.setTimestamp(System.currentTimeMillis() + "");
 		event.addToMessages(msg);
-		insertMessage(msg);
+		msg = insertMessage(msg);
 		Intent i = new Intent(this, ShowEvent.class);
 		i.putExtra("eventPOJO", event);
 		i.putExtra("message", msg);
@@ -40,7 +40,7 @@ public class PostMessage extends Activity {
 		startActivity(i);
 	}
 	
-	public void insertMessage(MessagePOJO message) {
+	public MessagePOJO insertMessage(MessagePOJO message) {
     	// First we have to open our DbHelper class by creating a new object of that
     	AndroidOpenDbHelper androidOpenDbHelperObj = new AndroidOpenDbHelper(this);
 
@@ -59,17 +59,29 @@ public class PostMessage extends Activity {
     	contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_MESSAGE_TIMESTAMP, message.getTimestamp());
     	contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_MESSAGE_EVENT, event.getEventID());
 
-
     	// Now we can insert the data in to relevant table
     	// I am going pass the id value, which is going to change because of our insert method, to a long variable to show in Toast
     	long insertedId = sqliteDatabase.insert(AndroidOpenDbHelper.TABLE_NAME_MESSAGES, null, contentValues);
+    	Cursor cursor = sqliteDatabase.query(androidOpenDbHelperObj.TABLE_NAME_MESSAGES,
+    			null, androidOpenDbHelperObj.COLUMN_NAME_MESSAGE_ID + " = " + insertedId, null,
+    			null, null, null);
+    	cursor.moveToFirst();
+    	int num = cursor.getInt(cursor.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_MESSAGE_ID));
+    	String text = cursor.getString(cursor.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_MESSAGE_TEXT));
+    	String author = cursor.getString(cursor.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_MESSAGE_AUTHOR));
+    	String timestamp = cursor.getString(cursor.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_MESSAGE_TIMESTAMP));
 
-    	// It is a good practice to close the database connections after you have done with it
+    	MessagePOJO msg = new MessagePOJO();
+    	msg.setMessageId(num);
+    	msg.setText(text);
+    	msg.setAuthor(author);
+    	msg.setTimestamp(timestamp);
+
     	sqliteDatabase.close();
 
     	// I am not going to do the retrieve part in this post. So this is just a notification for satisfaction 
     	Toast.makeText(this, "Message Posted. DB Column ID :" + insertedId, Toast.LENGTH_SHORT).show();
-
+    	return msg;
     }
 
 }

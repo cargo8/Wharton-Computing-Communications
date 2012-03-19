@@ -21,7 +21,6 @@ import android.widget.Toast;
 
 public class ShowComments extends Activity {
 
-	//TODO(kuyumcu)
 	private MessagePOJO message;
 	private String uname;
 	
@@ -34,8 +33,6 @@ public class ShowComments extends Activity {
         
         if (extras != null){
         	uname = extras.getString("user");
-        	// TODO(kuyumcu): Swap in Message data when implemented
-        	/* Message Object Start */
         	message = (MessagePOJO)extras.get("messagePOJO");
         	
         	LinearLayout layout = (LinearLayout) findViewById(R.id.commentMessagePane);
@@ -156,7 +153,7 @@ public class ShowComments extends Activity {
     	SQLiteDatabase db = dbHelper.getReadableDatabase();
     	dbHelper.createCommentsTable(db);
     	
-    	Cursor cursor = db.query(AndroidOpenDbHelper.TABLE_NAME_COMMENTS, AndroidOpenDbHelper.COMMENT_COLUMNS_ALL,
+    	Cursor cursor = db.query(AndroidOpenDbHelper.TABLE_NAME_COMMENTS, null,
     			AndroidOpenDbHelper.COLUMN_NAME_COMMENT_MESSAGE_ID + "=" + message.getMessageId(),
     			null, null, null, null);
     	startManagingCursor(cursor);

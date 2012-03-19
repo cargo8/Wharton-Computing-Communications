@@ -9,7 +9,7 @@ import android.provider.BaseColumns;
 public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 	// Database attributes
 	public static final String DB_NAME = "wcomm_db";
-	public static final int DB_VERSION = 1;
+	public static final int DB_VERSION = 2;
 
 	// Table attributes
 	public static final String TABLE_NAME_EVENTS = "events_table";
@@ -26,16 +26,13 @@ public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 	public static final String COLUMN_NAME_EVENT_SEVERITY = "event_severity_column";
 	public static final String COLUMN_NAME_EVENT_TYPE = "event_type_column";
 
-	//TODO (closen) add more columns
-
 	public static final String TABLE_NAME_COMMENTS = "comments_table";
 	public static final String COLUMN_NAME_COMMENT_MESSAGE_ID = "comment_message_id_column";
 	public static final String COLUMN_NAME_COMMENT_TEXT = "comment_text_column";
 	public static final String COLUMN_NAME_COMMENT_AUTHOR = "comment_author_column";
 	public static final String COLUMN_NAME_COMMENT_TIMESTAMP = "comment_timestamp_column";
-	public static final String[] COMMENT_COLUMNS_ALL = {COLUMN_NAME_COMMENT_MESSAGE_ID,
-		COLUMN_NAME_COMMENT_TEXT, COLUMN_NAME_COMMENT_AUTHOR, COLUMN_NAME_COMMENT_TIMESTAMP};
 	
+	//TODO: Enrich Users
 	public static final String TABLE_NAME_USERS = "users_table";
 	public static final String COLUMN_NAME_USER_NAME = "user_name_column";
 	public static final String COLUMN_NAME_USER_PW = "user_pw_column";

@@ -170,11 +170,13 @@ public class ShowEvent extends Activity {
     	startManagingCursor(cursor);
     	
     	while (cursor.moveToNext()) {
+    		int num = cursor.getInt(cursor.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_MESSAGE_ID));
     		String text = cursor.getString(cursor.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_MESSAGE_TEXT));
     		String author = cursor.getString(cursor.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_MESSAGE_AUTHOR));
     		String timestamp = cursor.getString(cursor.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_MESSAGE_TIMESTAMP));
     		
     		MessagePOJO message = new MessagePOJO();
+    		message.setMessageId(num);
     		message.setText(text);
     		message.setAuthor(author);
     		message.setTimestamp(timestamp);
