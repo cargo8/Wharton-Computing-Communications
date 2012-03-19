@@ -397,7 +397,8 @@ public class CreateNewEvent extends Activity {
 		sqliteDatabase.close();
 
 		// I am not going to do the retrieve part in this post. So this is just a notification for satisfaction 
-		Toast.makeText(this, "Values inserted column ID is :" + affectedColumnId, Toast.LENGTH_SHORT).show();
+//		Toast.makeText(this, "Values inserted column ID is :" + affectedColumnId, Toast.LENGTH_SHORT).show();
+		Toast.makeText(this, "Event created.", Toast.LENGTH_SHORT).show();
 
 	}
     

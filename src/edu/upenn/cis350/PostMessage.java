@@ -80,7 +80,7 @@ public class PostMessage extends Activity {
     	sqliteDatabase.close();
 
     	// I am not going to do the retrieve part in this post. So this is just a notification for satisfaction 
-    	Toast.makeText(this, "Message Posted. DB Column ID :" + insertedId, Toast.LENGTH_SHORT).show();
+    	Toast.makeText(this, "Message posted.", Toast.LENGTH_SHORT).show();
     	return msg;
     }
 

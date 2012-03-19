@@ -102,7 +102,8 @@ public class ShowComments extends Activity {
     	sqliteDatabase.close();
 
     	// I am not going to do the retrieve part in this post. So this is just a notification for satisfaction 
-    	Toast.makeText(this, "Comment Posted. DB Column ID :" + affectedColumnId, Toast.LENGTH_SHORT).show();
+//    	Toast.makeText(this, "Comment Posted. DB Column ID :" + affectedColumnId, Toast.LENGTH_SHORT).show();
+    	Toast.makeText(this, "Comment posted.", Toast.LENGTH_SHORT).show();
 
     }
     
