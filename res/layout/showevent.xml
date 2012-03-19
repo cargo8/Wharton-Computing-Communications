@@ -235,7 +235,7 @@
 	        android:id="@+id/postMessage"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:text="@string/postMessageBut"
+	        android:text="@string/newMessageBut"
 	        android:onClick="onPostMessage" />
     
     </LinearLayout>

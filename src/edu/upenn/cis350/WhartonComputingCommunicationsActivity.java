@@ -19,7 +19,7 @@ public class WhartonComputingCommunicationsActivity extends Activity {
 	private static final int ACTIVITY_Agenda = 3;
 	public static final int ACTIVITY_ShowComments = 4;
 	public static final int ACTIVITY_Register = 5;
-
+	public static final int ACTIVITY_PostMessage = 6;
 
 	
     /** Called when the activity is first created. */
