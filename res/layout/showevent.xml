@@ -248,33 +248,6 @@
                 android:padding="7sp" >
     </LinearLayout>
     
-    <TextView
-        	android:id="@+id/mes1"
-      		android:layout_width="wrap_content"
-       		android:layout_height="wrap_content"
-       		android:text="@string/dummyMes1"
-       		android:padding="7sp"
-       		android:onClick="onMessageClick"
-       		android:clickable="true" />
-    
-    <TextView
-        	android:id="@+id/mes2"
-      		android:layout_width="wrap_content"
-       		android:layout_height="wrap_content"
-       		android:text="@string/dummyMes2"
-       		android:padding="7sp"
-       		android:onClick="onMessageClick"
-       		android:clickable="true" />
-    
-    <TextView
-        	android:id="@+id/mes3"
-      		android:layout_width="wrap_content"
-       		android:layout_height="wrap_content"
-       		android:text="@string/dummyMes3"
-       		android:padding="7sp"
-       		android:onClick="onMessageClick"
-       		android:clickable="true" />
-    
 </LinearLayout>
 
 </ScrollView>
