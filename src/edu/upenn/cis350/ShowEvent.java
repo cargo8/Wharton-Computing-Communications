@@ -130,7 +130,7 @@ public class ShowEvent extends Activity {
         	TextView timestamp = new TextView(this);
         	Long time = Long.parseLong(m.getTimestamp());
         	SimpleDateFormat formatter = new SimpleDateFormat();
-        	timestamp.setText(" at " + formatter.format(new Date(time)));
+        	timestamp.setText(" at " + formatter.format(new Date(time)) + '\n');
         	
         	header.addView(posted);
         	header.addView(author);
@@ -138,6 +138,7 @@ public class ShowEvent extends Activity {
         	
         	TextView messageText = new TextView(this);
         	messageText.setText(m.getText());
+        	messageText.setTypeface(Typeface.DEFAULT_BOLD);
         	
         	messageFrame.addView(messageText);
         	messageFrame.addView(header);
