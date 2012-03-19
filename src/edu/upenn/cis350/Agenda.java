@@ -118,6 +118,7 @@ public class Agenda extends Activity {
 		// Get a readable SQLite database, because we are going to read all scheduled tasks from the DB
 		SQLiteDatabase db = dbHelper.getReadableDatabase();
 		dbHelper.createEventsTable(db);
+    	dbHelper.createMessagesTable(db);
 		
 		//(String table, String[] columns, String selection, String[] selectionArgs, String groupBy, String having, String orderBy)
 		Cursor cursor = db.query(AndroidOpenDbHelper.TABLE_NAME_EVENTS, null, null, null, null, null, null);
