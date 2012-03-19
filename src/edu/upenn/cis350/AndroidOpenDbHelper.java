@@ -92,7 +92,7 @@ public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 	
 	public void createCommentsTable(SQLiteDatabase db) {
 		String sqlCreateCommentsTable = "create table if not exists " + TABLE_NAME_COMMENTS + " ( " + BaseColumns._ID + " integer primary key autoincrement, "
-				+ COLUMN_NAME_COMMENT_MESSAGE_ID + "text not null, "
+				+ COLUMN_NAME_COMMENT_MESSAGE_ID + " text not null, "
 				+ COLUMN_NAME_COMMENT_TEXT + " text not null, "
 				+ COLUMN_NAME_COMMENT_AUTHOR + " text not null, "
 				+ COLUMN_NAME_COMMENT_TIMESTAMP + " text not null);";
@@ -101,13 +101,13 @@ public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 	}
 	
 	public void createMessagesTable(SQLiteDatabase db) {
-		String sqlCreateCommentsTable = "create table if not exists " + TABLE_NAME_MESSAGES + " ( " + COLUMN_NAME_MESSAGE_ID + " integer primary key autoincrement, "
+		String sqlCreateMessagesTable = "create table if not exists " + TABLE_NAME_MESSAGES + " ( " + COLUMN_NAME_MESSAGE_ID + " integer primary key autoincrement, "
 				+ COLUMN_NAME_MESSAGE_TEXT + " text not null, "
 				+ COLUMN_NAME_MESSAGE_AUTHOR + " text not null, "
 				+ COLUMN_NAME_MESSAGE_TIMESTAMP + " text not null," 
 				+ COLUMN_NAME_MESSAGE_EVENT + " text not null);";
 
-		db.execSQL(sqlCreateCommentsTable);
+		db.execSQL(sqlCreateMessagesTable);
 	}
 	
 	// onUpgrade method is used when we need to upgrade the database to a new version
