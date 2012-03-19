@@ -90,6 +90,7 @@ public class ShowEvent extends Activity {
         	temp.setText(event.getType());
         	
         }
+        populateMessages();
     }
     
     @Override
