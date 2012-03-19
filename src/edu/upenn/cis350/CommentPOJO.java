@@ -7,6 +7,7 @@ public class CommentPOJO implements Parcelable {
 	private String commentText;
 	private String author; // should this be authorID?
 	private String timestamp;
+	private int messageId;
 	
 	// Do I need this?
 	public static final Parcelable.Creator<CommentPOJO> CREATOR = new Parcelable.Creator<CommentPOJO>() {
@@ -24,6 +25,7 @@ public class CommentPOJO implements Parcelable {
     }
     
 	public CommentPOJO(Parcel in) {
+		messageId = in.readInt();
 		commentText = in.readString();
 		author = in.readString();
 		timestamp = in.readString();
@@ -31,8 +33,11 @@ public class CommentPOJO implements Parcelable {
 	
 	@Override
 	public int describeContents() {
-		// TODO Auto-generated method stub
 		return hashCode();
+	}
+	
+	public int getMessageId() {
+		return messageId;
 	}
 	
 	public String getText() {
@@ -45,6 +50,10 @@ public class CommentPOJO implements Parcelable {
 	
 	public String getTimestamp() {
 		return timestamp;
+	}
+	
+	public void setMessageId(int id) {
+		messageId = id;
 	}
 	
 	public void setText(String msg) {
@@ -61,6 +70,7 @@ public class CommentPOJO implements Parcelable {
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeInt(messageId);
 		dest.writeString(commentText);
 		dest.writeString(author);
 		dest.writeString(timestamp);

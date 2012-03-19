@@ -3,6 +3,7 @@ package edu.upenn.cis350;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
@@ -60,13 +61,13 @@ public class PostMessage extends Activity {
 
     	// Now we can insert the data in to relevant table
     	// I am going pass the id value, which is going to change because of our insert method, to a long variable to show in Toast
-    	long affectedColumnId = sqliteDatabase.insert(AndroidOpenDbHelper.TABLE_NAME_MESSAGES, null, contentValues);
+    	long insertedId = sqliteDatabase.insert(AndroidOpenDbHelper.TABLE_NAME_MESSAGES, null, contentValues);
 
     	// It is a good practice to close the database connections after you have done with it
     	sqliteDatabase.close();
 
     	// I am not going to do the retrieve part in this post. So this is just a notification for satisfaction 
-    	Toast.makeText(this, "Message Posted. DB Column ID :" + affectedColumnId, Toast.LENGTH_SHORT).show();
+    	Toast.makeText(this, "Message Posted. DB Column ID :" + insertedId, Toast.LENGTH_SHORT).show();
 
     }
 

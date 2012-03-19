@@ -181,7 +181,8 @@ public class ShowEvent extends Activity {
     	db.close();
     	return messageList;
     }
-    
+
+    //TODO: Remove this if it's safe.
     public void onMessageClick(View view) {
     	Intent i = new Intent(this, ShowComments.class);
     	MessagePOJO message = new MessagePOJO();

@@ -23,7 +23,7 @@ public class Register extends Activity {
     public void newUser(View view) {
     	AndroidOpenDbHelper dbHelper = new AndroidOpenDbHelper(this);
     	SQLiteDatabase db = dbHelper.getReadableDatabase();
-    	
+    	dbHelper.createUsersTable(db);
     	String uname = ((EditText)findViewById(R.id.loginUsername)).getText().toString();
 		String pw = ((EditText)findViewById(R.id.loginPassword)).getText().toString();
 		
@@ -42,7 +42,6 @@ public class Register extends Activity {
     		values.put(dbHelper.COLUMN_NAME_USER_SIGNUP_TIMESTAMP, System.currentTimeMillis());
     		
     		long affectedRow = db.insert(dbHelper.TABLE_NAME_USERS, null, values);
-    		db.close();
     		
     		Toast.makeText(this, "User " + uname + " created.", Toast.LENGTH_SHORT).show();
     		Intent i = new Intent(this, WhartonComputingCommunicationsActivity.class);

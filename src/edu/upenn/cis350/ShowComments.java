@@ -38,7 +38,6 @@ public class ShowComments extends Activity {
         	/* Message Object Start */
         	message = (MessagePOJO)extras.get("messagePOJO");
         	
-        	/* Dummy Code */
         	LinearLayout layout = (LinearLayout) findViewById(R.id.commentMessagePane);
             layout.setBackgroundColor(Color.GRAY);
 
@@ -63,6 +62,7 @@ public class ShowComments extends Activity {
     public void onPostComment(View view) {
     	CommentPOJO comment = new CommentPOJO();
     	
+    	comment.setMessageId(message.getMessageId());
     	EditText commentText = (EditText) findViewById(R.id.newCommentText);
     	if (commentText.getText().toString().equals("")) {
     		Toast.makeText(this, "Please enter a comment.", Toast.LENGTH_SHORT).show();
@@ -70,7 +70,6 @@ public class ShowComments extends Activity {
     	}
     	comment.setText(commentText.getText().toString());
     	
-    	//TODO(jmow): Save author name when logins are enabled
     	comment.setAuthor(uname);
     	comment.setTimestamp(System.currentTimeMillis() + "");
     	
@@ -93,10 +92,10 @@ public class ShowComments extends Activity {
     	ContentValues contentValues = new ContentValues();
 
     	// Get values from the POJO class and passing them to the ContentValues class
+    	contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_COMMENT_MESSAGE_ID, comment.getMessageId());
     	contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_COMMENT_TEXT, comment.getText());
     	contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_COMMENT_AUTHOR, comment.getAuthor());
     	contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_COMMENT_TIMESTAMP, comment.getTimestamp());
-
 
     	// Now we can insert the data in to relevant table
     	// I am going pass the id value, which is going to change because of our insert method, to a long variable to show in Toast
@@ -157,15 +156,19 @@ public class ShowComments extends Activity {
     	SQLiteDatabase db = dbHelper.getReadableDatabase();
     	dbHelper.createCommentsTable(db);
     	
-    	Cursor cursor = db.query(AndroidOpenDbHelper.TABLE_NAME_COMMENTS, null, null, null, null, null, null);
+    	Cursor cursor = db.query(AndroidOpenDbHelper.TABLE_NAME_COMMENTS, AndroidOpenDbHelper.COMMENT_COLUMNS_ALL,
+    			AndroidOpenDbHelper.COLUMN_NAME_COMMENT_MESSAGE_ID + "=" + message.getMessageId(),
+    			null, null, null, null);
     	startManagingCursor(cursor);
     	
     	while (cursor.moveToNext()) {
+    		int id = cursor.getInt(cursor.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_COMMENT_MESSAGE_ID));
     		String text = cursor.getString(cursor.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_COMMENT_TEXT));
     		String author = cursor.getString(cursor.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_COMMENT_AUTHOR));
     		String timestamp = cursor.getString(cursor.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_COMMENT_TIMESTAMP));
     		
     		CommentPOJO comment = new CommentPOJO();
+    		comment.setMessageId(id);
     		comment.setText(text);
     		comment.setAuthor(author);
     		comment.setTimestamp(timestamp);

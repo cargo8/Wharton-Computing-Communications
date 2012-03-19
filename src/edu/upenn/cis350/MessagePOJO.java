@@ -7,10 +7,12 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class MessagePOJO implements Parcelable {
+	private int id;
 	private boolean read;
 	private String message;
 	private String author; // should this be authorID?
 	private String timestamp;
+	
 	private List<CommentPOJO> comments;
 	
 	// Do I need this?
@@ -30,6 +32,7 @@ public class MessagePOJO implements Parcelable {
     
 	public MessagePOJO(Parcel in) {
 		read = false;
+		id = in.readInt();
 		message = in.readString();
 		author = in.readString();
 		timestamp = in.readString();
@@ -44,6 +47,10 @@ public class MessagePOJO implements Parcelable {
 	
 	public boolean isRead() {
 		return read;
+	}
+	
+	public int getMessageId() {
+		return id;
 	}
 	
 	public String getText() {
@@ -66,6 +73,10 @@ public class MessagePOJO implements Parcelable {
 		comments.add(comment);
 	}
 	
+	public void setMessageId(int num) {
+		id = num;
+	}
+	
 	public void setText(String msg) {
 		message = msg;
 	}
@@ -80,6 +91,7 @@ public class MessagePOJO implements Parcelable {
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeInt(id);
 		dest.writeString(message);
 		dest.writeString(author);
 		dest.writeString(timestamp);

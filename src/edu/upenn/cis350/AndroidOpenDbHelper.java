@@ -28,9 +28,12 @@ public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 	//TODO (closen) add more columns
 
 	public static final String TABLE_NAME_COMMENTS = "comments_table";
+	public static final String COLUMN_NAME_COMMENT_MESSAGE_ID = "comment_message_id_column";
 	public static final String COLUMN_NAME_COMMENT_TEXT = "comment_text_column";
 	public static final String COLUMN_NAME_COMMENT_AUTHOR = "comment_author_column";
 	public static final String COLUMN_NAME_COMMENT_TIMESTAMP = "comment_timestamp_column";
+	public static final String[] COMMENT_COLUMNS_ALL = {COLUMN_NAME_COMMENT_MESSAGE_ID,
+		COLUMN_NAME_COMMENT_TEXT, COLUMN_NAME_COMMENT_AUTHOR, COLUMN_NAME_COMMENT_TIMESTAMP};
 	
 	public static final String TABLE_NAME_USERS = "users_table";
 	public static final String COLUMN_NAME_USER_NAME = "user_name_column";
@@ -38,6 +41,7 @@ public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 	public static final String COLUMN_NAME_USER_SIGNUP_TIMESTAMP = "user_signup_timestamp_column";
 	
 	public static final String TABLE_NAME_MESSAGES = "messages_table";
+	public static final String COLUMN_NAME_MESSAGE_ID = "message_id_column";
 	public static final String COLUMN_NAME_MESSAGE_TEXT = "message_text_column";
 	public static final String COLUMN_NAME_MESSAGE_AUTHOR = "message_author_column";
 	public static final String COLUMN_NAME_MESSAGE_TIMESTAMP = "message_timestamp_column";
@@ -88,6 +92,7 @@ public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 	
 	public void createCommentsTable(SQLiteDatabase db) {
 		String sqlCreateCommentsTable = "create table if not exists " + TABLE_NAME_COMMENTS + " ( " + BaseColumns._ID + " integer primary key autoincrement, "
+				+ COLUMN_NAME_COMMENT_MESSAGE_ID + "text not null, "
 				+ COLUMN_NAME_COMMENT_TEXT + " text not null, "
 				+ COLUMN_NAME_COMMENT_AUTHOR + " text not null, "
 				+ COLUMN_NAME_COMMENT_TIMESTAMP + " text not null);";
@@ -96,7 +101,7 @@ public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 	}
 	
 	public void createMessagesTable(SQLiteDatabase db) {
-		String sqlCreateCommentsTable = "create table if not exists " + TABLE_NAME_MESSAGES + " ( " + BaseColumns._ID + " integer primary key autoincrement, "
+		String sqlCreateCommentsTable = "create table if not exists " + TABLE_NAME_MESSAGES + " ( " + COLUMN_NAME_MESSAGE_ID + " integer primary key autoincrement, "
 				+ COLUMN_NAME_MESSAGE_TEXT + " text not null, "
 				+ COLUMN_NAME_MESSAGE_AUTHOR + " text not null, "
 				+ COLUMN_NAME_MESSAGE_TIMESTAMP + " text not null);";
