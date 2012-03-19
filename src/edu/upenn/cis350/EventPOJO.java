@@ -21,7 +21,7 @@ public class EventPOJO implements Parcelable{
 	private String contact1;
 	private String contact2;
 	private String type;
-	private List<MessagePOJO> messages;
+	private List<MessagePOJO> messages = new ArrayList<MessagePOJO>();
 	//TODO List of messages as Strings or Message objects?
 	
 	//Used to regenerate object
@@ -39,7 +39,6 @@ public class EventPOJO implements Parcelable{
 	public EventPOJO(){
 		affils = new ArrayList<String>();
 		systems = new ArrayList<String>();
-		messages = new ArrayList<MessagePOJO>();
 	}
 	
 	public EventPOJO(Parcel in){
@@ -56,7 +55,7 @@ public class EventPOJO implements Parcelable{
 		contact1 = in.readString();
 		contact2 = in.readString();
 		type = in.readString();
-		in.readList(messages, null);
+		in.readList(messages, EventPOJO.class.getClassLoader());
 	}
 	
 	///////// SETTER METHODS /////////////

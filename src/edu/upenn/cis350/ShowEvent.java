@@ -90,6 +90,7 @@ public class ShowEvent extends Activity {
         	temp.setText(event.getType());
         	
         }
+        populateMessages();
     }
     
     @Override
@@ -119,6 +120,9 @@ public class ShowEvent extends Activity {
         	LinearLayout header = new LinearLayout(this);
         	header.setOrientation(0);
         	
+        	TextView posted = new TextView(this);
+        	posted.setText("Posted by ");
+        	
         	TextView author = new TextView(this);
         	author.setText(m.getAuthor());
         	author.setTypeface(Typeface.DEFAULT_BOLD);
@@ -128,14 +132,16 @@ public class ShowEvent extends Activity {
         	SimpleDateFormat formatter = new SimpleDateFormat();
         	timestamp.setText(" at " + formatter.format(new Date(time)));
         	
+        	header.addView(posted);
         	header.addView(author);
         	header.addView(timestamp);
         	
         	TextView messageText = new TextView(this);
         	messageText.setText(m.getText());
         	
-        	messageFrame.addView(header);
         	messageFrame.addView(messageText);
+        	messageFrame.addView(header);
+        	
         	messageFrame.setOnClickListener(new LinearLayout.OnClickListener() {  
                 public void onClick(View v){
                     onMessageClick(m);
@@ -197,7 +203,7 @@ public class ShowEvent extends Activity {
     public void onPostMessage(View view){
     	Intent i = new Intent(this, PostMessage.class);
     	i.putExtra("user", uname);
-    	i.putExtra("eventPOJO", event);
+		i.putExtra("eventPOJO", event);
     	startActivity(i);
     }
 	

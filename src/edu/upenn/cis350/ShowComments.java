@@ -54,7 +54,7 @@ public class ShowComments extends Activity {
         	temp = (TextView) findViewById(R.id.messageTimestamp);
         	temp.setTextColor(Color.WHITE);
         	SimpleDateFormat formatter = new SimpleDateFormat();
-        	temp.setText(formatter.format(new Date(message.getTimestamp())));
+        	temp.setText(formatter.format(new Date(Long.parseLong(message.getTimestamp()))));
         }
         
         populateComments();

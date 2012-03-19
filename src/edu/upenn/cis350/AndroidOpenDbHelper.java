@@ -95,6 +95,15 @@ public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 		db.execSQL(sqlCreateCommentsTable);
 	}
 	
+	public void createMessagesTable(SQLiteDatabase db) {
+		String sqlCreateCommentsTable = "create table if not exists " + TABLE_NAME_MESSAGES + " ( " + BaseColumns._ID + " integer primary key autoincrement, "
+				+ COLUMN_NAME_MESSAGE_TEXT + " text not null, "
+				+ COLUMN_NAME_MESSAGE_AUTHOR + " text not null, "
+				+ COLUMN_NAME_MESSAGE_TIMESTAMP + " text not null);";
+
+		db.execSQL(sqlCreateCommentsTable);
+	}
+	
 	// onUpgrade method is used when we need to upgrade the database to a new version
 	//As an example, the first release of the app contains DB_VERSION = 1
 	//Then, the second release of the same app contains DB_VERSION = 2
