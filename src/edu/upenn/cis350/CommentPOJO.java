@@ -65,5 +65,39 @@ public class CommentPOJO implements Parcelable {
 		dest.writeString(author);
 		dest.writeString(timestamp);
 	}
+	
+
+//	public class CommentPOJOBuilder {
+//		private CommentPOJO comment = null;
+//		
+//		public CommentPOJOBuilder() {
+//			comment = new CommentPOJO();
+//		}
+//		
+//		public CommentPOJOBuilder setText(String msg) {
+//			comment.setText(msg);
+//			return this;
+//		}
+//		
+//		public CommentPOJOBuilder setAuthor(String author) {
+//			comment.setAuthor(author);
+//			return this;
+//		}
+//		
+//		public CommentPOJOBuilder setTimestamp(String time) {
+//			comment.setTimestamp(time);
+//			return this;
+//		}
+//		
+//		public CommentPOJO build() {
+//			if (comment.getText() != null &&
+//					comment.getAuthor() != null &&
+//					comment.getTimestamp() != null) {
+//				return comment;
+//			} else {
+//				return null;
+//			}
+//		}
+//	}
 
 }

@@ -65,19 +65,27 @@ public class Home extends Activity {
  		String deleteEventsTable = "drop table events_table;";
  		String deleteCommentsTable = "drop table comments_table;";
  		String deleteUsersTable = "drop table users_table;";
+ 		String deleteMessagesTable = "drop table messages_table;";
  		try {
  			db.execSQL(deleteEventsTable);
  			db.execSQL(deleteCommentsTable);
  			db.execSQL(deleteUsersTable);
+ 			db.execSQL(deleteMessagesTable);
  		} catch (Exception e1) {
  			try {
  				db.execSQL(deleteCommentsTable);
  				db.execSQL(deleteUsersTable);
+ 	 			db.execSQL(deleteMessagesTable);
  			} catch (Exception e2) {
  				try {
  					db.execSQL(deleteUsersTable);
+ 		 			db.execSQL(deleteMessagesTable);
  				} catch (Exception e3) {
-
+ 					try {
+ 	 		 			db.execSQL(deleteMessagesTable);
+ 					} catch (Exception e4) {
+ 						
+ 					}
  				}
  			}
  		}
