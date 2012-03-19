@@ -176,6 +176,17 @@ public class ShowEvent extends Activity {
     	return messageList;
     }
     
+    public void onMessageClick(View view) {
+    	Intent i = new Intent(this, ShowComments.class);
+    	MessagePOJO message = new MessagePOJO();
+    	message.setText("Message");
+    	message.setAuthor("Joe Cruz");
+    	message.setTimestamp("March 18, 2012");
+    	i.putExtra("messagePOJO", message);
+    	i.putExtra("user", uname);
+    	startActivity(i);
+    }
+    
     public void onMessageClick(MessagePOJO message){
     	Intent i = new Intent(this, ShowComments.class);
     	i.putExtra("messagePOJO", message);
