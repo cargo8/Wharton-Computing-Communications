@@ -130,7 +130,7 @@ public class ShowEvent extends Activity {
         	TextView timestamp = new TextView(this);
         	Long time = Long.parseLong(m.getTimestamp());
         	SimpleDateFormat formatter = new SimpleDateFormat();
-        	timestamp.setText(" at " + formatter.format(new Date(time)));
+        	timestamp.setText(" at " + formatter.format(new Date(time)) + '\n');
         	
         	header.addView(posted);
         	header.addView(author);
@@ -138,6 +138,7 @@ public class ShowEvent extends Activity {
         	
         	TextView messageText = new TextView(this);
         	messageText.setText(m.getText());
+        	messageText.setTypeface(Typeface.DEFAULT_BOLD);
         	
         	messageFrame.addView(messageText);
         	messageFrame.addView(header);
@@ -162,8 +163,10 @@ public class ShowEvent extends Activity {
     	// SQLiteDatabase has methods to create, delete, execute SQL commands, and perform other common database management tasks.
     	SQLiteDatabase db = dbHelper.getReadableDatabase();
     	dbHelper.createCommentsTable(db);
-    	
-    	Cursor cursor = db.query(AndroidOpenDbHelper.TABLE_NAME_MESSAGES, null, null, null, null, null, null);
+    	dbHelper.createMessagesTable(db);
+   
+    	Cursor cursor = db.query(AndroidOpenDbHelper.TABLE_NAME_MESSAGES, null, 
+    			AndroidOpenDbHelper.COLUMN_NAME_MESSAGE_EVENT + "=" + event.getEventID(), null, null, null, null);
     	startManagingCursor(cursor);
     	
     	while (cursor.moveToNext()) {
