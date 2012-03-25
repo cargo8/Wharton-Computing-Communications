@@ -19,6 +19,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/* This activity displays the comments related to a particular message.
+ * Each message has its own comments related to it.
+ */
 public class ShowComments extends Activity {
 
 	private MessagePOJO message;
@@ -56,6 +59,7 @@ public class ShowComments extends Activity {
         populateComments();
     }
 
+    // onClick function of postComment button
     public void onPostComment(View view) {
     	CommentPOJO comment = new CommentPOJO();
     	
@@ -75,6 +79,8 @@ public class ShowComments extends Activity {
     	populateComments();
     }
     
+    // Inserts the comment into the SQLite DB.
+    // TODO: Change to MySQL
     public void insertComment(CommentPOJO comment) {
     	// First we have to open our DbHelper class by creating a new object of that
     	AndroidOpenDbHelper androidOpenDbHelperObj = new AndroidOpenDbHelper(this);
@@ -107,6 +113,7 @@ public class ShowComments extends Activity {
 
     }
     
+    // populates the comments in the view from the DB
     public void populateComments() {
     	List<CommentPOJO> comments = getComments();
         

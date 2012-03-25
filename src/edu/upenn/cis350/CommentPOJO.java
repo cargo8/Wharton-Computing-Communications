@@ -3,6 +3,10 @@ package edu.upenn.cis350;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+/* Plain Old Java Object to represent a comment.
+ * This is passed throughout the app rather than making
+ * frequent database queries
+ */
 public class CommentPOJO implements Parcelable {
 	private String commentText;
 	private String author; // should this be authorID?
@@ -24,6 +28,7 @@ public class CommentPOJO implements Parcelable {
     	
     }
     
+    // Necessary constructor b/c of "Parcelable" interface
 	public CommentPOJO(Parcel in) {
 		messageId = in.readInt();
 		commentText = in.readString();
@@ -69,6 +74,7 @@ public class CommentPOJO implements Parcelable {
 	}
 
 	@Override
+	// flattens fields
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeInt(messageId);
 		dest.writeString(commentText);
@@ -76,6 +82,7 @@ public class CommentPOJO implements Parcelable {
 		dest.writeString(timestamp);
 	}
 	
+	// TODO: Change to builder interface
 
 //	public class CommentPOJOBuilder {
 //		private CommentPOJO comment = null;

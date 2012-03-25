@@ -25,6 +25,10 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+/* This activity displays the form for creating a new event.
+ * Once the event is submitted, it is written to the DB and the 
+ * user is shown the ShowEvent view for this Event
+ */
 public class CreateNewEvent extends Activity {
 
 	
@@ -86,7 +90,7 @@ public class CreateNewEvent extends Activity {
                    updateDisplay();
                }
            };
-           
+     // the callback received when the user "sets" the time in the dialog (start time)      
      private TimePickerDialog.OnTimeSetListener mTimeSetListener =
     	 	new TimePickerDialog.OnTimeSetListener() {
     	 		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -95,7 +99,7 @@ public class CreateNewEvent extends Activity {
         	        updateDisplay();
         	    }
         	};
-        	
+     // the callback received when the user "sets" the time in the dialog (end time)              	
      private TimePickerDialog.OnTimeSetListener mTimeSetListener2 =
     	 	new TimePickerDialog.OnTimeSetListener() {
          		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -153,6 +157,7 @@ public class CreateNewEvent extends Activity {
 
     }
     
+    // helper method to populate spinners with dummy info
     private void populateSpinners() {
         Spinner spinner = (Spinner) findViewById(R.id.personSpinner1);
         ArrayAdapter <CharSequence> adapter =
@@ -248,7 +253,7 @@ public class CreateNewEvent extends Activity {
     public void showPickAffilsDialog(View view){
        	showDialog(PICK_AFFILS_DIALOG_ID);
     }
-    
+    // onClick function of pickSys button
     public void showPickSysDialog(View view){
     	showDialog(PICK_SYS_DIALOG_ID);
     }
@@ -350,6 +355,8 @@ public class CreateNewEvent extends Activity {
         return null;
     }
     
+    // inserts the event into the SQLite DB
+    // TODO: Change to MySQL DB
     public void insertEvent(EventPOJO event){
 
 		// First we have to open our DbHelper class by creating a new object of that

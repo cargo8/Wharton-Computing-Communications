@@ -6,6 +6,10 @@ import java.util.List;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+/* Plain Old Java Object for information related to a Message.
+ * Information in this object will be passed throughout the app
+ * to limit the number of DB queries.
+ */
 public class MessagePOJO implements Parcelable {
 	private int id;
 	private boolean read;

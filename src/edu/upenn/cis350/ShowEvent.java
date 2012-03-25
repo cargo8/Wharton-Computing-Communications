@@ -16,7 +16,10 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-
+/* Displays all information related to a particular Event as well as messages 
+ * related to that event. Upon clicking on a message, the user will see
+ * a new view where they can comment on a particular message.
+ */
 public class ShowEvent extends Activity {
 	
 	private EventPOJO event;
@@ -102,11 +105,13 @@ public class ShowEvent extends Activity {
        startActivity(i);
     }
     
+    // onClick function of backToAgenda button (deprected)
     public void onBackToAgendaClick(View view){
     	Intent i = new Intent(this, Agenda.class);
     	startActivity(i);
     }
     
+    // populates the messages in the bottom half of the view from the DB
     public void populateMessages() {
     	List<MessagePOJO> messages = getMessages();
         
@@ -153,6 +158,8 @@ public class ShowEvent extends Activity {
         }
     }
     
+    // gets the messages from the database 
+    // TODO: get the messages from the EventPOJO instead
     public List<MessagePOJO> getMessages() {
     	List<MessagePOJO> messageList = new ArrayList<MessagePOJO>();
     	
@@ -199,6 +206,7 @@ public class ShowEvent extends Activity {
     	startActivity(i);
     }
     
+    // method called when a user clicks on a message layout
     public void onMessageClick(MessagePOJO message){
     	Intent i = new Intent(this, ShowComments.class);
     	i.putExtra("messagePOJO", message);
@@ -206,6 +214,7 @@ public class ShowEvent extends Activity {
     	startActivity(i);
     }
     
+    // onClickFunction of postMessage button
     public void onPostMessage(View view){
     	Intent i = new Intent(this, PostMessage.class);
     	i.putExtra("user", uname);

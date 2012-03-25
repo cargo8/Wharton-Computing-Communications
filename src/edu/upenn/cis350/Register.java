@@ -10,6 +10,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+/* This activity displays a form for the user to register a user name for the app.
+ * In the future, this will contain more fields to create a more robust "contact"
+ */
 public class Register extends Activity {
 
 	/** Called when the activity is first created. */
@@ -20,6 +23,7 @@ public class Register extends Activity {
         
     }
     
+    // Adds the new user to the database if it doesn't already exist
     public void newUser(View view) {
     	AndroidOpenDbHelper dbHelper = new AndroidOpenDbHelper(this);
     	SQLiteDatabase db = dbHelper.getReadableDatabase();

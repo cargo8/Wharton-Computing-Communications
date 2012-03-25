@@ -21,6 +21,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+/* This activity shows the events in a list form.
+ * Events are separated by type - Emergency and Scheduled.
+ * Clicking on an event goes to the ShowEvent view for that Event.
+ */
 public class Agenda extends Activity {
 	
 	private String uname;
@@ -105,11 +109,14 @@ public class Agenda extends Activity {
         }
     }
     
+    // transitions to showEvent
     public void showEvent(View view) {
     	Intent i = new Intent(this, ShowEvent.class);
     	startActivity(i);
     }
     
+    // gets all events from SQLite DB
+    // TODO: get all events from MySQL DB
     public List<EventPOJO> getEvents(){
     	List<EventPOJO> eventList = new ArrayList<EventPOJO>();
     	
@@ -173,6 +180,7 @@ public class Agenda extends Activity {
 	}
     
     @Override
+    // changes behavior when back button is pressed
     public void onBackPressed() {
        Intent i = new Intent(this, Home.class);
        i.putExtra("user", uname);

@@ -57,6 +57,7 @@ public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 		createUsersTable(db);
 		createEventsTable(db);
 		createCommentsTable(db);
+		createMessagesTable(db);
 	}
 
 	public void createUsersTable(SQLiteDatabase db) {

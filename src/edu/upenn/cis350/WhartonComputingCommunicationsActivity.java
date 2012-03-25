@@ -10,6 +10,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 
+/* This activity shows a login screen to the user.
+ * If the user does not have an account, they can create an account
+ * by clicking on the register button
+ */
 public class WhartonComputingCommunicationsActivity extends Activity {
 	
 	// fields for changing activities
@@ -29,6 +33,7 @@ public class WhartonComputingCommunicationsActivity extends Activity {
         setContentView(R.layout.main);   
     }
     
+    // Queries the DB to decide if the user exists or not
     public void login(View view) {
 		AndroidOpenDbHelper dbHelper = new AndroidOpenDbHelper(this);
 		SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -61,6 +66,7 @@ public class WhartonComputingCommunicationsActivity extends Activity {
 		}
     }
     
+    // onClick function of register button
     public void clickRegister(View view) {
     	Intent i = new Intent(this, Register.class);
     	startActivityForResult(i, ACTIVITY_ShowComments);

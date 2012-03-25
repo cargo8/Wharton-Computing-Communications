@@ -7,7 +7,10 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 
-// POJO to hold all event data, eventually to be put into a sqlite DB
+/* Plain Old Java Object that holds all information for an event.
+ * The information in this object eventually gets read from/written to 
+ * the SQLite DB.
+ */
 public class EventPOJO implements Parcelable{
 	
 	private String eventTitle;

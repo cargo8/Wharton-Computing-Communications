@@ -10,6 +10,10 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/* This activity is shown when the user wants to post a new message.
+ * It includes functionality to insert the message into the database and
+ * transition to the ShowEvent view for this Event.
+ */
 public class PostMessage extends Activity {
 	
 	private String uname;
@@ -25,6 +29,7 @@ public class PostMessage extends Activity {
 		}
 	}
 	 
+	// onClick function for Post button
 	public void onPostClick(View view){
 		TextView tv = (TextView)findViewById(R.id.messageBox);
 		MessagePOJO msg = new MessagePOJO();
@@ -40,6 +45,8 @@ public class PostMessage extends Activity {
 		startActivity(i);
 	}
 	
+	// inserts the message into the SQLite DB.
+	// TODO: Change to MySQL DB
 	public MessagePOJO insertMessage(MessagePOJO message) {
     	// First we have to open our DbHelper class by creating a new object of that
     	AndroidOpenDbHelper androidOpenDbHelperObj = new AndroidOpenDbHelper(this);
