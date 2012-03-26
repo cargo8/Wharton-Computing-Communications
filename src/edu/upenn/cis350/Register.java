@@ -6,6 +6,7 @@ import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.SaveCallback;
 
 import android.app.Activity;
 import android.content.ContentValues;
@@ -50,10 +51,26 @@ public class Register extends Activity {
 			ParseObject user = new ParseObject("Users");
 			user.put("username", uname);
 			user.put("pw", pw);
-			user.save();
-    		Toast.makeText(this, "User " + uname + " created.", Toast.LENGTH_SHORT).show();
-    		Intent i = new Intent(this, WhartonComputingCommunicationsActivity.class);
-    		startActivity(i);
+			
+    		final Toast successToast = Toast.makeText(this, "User " + uname + " created.", Toast.LENGTH_SHORT);
+    		final Intent i = new Intent(this, WhartonComputingCommunicationsActivity.class);
+
+    		final Toast failToast = Toast.makeText(this, "Could not create user. Try again.", Toast.LENGTH_SHORT);
+
+    		user.saveInBackground(new SaveCallback() {
+
+				@Override
+				public void done(ParseException e) {
+					if (e == null) {
+						successToast.show();
+			    		startActivity(i);
+					} else {
+						failToast.show();
+						return;
+					}
+				}
+				
+			});
 
 		} else {
     		Toast.makeText(this, "This username is taken. Try again.", Toast.LENGTH_SHORT).show();
