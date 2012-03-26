@@ -28,5 +28,5 @@
         <activity android:name=".PostMessage" />
         
     </application>
-
+	<uses-permission android:name="android.permission.INTERNET" />
 </manifest>

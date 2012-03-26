@@ -1,5 +1,8 @@
 package edu.upenn.cis350;
 
+import com.parse.Parse;
+import com.parse.ParseObject;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -30,7 +33,8 @@ public class WhartonComputingCommunicationsActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);   
+        Parse.initialize(this, "FWyFNrvpkliSb7nBNugCNttN5HWpcbfaOWEutejH", "SZoWtHw28U44nJy8uKtV2oAQ8suuCZnFLklFSk46");
+        setContentView(R.layout.main);
     }
     
     // Queries the DB to decide if the user exists or not
