@@ -1,5 +1,12 @@
 package edu.upenn.cis350;
 
+import java.util.List;
+
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -19,39 +26,38 @@ public class Register extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Parse.initialize(this, "FWyFNrvpkliSb7nBNugCNttN5HWpcbfaOWEutejH", "SZoWtHw28U44nJy8uKtV2oAQ8suuCZnFLklFSk46");
         setContentView(R.layout.register);
         
     }
     
     // Adds the new user to the database if it doesn't already exist
     public void newUser(View view) {
-    	AndroidOpenDbHelper dbHelper = new AndroidOpenDbHelper(this);
-    	SQLiteDatabase db = dbHelper.getReadableDatabase();
-    	dbHelper.createUsersTable(db);
     	String uname = ((EditText)findViewById(R.id.loginUsername)).getText().toString();
 		String pw = ((EditText)findViewById(R.id.loginPassword)).getText().toString();
 		
-    	String[] columns = {dbHelper.COLUMN_NAME_USER_NAME};
-    	Cursor cursor = db.query(dbHelper.TABLE_NAME_USERS, columns, 
-    			dbHelper.COLUMN_NAME_USER_NAME + " = '" + uname + "'", 
-    			null, null, null, null);
-    	int count = cursor.getCount();
-    	db.close();
-    	
-    	if (count == 0) {
-    		db = dbHelper.getWritableDatabase();
-    		ContentValues values = new ContentValues();
-    		values.put(dbHelper.COLUMN_NAME_USER_NAME, uname);
-    		values.put(dbHelper.COLUMN_NAME_USER_PW, pw);
-    		values.put(dbHelper.COLUMN_NAME_USER_SIGNUP_TIMESTAMP, System.currentTimeMillis());
-    		
-    		long affectedRow = db.insert(dbHelper.TABLE_NAME_USERS, null, values);
-    		
+		ParseQuery query = new ParseQuery("Users");
+		query.whereEqualTo("username", uname);
+    	List<ParseObject> userList;
+		try {
+			userList = query.find();
+		} catch (ParseException e) {
+			Toast.makeText(this, "Error registering account", Toast.LENGTH_SHORT);
+			return;
+		}
+
+		if (userList.size() == 0) {
+			ParseObject user = new ParseObject("Users");
+			user.put("username", uname);
+			user.put("pw", pw);
+			user.save();
     		Toast.makeText(this, "User " + uname + " created.", Toast.LENGTH_SHORT).show();
     		Intent i = new Intent(this, WhartonComputingCommunicationsActivity.class);
     		startActivity(i);
-    	} else {
+
+		} else {
     		Toast.makeText(this, "This username is taken. Try again.", Toast.LENGTH_SHORT).show();
-    	}
+		}
+	
     }
 }

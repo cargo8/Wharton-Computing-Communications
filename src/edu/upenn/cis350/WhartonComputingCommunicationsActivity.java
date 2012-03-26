@@ -1,7 +1,11 @@
 package edu.upenn.cis350;
 
+import java.util.List;
+
 import com.parse.Parse;
+import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -39,9 +43,7 @@ public class WhartonComputingCommunicationsActivity extends Activity {
     
     // Queries the DB to decide if the user exists or not
     public void login(View view) {
-		AndroidOpenDbHelper dbHelper = new AndroidOpenDbHelper(this);
-		SQLiteDatabase db = dbHelper.getReadableDatabase();
-		dbHelper.createUsersTable(db);
+    	ParseQuery query = new ParseQuery("Users");
 
 		String uname = ((EditText)findViewById(R.id.loginUsername)).getText().toString();
 		String pw = ((EditText)findViewById(R.id.loginPassword)).getText().toString();
@@ -51,16 +53,17 @@ public class WhartonComputingCommunicationsActivity extends Activity {
 			return;
 		}
 		
-		String[] columns = {dbHelper.COLUMN_NAME_USER_NAME, dbHelper.COLUMN_NAME_USER_PW};
-		
-		Cursor cursor = db.query(dbHelper.TABLE_NAME_USERS, columns, 
-				dbHelper.COLUMN_NAME_USER_NAME + " = '" + uname + "' AND " +
-				dbHelper.COLUMN_NAME_USER_PW + " = '" + pw + "'", null, null, null, null);
-		startManagingCursor(cursor);
-		int count = cursor.getCount();
-		db.close();
-		
-		if(count > 0) {
+    	query.whereEqualTo("username", uname);
+    	List<ParseObject> userList;
+		try {
+			userList = query.find();
+		} catch (ParseException e) {
+			Toast.makeText(this, "Error logging in", Toast.LENGTH_SHORT);
+			return;
+		}
+    	
+    	
+    	if (userList.size() > 0) {
     		Toast.makeText(this, "Login Successful.", Toast.LENGTH_SHORT).show();
 			Intent i = new Intent(this, Home.class);
 			i.putExtra("user", uname);
@@ -68,16 +71,18 @@ public class WhartonComputingCommunicationsActivity extends Activity {
 		} else {
 			Toast.makeText(this, "Login failed.", Toast.LENGTH_SHORT).show();
 		}
+    		
     }
     
     // onClick function of register button
     public void clickRegister(View view) {
     	Intent i = new Intent(this, Register.class);
-    	startActivityForResult(i, ACTIVITY_ShowComments);
+    	startActivityForResult(i, ACTIVITY_Register);
     }
     
     @Override
     public void onBackPressed() {
        Intent i = new Intent(this, WhartonComputingCommunicationsActivity.class);
        startActivity(i);
-    }   }
+    }
+}
