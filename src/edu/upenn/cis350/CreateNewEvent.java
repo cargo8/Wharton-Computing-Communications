@@ -53,7 +53,7 @@ public class CreateNewEvent extends Activity {
     private CharSequence[] systems;
     private boolean[] systemsChecked;
     
-    private String uname;
+    private String userKey;
 
     //dialog constants
     static final int START_DATE_DIALOG_ID = 0;
@@ -117,7 +117,7 @@ public class CreateNewEvent extends Activity {
         
         Bundle extras = this.getIntent().getExtras();
         if(extras != null){
-           	uname = extras.getString("user");
+           	userKey = extras.getString("userKey");
         }
         
         // capture our View elements
@@ -234,7 +234,7 @@ public class CreateNewEvent extends Activity {
     		return;
     	}
     	i.putExtra("eventPOJO", event);
-    	i.putExtra("user", uname);
+    	i.putExtra("userKey", userKey);
     	insertEvent(event);
     	startActivity(i);
     }

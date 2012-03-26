@@ -27,7 +27,7 @@ import android.widget.Toast;
  */
 public class Agenda extends Activity {
 	
-	private String uname;
+	private String userKey;
 	
     /** Called when the activity is first created. */
     @Override
@@ -36,15 +36,13 @@ public class Agenda extends Activity {
         setContentView(R.layout.agenda);
         Bundle extras = this.getIntent().getExtras();
         if (extras != null) {
-        	uname = extras.getString("user");
+        	userKey = extras.getString("userKey");
         }
         
         List<EventPOJO> eventList = getEvents();
         LinearLayout eventPane = (LinearLayout) findViewById(R.id.agendaEvents);
         LinearLayout emergencyPane = (LinearLayout) findViewById(R.id.agendaEmergency);
-        
-        //TODO(jmow): Add events to separate emergency vs. event pane
-        
+                
         for (EventPOJO event : eventList) {
         	final LinearLayout eventFrame = new LinearLayout(this);
         	// Vertical Orientation
@@ -86,7 +84,7 @@ public class Agenda extends Activity {
         	
 			final Intent i = new Intent(this, ShowEvent.class);
 			i.putExtra("eventPOJO", event);
-			i.putExtra("user", uname);
+			i.putExtra("userKey", userKey);
 
         	eventFrame.setOnClickListener(new OnClickListener() {
 
@@ -183,7 +181,7 @@ public class Agenda extends Activity {
     // changes behavior when back button is pressed
     public void onBackPressed() {
        Intent i = new Intent(this, Home.class);
-       i.putExtra("user", uname);
+       i.putExtra("userKey", userKey);
        startActivity(i);
     }
 }

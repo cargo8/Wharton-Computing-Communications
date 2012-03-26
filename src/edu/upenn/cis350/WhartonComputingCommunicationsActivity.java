@@ -22,7 +22,7 @@ import android.widget.Toast;
  * by clicking on the register button
  */
 public class WhartonComputingCommunicationsActivity extends Activity {
-	
+
 	// fields for changing activities
 	public static final int ACTIVITY_Home = 0;
 	public static final int ACTIVITY_CreateNewEvent = 1;
@@ -32,57 +32,55 @@ public class WhartonComputingCommunicationsActivity extends Activity {
 	public static final int ACTIVITY_Register = 5;
 	public static final int ACTIVITY_PostMessage = 6;
 
-	
-    /** Called when the activity is first created. */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Parse.initialize(this, "FWyFNrvpkliSb7nBNugCNttN5HWpcbfaOWEutejH", "SZoWtHw28U44nJy8uKtV2oAQ8suuCZnFLklFSk46");
-        setContentView(R.layout.main);
-    }
-    
-    // Queries the DB to decide if the user exists or not
-    public void login(View view) {
-    	ParseQuery query = new ParseQuery("Users");
+
+	/** Called when the activity is first created. */
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		Parse.initialize(this, "FWyFNrvpkliSb7nBNugCNttN5HWpcbfaOWEutejH", "SZoWtHw28U44nJy8uKtV2oAQ8suuCZnFLklFSk46");
+		setContentView(R.layout.main);
+	}
+
+	// Queries the DB to decide if the user exists or not
+	public void login(View view) {
+		ParseQuery query = new ParseQuery("Users");
 
 		String uname = ((EditText)findViewById(R.id.loginUsername)).getText().toString();
 		String pw = ((EditText)findViewById(R.id.loginPassword)).getText().toString();
-		
+
 		if (uname.equals("") || pw.equals("")) {
 			Toast.makeText(this, "Login failed.", Toast.LENGTH_SHORT).show();
 			return;
 		}
-		
-    	query.whereEqualTo("username", uname);
-    	List<ParseObject> userList;
+
+		query.whereEqualTo("username", uname);
+		List<ParseObject> userList;
 		try {
 			userList = query.find();
-		} catch (ParseException e) {
-			Toast.makeText(this, "Error logging in", Toast.LENGTH_SHORT);
-			return;
-		}
-    	
-    	
-    	if (userList.size() > 0) {
-    		Toast.makeText(this, "Login Successful.", Toast.LENGTH_SHORT).show();
-			Intent i = new Intent(this, Home.class);
-			i.putExtra("user", uname);
-			startActivityForResult(i, ACTIVITY_Home);
-		} else {
+			if (userList.size() > 0) {
+				Toast.makeText(this, "Login Successful.", Toast.LENGTH_SHORT).show();
+				Intent i = new Intent(this, Home.class);
+				i.putExtra("userKey", userList.iterator().next().getObjectId());
+				startActivityForResult(i, ACTIVITY_Home);
+				return;
+			}
 			Toast.makeText(this, "Login failed.", Toast.LENGTH_SHORT).show();
-		}
-    		
-    }
-    
-    // onClick function of register button
-    public void clickRegister(View view) {
-    	Intent i = new Intent(this, Register.class);
-    	startActivityForResult(i, ACTIVITY_Register);
-    }
-    
-    @Override
-    public void onBackPressed() {
-       Intent i = new Intent(this, WhartonComputingCommunicationsActivity.class);
-       startActivity(i);
-    }
+			return;
+		} catch (ParseException e) {
+			Toast.makeText(this, "Login failed.", Toast.LENGTH_SHORT).show();
+			return;
+		}	
+	}
+
+	// onClick function of register button
+	public void clickRegister(View view) {
+		Intent i = new Intent(this, Register.class);
+		startActivityForResult(i, ACTIVITY_Register);
+	}
+
+	@Override
+	public void onBackPressed() {
+		Intent i = new Intent(this, WhartonComputingCommunicationsActivity.class);
+		startActivity(i);
+	}
 }
