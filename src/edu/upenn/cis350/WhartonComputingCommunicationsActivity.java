@@ -1,21 +1,16 @@
 package edu.upenn.cis350;
 
-import java.util.List;
-
-import com.parse.Parse;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.parse.LogInCallback;
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseUser;
 
 /* This activity shows a login screen to the user.
  * If the user does not have an account, they can create an account
@@ -38,38 +33,42 @@ public class WhartonComputingCommunicationsActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Parse.initialize(this, "FWyFNrvpkliSb7nBNugCNttN5HWpcbfaOWEutejH", "SZoWtHw28U44nJy8uKtV2oAQ8suuCZnFLklFSk46");
-		setContentView(R.layout.main);
+		ParseUser currentUser = ParseUser.getCurrentUser();
+		if (currentUser != null) {
+		    Intent i = new Intent(this, Home.class);
+		    startActivity(i);
+		} else {
+			setContentView(R.layout.main);
+		}
 	}
 
-	// Queries the DB to decide if the user exists or not
+	/**
+	 * Logs in the User
+	 */
 	public void login(View view) {
-		ParseQuery query = new ParseQuery("Users");
-
+		
 		String uname = ((EditText)findViewById(R.id.loginUsername)).getText().toString();
 		String pw = ((EditText)findViewById(R.id.loginPassword)).getText().toString();
 
-		if (uname.equals("") || pw.equals("")) {
-			Toast.makeText(this, "Login failed.", Toast.LENGTH_SHORT).show();
-			return;
-		}
-
-		query.whereEqualTo("username", uname);
-		List<ParseObject> userList;
-		try {
-			userList = query.find();
-			if (userList.size() > 0) {
-				Toast.makeText(this, "Login Successful.", Toast.LENGTH_SHORT).show();
-				Intent i = new Intent(this, Home.class);
-				i.putExtra("userKey", userList.iterator().next().getObjectId());
-				startActivityForResult(i, ACTIVITY_Home);
-				return;
-			}
-			Toast.makeText(this, "Login failed.", Toast.LENGTH_SHORT).show();
-			return;
-		} catch (ParseException e) {
-			Toast.makeText(this, "Login failed.", Toast.LENGTH_SHORT).show();
-			return;
-		}	
+		final Toast successToast = Toast.makeText(this, "Login Successful.", Toast.LENGTH_SHORT);
+		final Intent i = new Intent(this, Home.class);
+		
+		final Toast failureToast = Toast.makeText(this, "Login failed.", Toast.LENGTH_SHORT);
+		
+		ParseUser.logInInBackground(uname, pw, new LogInCallback() {
+		    public void done(ParseUser user, ParseException e) {
+		        if (user != null) {
+		            // Hooray! The user is logged in.
+		        	successToast.show();
+		    		i.putExtra("userKey", user.getObjectId());
+		    		startActivity(i);
+		        } else {
+		            // Signup failed. Look at the ParseException to see what happened.
+		        	failureToast.show();
+		        }
+		    }
+		});
+		
 	}
 
 	// onClick function of register button

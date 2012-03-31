@@ -1,6 +1,13 @@
 package edu.upenn.cis350;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.SaveCallback;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -19,7 +26,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -53,8 +59,6 @@ public class CreateNewEvent extends Activity {
     private CharSequence[] systems;
     private boolean[] systemsChecked;
     
-    private String userKey;
-
     //dialog constants
     static final int START_DATE_DIALOG_ID = 0;
     static final int END_DATE_DIALOG_ID = 1;
@@ -113,12 +117,8 @@ public class CreateNewEvent extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+		Parse.initialize(this, "FWyFNrvpkliSb7nBNugCNttN5HWpcbfaOWEutejH", "SZoWtHw28U44nJy8uKtV2oAQ8suuCZnFLklFSk46");
         setContentView(R.layout.eventform);
-        
-        Bundle extras = this.getIntent().getExtras();
-        if(extras != null){
-           	userKey = extras.getString("userKey");
-        }
         
         // capture our View elements
         mDateDisplay = (TextView) findViewById(R.id.startDateDisplay);
@@ -182,42 +182,51 @@ public class CreateNewEvent extends Activity {
     public void onCreateEventSubmit(View view){
     	//TODO closen: Phase out intent stuff - use eventPOJO for everything
     	//Intent i = new Intent(this, WhartonComputingCommunicationsActivity.class);
-    	EventPOJO event = new EventPOJO();
-    	Intent i = new Intent(this, ShowEvent.class);
+    	
+    	ParseObject event = new ParseObject("Event");
     	EditText temp = (EditText)findViewById(R.id.eventTitle);
-    	event.setEventTitle(temp.getText().toString());		// EVENT
+    	event.put("title", temp.getText().toString());
     	temp = (EditText)findViewById(R.id.eventDesc);
-    	event.setEventDesc(temp.getText().toString());		// EVENT
+    	event.put("description", temp.getText().toString());		// EVENT
     	temp = (EditText)findViewById(R.id.eventActions);
-    	event.setEventActions(temp.getText().toString());	// EVENT
+    	event.put("actionItems", temp.getText().toString());	// EVENT
     	TextView temp2 = (TextView)findViewById(R.id.startDateDisplay);
-    	event.setStart(temp2.getText().toString());			// EVENT
+    	event.put("startDate", temp2.getText().toString());			// EVENT
     	temp2 = (TextView)findViewById(R.id.endDateDisplay);
-    	event.setEnd(temp2.getText().toString());			// EVENT
-    	if(affils != null){
-    		for(int x = 0; x < affils.length; x++){				// EVENT
-    			if(affilsChecked[x])
-    				event.addToAffils(affils[x].toString());
-    		}
-    	}
-    	if(systems != null){
-    		for(int x = 0; x < systems.length; x++){
-    			if(systemsChecked[x])
-    				event.addToSystems(systems[x].toString());
-    		}
-    	}														// EVENT
-    	Spinner spin1 = (Spinner)findViewById(R.id.personSpinner1);
-    	event.setContact1(spin1.getSelectedItem().toString());	// EVENT
-    	spin1 = (Spinner)findViewById(R.id.personSpinner2);
-    	event.setContact2(spin1.getSelectedItem().toString());	// EVENT
+    	event.put("endDate", temp2.getText().toString());			// EVENT
+
+    	//TODO: Affils + Systems
+//    	List<String> affiliations = new ArrayList<String>();
+//    	if(affils != null){
+//    		for(int x = 0; x < affils.length; x++){				// EVENT
+//    			if(affilsChecked[x])
+//    				affiliations.add(affils[x].toString());
+//    		}
+//    		event.put("affils", affiliations);
+//    	}
+//    	List<String> sys = new ArrayList<String>();
+//    	if(systems != null){
+//    		for(int x = 0; x < systems.length; x++){
+//    			if(systemsChecked[x])
+//    				sys.add(systems[x].toString());
+//    		}
+//    		event.put("systems", sys);
+//    	}
+
+    	//TODO: User linking
+//    	Spinner spin1 = (Spinner)findViewById(R.id.personSpinner1);
+//    	event.setContact1(spin1.getSelectedItem().toString());	// EVENT
+//    	spin1 = (Spinner)findViewById(R.id.personSpinner2);
+//    	event.setContact2(spin1.getSelectedItem().toString());	// EVENT
+
     	if(((RadioButton)findViewById(R.id.radioRed)).isChecked()){
-    		event.setSeverity(Color.RED);						// EVENT
+    		event.put("severity", Color.RED);
     	}
     	else if(((RadioButton)findViewById(R.id.radioYellow)).isChecked()){
-    		event.setSeverity(Color.YELLOW);					// EVENT
+    		event.put("severity", Color.YELLOW);
     	}
     	else if(((RadioButton)findViewById(R.id.radioGreen)).isChecked()){
-    		event.setSeverity(Color.GREEN);						// EVENT
+    		event.put("severity", Color.GREEN);
     	}
     	else {
     		Toast.makeText(this, "Select an severity code.", Toast.LENGTH_SHORT).show();
@@ -225,18 +234,32 @@ public class CreateNewEvent extends Activity {
     	}
     	
     	if(((RadioButton)findViewById(R.id.radioEmergency)).isChecked()){
-    		event.setType("Emergency");
+    		event.put("type", "Emergency");
     	}
     	else if(((RadioButton)findViewById(R.id.radioScheduled)).isChecked()){
-    		event.setType("Scheduled");					// EVENT
+    		event.put("type", "Scheduled");
     	} else  {
     		Toast.makeText(this, "Select an event type.", Toast.LENGTH_SHORT).show();
     		return;
     	}
-    	i.putExtra("eventPOJO", event);
-    	i.putExtra("userKey", userKey);
-    	insertEvent(event);
-    	startActivity(i);
+    	
+    	final Toast success = Toast.makeText(this, "Event saved.", Toast.LENGTH_SHORT);
+    	final Intent i = new Intent(this, ShowEvent.class);
+
+    	final Toast failure = Toast.makeText(this, "Could not save event. Try again.", Toast.LENGTH_SHORT);
+
+    	event.saveInBackground(new SaveCallback() {
+			@Override
+			public void done(ParseException e) {
+				if (e == null) {
+					success.show();
+			    	startActivity(i);	
+				} else {
+					failure.setText(e.getMessage());
+					failure.show();
+				}
+			}
+    	});
     }
     
     // onClick function of pickStartDateButton

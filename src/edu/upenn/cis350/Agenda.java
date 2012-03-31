@@ -3,6 +3,12 @@ package edu.upenn.cis350;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.parse.FindCallback;
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
@@ -34,12 +40,10 @@ public class Agenda extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.agenda);
-        Bundle extras = this.getIntent().getExtras();
-        if (extras != null) {
-        	userKey = extras.getString("userKey");
-        }
+		Parse.initialize(this, "FWyFNrvpkliSb7nBNugCNttN5HWpcbfaOWEutejH", "SZoWtHw28U44nJy8uKtV2oAQ8suuCZnFLklFSk46");
         
         List<EventPOJO> eventList = getEvents();
+//        List<EventPOJO> eventList = getParseEvents();
         LinearLayout eventPane = (LinearLayout) findViewById(R.id.agendaEvents);
         LinearLayout emergencyPane = (LinearLayout) findViewById(R.id.agendaEmergency);
                 
@@ -113,8 +117,24 @@ public class Agenda extends Activity {
     	startActivity(i);
     }
     
+//    public List<EventPOJO> getParseEvents() {
+//    	ParseQuery query = new ParseQuery("Event");
+//    	query.orderByAscending("startDate");
+//    	query.findInBackground(new FindCallback() {
+//    	    
+//    		@Override
+//    		public void done(List<ParseObject> scoreList, ParseException e) {
+//    	        if (e == null) {
+//    	            Log.d("score", "Retrieved " + scoreList.size() + " scores");
+//    	        } else {
+//    	            Log.d("score", "Error: " + e.getMessage());
+//    	        }
+//    	    }
+//
+//    	});
+//    }
+    
     // gets all events from SQLite DB
-    // TODO: get all events from MySQL DB
     public List<EventPOJO> getEvents(){
     	List<EventPOJO> eventList = new ArrayList<EventPOJO>();
     	
