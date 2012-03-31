@@ -42,97 +42,105 @@ public class Agenda extends Activity {
         setContentView(R.layout.agenda);
 		Parse.initialize(this, "FWyFNrvpkliSb7nBNugCNttN5HWpcbfaOWEutejH", "SZoWtHw28U44nJy8uKtV2oAQ8suuCZnFLklFSk46");
         
-        List<EventPOJO> eventList = getEvents();
-//        List<EventPOJO> eventList = getParseEvents();
-        LinearLayout eventPane = (LinearLayout) findViewById(R.id.agendaEvents);
-        LinearLayout emergencyPane = (LinearLayout) findViewById(R.id.agendaEmergency);
-                
-        for (EventPOJO event : eventList) {
-        	final LinearLayout eventFrame = new LinearLayout(this);
-        	// Vertical Orientation
-        	eventFrame.setOrientation(1);
-        	eventFrame.setPadding(1, 1, 1, 1);
-        	
-        	LinearLayout titleFrame = new LinearLayout(this);
-        	titleFrame.setOrientation(0);
-        	
-        	TextView severity = new TextView(this);
-        	severity.setWidth(35);
-        	severity.setHeight(35);
-        	severity.setText("    ");
-        	severity.setBackgroundColor(event.getSeverity());
-        	
-        	TextView title = new TextView(this);
-        	title.setText(event.getEventTitle());
-        	// textSize="16.0sp"
-        	title.setTextSize((float)16.0);
-        	// gravity="center_horizontal"
-        	//title.setGravity(0x01);
-        	// textStyle="bold"
-        	title.setTypeface(Typeface.DEFAULT_BOLD);
-        	
-        	titleFrame.addView(severity);
-        	titleFrame.addView(title);
-        	eventFrame.addView(titleFrame);
-        	
-        	TextView timeframe = new TextView(this);
-        	timeframe.setText("Start: " + event.getStart() + 
-        			", Est. Finish: " + event.getEnd());
-        	timeframe.setTextSize((float)12.0);
-        	eventFrame.addView(timeframe);
-        	
-        	TextView description = new TextView(this);
-        	description.setText(event.getEventDesc());
-        	description.setTextSize((float)12.0);
-        	eventFrame.addView(description);
-        	
-			final Intent i = new Intent(this, ShowEvent.class);
-			i.putExtra("eventPOJO", event);
-			i.putExtra("userKey", userKey);
-
-        	eventFrame.setOnClickListener(new OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					//TODO(jmow): Change background on click
-//					eventFrame.setBackgroundColor(Color.GRAY);
-					startActivity(i);
-				}
-        		
-        	});
+//        List<EventPOJO> eventList = getEvents();
+		ParseQuery query = new ParseQuery("Event");
+    	query.orderByAscending("startDate");
+    	
+    	final Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT); 
+    			
+    	final LinearLayout eventPane = (LinearLayout) findViewById(R.id.agendaEvents);
+        final LinearLayout emergencyPane = (LinearLayout) findViewById(R.id.agendaEmergency);
+        
+    	query.findInBackground(new FindCallback() {
+    	    
+    		@Override
+    		public void done(List<ParseObject> eventList, ParseException e) {
+    	        if (e == null) {
+    	        	for (ParseObject event : eventList) {
+    	        		
+        	        	LinearLayout eventFrame = createEventFrame(event);
         	        	
-        	if (event.getType().equals("Emergency")) {
-            	emergencyPane.addView(eventFrame);
-        	} else if (event.getType().equals("Scheduled")) {
-        		eventPane.addView(eventFrame);
-        	} else {
-        		eventPane.addView(eventFrame);
-        	}
-        }
+    	        		String type = event.getString("type");
+    	            	if ("Emergency".equals(type)) {
+    	                	emergencyPane.addView(eventFrame);
+    	            	} else if ("Scheduled".equals(type)) {
+    	            		eventPane.addView(eventFrame);
+    	            	} else {
+    	            		eventPane.addView(eventFrame);
+    	            	}
+    	        	}
+    	        	
+    	             toast.setText("Retrieved " + eventList.size() + " events");
+    	             toast.show();
+    	        } else {
+    	             toast.setText("Error: " + e.getMessage());
+    	             toast.show();
+    	        }
+    	    }
+
+    	});
     }
     
-    // transitions to showEvent
-    public void showEvent(View view) {
-    	Intent i = new Intent(this, ShowEvent.class);
-    	startActivity(i);
+    /**
+     * Creates the layout for an Event Panel in the Agenda View
+     * 
+     * @param event A ParseObject representing an Event
+     */
+    public LinearLayout createEventFrame(ParseObject event) {
+    	final LinearLayout eventFrame = new LinearLayout(this);
+    	// Vertical Orientation
+    	eventFrame.setOrientation(1);
+    	eventFrame.setPadding(1, 1, 1, 1);
+    	
+    	LinearLayout titleFrame = new LinearLayout(this);
+    	titleFrame.setOrientation(0);
+    	
+    	TextView severity = new TextView(this);
+    	severity.setWidth(35);
+    	severity.setHeight(35);
+    	severity.setText("    ");
+    	severity.setBackgroundColor(event.getNumber("severity").intValue());
+    	
+    	TextView title = new TextView(this);
+    	title.setText(event.getString("title"));
+    	// textSize="16.0sp"
+    	title.setTextSize((float)16.0);
+    	// gravity="center_horizontal"
+    	//title.setGravity(0x01);
+    	// textStyle="bold"
+    	title.setTypeface(Typeface.DEFAULT_BOLD);
+    	
+    	titleFrame.addView(severity);
+    	titleFrame.addView(title);
+    	eventFrame.addView(titleFrame);
+    	
+    	TextView timeframe = new TextView(this);
+    	timeframe.setText("Start: " + event.getString("startDate") + 
+    			", Est. Finish: " + event.getString("endDate"));
+    	timeframe.setTextSize((float)12.0);
+    	eventFrame.addView(timeframe);
+    	
+    	TextView description = new TextView(this);
+    	description.setText(event.getString("description"));
+    	description.setTextSize((float)12.0);
+    	eventFrame.addView(description);
+    	
+		final Intent i = new Intent(this, ShowEvent.class);
+		i.putExtra("eventKey", event.getObjectId());
+
+    	eventFrame.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				//TODO(jmow): Change background on click
+//				eventFrame.setBackgroundColor(Color.GRAY);
+				startActivity(i);
+			}
+    		
+    	});
+    	
+    	return eventFrame;
     }
-    
-//    public List<EventPOJO> getParseEvents() {
-//    	ParseQuery query = new ParseQuery("Event");
-//    	query.orderByAscending("startDate");
-//    	query.findInBackground(new FindCallback() {
-//    	    
-//    		@Override
-//    		public void done(List<ParseObject> scoreList, ParseException e) {
-//    	        if (e == null) {
-//    	            Log.d("score", "Retrieved " + scoreList.size() + " scores");
-//    	        } else {
-//    	            Log.d("score", "Error: " + e.getMessage());
-//    	        }
-//    	    }
-//
-//    	});
-//    }
     
     // gets all events from SQLite DB
     public List<EventPOJO> getEvents(){
@@ -201,7 +209,6 @@ public class Agenda extends Activity {
     // changes behavior when back button is pressed
     public void onBackPressed() {
        Intent i = new Intent(this, Home.class);
-       i.putExtra("userKey", userKey);
        startActivity(i);
     }
 }
