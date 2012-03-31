@@ -5,6 +5,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.parse.FindCallback;
+import com.parse.GetCallback;
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
+
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -24,164 +33,169 @@ import android.widget.Toast;
  */
 public class ShowComments extends Activity {
 
-	private MessagePOJO message;
-	private String uname;
+	private String msgId;
+	private ParseObject message;
 	
 	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.showcomments);
+		Parse.initialize(this, "FWyFNrvpkliSb7nBNugCNttN5HWpcbfaOWEutejH", "SZoWtHw28U44nJy8uKtV2oAQ8suuCZnFLklFSk46");
+
         Bundle extras = this.getIntent().getExtras();
         
-        if (extras != null){
-        	uname = extras.getString("user");
-        	message = (MessagePOJO)extras.get("messagePOJO");
-        	
-        	LinearLayout layout = (LinearLayout) findViewById(R.id.commentMessagePane);
-            layout.setBackgroundColor(Color.GRAY);
+        if (extras == null){
+        	Toast.makeText(this, "Could not load event.", Toast.LENGTH_LONG);
+        	return;
+        } else {
+        	msgId = extras.getString("messageID");
+        	ParseQuery msgQuery = new ParseQuery("Message");
+        	final Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
+        	msgQuery.getInBackground(msgId, new GetCallback() {
 
-            TextView temp = (TextView)findViewById(R.id.messageText);
-            temp.setTextColor(Color.WHITE);
-            temp.setText(message.getText());
-            
-        	temp = (TextView) findViewById(R.id.messageAuthor);
-        	temp.setTextColor(Color.WHITE);
-        	String author = message.getAuthor();
-        	temp.setText("Posted by " + author + " at ");
+				@Override
+				public void done(ParseObject msg, ParseException e) {
+					if (msg == null) {
+						toast.setText("Error: " + e.getMessage());
+						toast.show();
+						return;
+					} else {
+						message = msg;
+						LinearLayout layout = (LinearLayout) findViewById(R.id.commentMessagePane);
+			            layout.setBackgroundColor(Color.GRAY);
+
+			            TextView temp = (TextView)findViewById(R.id.messageText);
+			            temp.setTextColor(Color.WHITE);
+			            temp.setText(msg.getString("text"));
+			            
+			        	temp = (TextView) findViewById(R.id.messageAuthor);
+			        	temp.setTextColor(Color.WHITE);
+			        	//TODO(kuyumcu): change to ParseUser
+			        	String author = msg.getString("author");
+			        	temp.setText("Posted by " + author + " at ");
+			        	
+			        	temp = (TextView) findViewById(R.id.messageTimestamp);
+			        	temp.setTextColor(Color.WHITE);
+			        	SimpleDateFormat formatter = new SimpleDateFormat();
+			        	temp.setText(formatter.format(new Date(msg.getLong("timestamp"))));
+			        	
+			            getParseComments(msg);
+					}
+				}
+        		
+        	});
         	
-        	temp = (TextView) findViewById(R.id.messageTimestamp);
-        	temp.setTextColor(Color.WHITE);
-        	SimpleDateFormat formatter = new SimpleDateFormat();
-        	temp.setText(formatter.format(new Date(Long.parseLong(message.getTimestamp()))));
         }
-        
-        populateComments();
     }
 
     // onClick function of postComment button
+    /**
+     * Post a new comment to this message
+     * 
+     * @param view
+     */
     public void onPostComment(View view) {
-    	CommentPOJO comment = new CommentPOJO();
+    	ParseObject comment = new ParseObject("Comment");
     	
-    	comment.setMessageId(message.getMessageId());
-    	EditText commentText = (EditText) findViewById(R.id.newCommentText);
+    	final EditText commentText = (EditText) findViewById(R.id.newCommentText);
     	if (commentText.getText().toString().equals("")) {
     		Toast.makeText(this, "Please enter a comment.", Toast.LENGTH_SHORT).show();
     		return;
     	}
-    	comment.setText(commentText.getText().toString());
+    	comment.put("text", commentText.getText().toString());
     	
-    	comment.setAuthor(uname);
-    	comment.setTimestamp(System.currentTimeMillis() + "");
+    	//TODO: check if message is null, necessary?
+    	comment.put("message", message);
+    	comment.put("author", ParseUser.getCurrentUser());
+    	comment.put("timestamp", System.currentTimeMillis());
     	
-    	insertComment(comment);
-    	commentText.setText("");
-    	populateComments();
-    }
-    
-    // Inserts the comment into the SQLite DB.
-    // TODO: Change to MySQL
-    public void insertComment(CommentPOJO comment) {
-    	// First we have to open our DbHelper class by creating a new object of that
-    	AndroidOpenDbHelper androidOpenDbHelperObj = new AndroidOpenDbHelper(this);
+    	final Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
+    	comment.saveInBackground(new SaveCallback() {
 
-    	// Then we need to get a writable SQLite database, because we are going to insert some values
-    	// SQLiteDatabase has methods to create, delete, execute SQL commands, and perform other common database management tasks.
-    	SQLiteDatabase sqliteDatabase = androidOpenDbHelperObj.getWritableDatabase();
-    	// Try to create database for comments if not already there
-    	androidOpenDbHelperObj.createCommentsTable(sqliteDatabase);
-
-    	// ContentValues class is used to store a set of values that the ContentResolver can process.
-    	ContentValues contentValues = new ContentValues();
-
-    	// Get values from the POJO class and passing them to the ContentValues class
-    	contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_COMMENT_MESSAGE_ID, comment.getMessageId());
-    	contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_COMMENT_TEXT, comment.getText());
-    	contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_COMMENT_AUTHOR, comment.getAuthor());
-    	contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_COMMENT_TIMESTAMP, comment.getTimestamp());
-
-    	// Now we can insert the data in to relevant table
-    	// I am going pass the id value, which is going to change because of our insert method, to a long variable to show in Toast
-    	long affectedColumnId = sqliteDatabase.insert(AndroidOpenDbHelper.TABLE_NAME_COMMENTS, null, contentValues);
-
-    	// It is a good practice to close the database connections after you have done with it
-    	sqliteDatabase.close();
-
-    	// I am not going to do the retrieve part in this post. So this is just a notification for satisfaction 
-//    	Toast.makeText(this, "Comment Posted. DB Column ID :" + affectedColumnId, Toast.LENGTH_SHORT).show();
-    	Toast.makeText(this, "Comment posted.", Toast.LENGTH_SHORT).show();
-
-    }
-    
-    // populates the comments in the view from the DB
-    public void populateComments() {
-    	List<CommentPOJO> comments = getComments();
-        
-        LinearLayout commentsPane = (LinearLayout) findViewById(R.id.commentsPane);
-        commentsPane.removeAllViews();
-        for (CommentPOJO c : comments) {
-        	LinearLayout commentFrame = new LinearLayout(this);
-        	commentFrame.setOrientation(1);
-        	commentFrame.setPadding(1, 1, 1, 1);
-        	
-        	LinearLayout header = new LinearLayout(this);
-        	header.setOrientation(0);
-        	
-        	TextView author = new TextView(this);
-        	author.setText(c.getAuthor());
-        	author.setTypeface(Typeface.DEFAULT_BOLD);
-        	
-        	TextView timestamp = new TextView(this);
-        	long time = Long.parseLong(c.getTimestamp());
-        	SimpleDateFormat formatter = new SimpleDateFormat();
-        	timestamp.setText(" at " + formatter.format(new Date(time)));
-        	
-        	header.addView(author);
-        	header.addView(timestamp);
-        	
-        	TextView commentText = new TextView(this);
-        	commentText.setText(c.getText());
-        	
-        	commentFrame.addView(header);
-        	commentFrame.addView(commentText);
-        	
-        	commentsPane.addView(commentFrame);
-        }
-    }
-    
-    // For Testing
-    public List<CommentPOJO> getComments() {
-    	List<CommentPOJO> commentList = new ArrayList<CommentPOJO>();
-
-    	// First we have to open our DbHelper class by creating a new object of that
-    	AndroidOpenDbHelper dbHelper = new AndroidOpenDbHelper(this);
-
-    	// Then we need to get a writable SQLite database, because we are going to insert some values
-    	// SQLiteDatabase has methods to create, delete, execute SQL commands, and perform other common database management tasks.
-    	SQLiteDatabase db = dbHelper.getReadableDatabase();
-    	dbHelper.createCommentsTable(db);
-    	
-    	Cursor cursor = db.query(AndroidOpenDbHelper.TABLE_NAME_COMMENTS, null,
-    			AndroidOpenDbHelper.COLUMN_NAME_COMMENT_MESSAGE_ID + "=" + message.getMessageId(),
-    			null, null, null, null);
-    	startManagingCursor(cursor);
-    	
-    	while (cursor.moveToNext()) {
-    		int id = cursor.getInt(cursor.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_COMMENT_MESSAGE_ID));
-    		String text = cursor.getString(cursor.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_COMMENT_TEXT));
-    		String author = cursor.getString(cursor.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_COMMENT_AUTHOR));
-    		String timestamp = cursor.getString(cursor.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_COMMENT_TIMESTAMP));
+			@Override
+			public void done(ParseException e) {
+				if (e != null) {
+					toast.setText("Error: " + e.getMessage());
+					toast.show();
+					return;
+				} else {
+					toast.setText("Comment posted");
+					toast.show();
+			    	commentText.setText("");
+			    	getParseComments(message);
+				}
+			}
     		
-    		CommentPOJO comment = new CommentPOJO();
-    		comment.setMessageId(id);
-    		comment.setText(text);
-    		comment.setAuthor(author);
-    		comment.setTimestamp(timestamp);
-    		commentList.add(comment);
-    	}
+    	});
+    }
+    
+    /**
+     * Creates a UI frame to display comments
+     * 
+     * @param comment A ParseObject representing a comment to be displayed
+     * @return LinearLayout representing the comment
+     */
+    public LinearLayout createCommentFrame(ParseObject comment) {
+    	LinearLayout commentFrame = new LinearLayout(this);
+    	commentFrame.setOrientation(1);
+    	commentFrame.setPadding(1, 1, 1, 1);
     	
-    	db.close();
-    	return commentList;
+    	LinearLayout header = new LinearLayout(this);
+    	header.setOrientation(0);
+    	
+    	TextView author = new TextView(this);
+    	author.setText(comment.getString("author"));
+    	author.setTypeface(Typeface.DEFAULT_BOLD);
+    	
+    	TextView timestamp = new TextView(this);
+    	long time = comment.getLong("timestamp");
+    	SimpleDateFormat formatter = new SimpleDateFormat();
+    	timestamp.setText(" at " + formatter.format(new Date(time)));
+    	
+    	header.addView(author);
+    	header.addView(timestamp);
+    	
+    	TextView commentText = new TextView(this);
+    	commentText.setText(comment.getString("text"));
+    	
+    	commentFrame.addView(header);
+    	commentFrame.addView(commentText);
+    	
+    	return commentFrame;
+    }
+    
+    /**
+     * Get list of comments for this message
+     * 
+     * @param message ParseObject representing the message to get comments for
+     * @return List of ParseObjects representing comments
+     */
+    public void getParseComments(ParseObject message) {
+    	ParseQuery commentQuery = new ParseQuery("Comment");
+    	commentQuery.addAscendingOrder("timestamp");
+    	commentQuery.whereEqualTo("message", message);
+    	
+    	final Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
+    	commentQuery.findInBackground(new FindCallback() {
+
+			@Override
+			public void done(List<ParseObject> comments, ParseException e) {
+				if (e != null) {
+					toast.setText("Error: " + e.getMessage());
+					toast.show();
+					return;
+				} else {
+					LinearLayout commentsPane = (LinearLayout) findViewById(R.id.commentsPane);
+			        commentsPane.removeAllViews();
+			        for (ParseObject c : comments) {
+			        	LinearLayout commentFrame = createCommentFrame(c);
+			        	commentsPane.addView(commentFrame);
+			        }
+				}
+			}
+    		
+    	});
     }
     
 }
