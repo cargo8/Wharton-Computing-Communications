@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -30,6 +31,7 @@ import android.widget.Toast;
 public class ShowEvent extends Activity {
 	
 	private String uname;
+	private ParseObject event;
 
     /** Called when the activity is first created. */
     @Override
@@ -47,11 +49,12 @@ public class ShowEvent extends Activity {
 			query.getInBackground(extras.getString("eventKey"), new GetCallback() {
 
 				@Override
-				public void done(ParseObject event, ParseException e) {
-					if (event == null) {
+				public void done(ParseObject event1, ParseException e) {
+					if (event1 == null) {
 						toast.setText(e.getMessage());
 						toast.show();
 					} else {
+						event = event1;
 						TextView temp = (TextView)findViewById(R.id.eventTitleText);
 			        	temp.setText(event.getString("title"));
 			        	temp = (TextView)findViewById(R.id.eventDescText);
@@ -87,6 +90,7 @@ public class ShowEvent extends Activity {
 			        	temp.setBackgroundColor(event.getInt("severity"));
 			        	temp = (TextView)findViewById(R.id.typeText);
 			        	temp.setText(event.getString("type"));
+			        	populateMessages();
 					}
 				}
 				
@@ -125,7 +129,6 @@ public class ShowEvent extends Activity {
 
         	
         }
-        populateMessages();
     }
     
     @Override
@@ -147,86 +150,102 @@ public class ShowEvent extends Activity {
     
     // populates the messages in the bottom half of the view from the DB
     public void populateMessages() {
-    	List<MessagePOJO> messages = getMessages();
         
-        LinearLayout messagesPane = (LinearLayout) findViewById(R.id.messagesPane);
+        final LinearLayout messagesPane = (LinearLayout) findViewById(R.id.messagesPane);
         messagesPane.removeAllViews();
-        for (final MessagePOJO m : messages) {
-        	LinearLayout messageFrame = new LinearLayout(this);
-        	messageFrame.setOrientation(1);
-        	messageFrame.setPadding(1, 1, 1, 1);
-        	
-        	LinearLayout header = new LinearLayout(this);
-        	header.setOrientation(0);
-        	
-        	TextView posted = new TextView(this);
-        	posted.setText("Posted by ");
-        	
-        	TextView author = new TextView(this);
-        	author.setText(m.getAuthor());
-        	author.setTypeface(Typeface.DEFAULT_BOLD);
-        	
-        	TextView timestamp = new TextView(this);
-        	Long time = Long.parseLong(m.getTimestamp());
-        	SimpleDateFormat formatter = new SimpleDateFormat();
-        	timestamp.setText(" at " + formatter.format(new Date(time)) + '\n');
-        	
-        	header.addView(posted);
-        	header.addView(author);
-        	header.addView(timestamp);
-        	
-        	TextView messageText = new TextView(this);
-        	messageText.setText(m.getText());
-        	messageText.setTypeface(Typeface.DEFAULT_BOLD);
-        	
-        	messageFrame.addView(messageText);
-        	messageFrame.addView(header);
-        	
-        	messageFrame.setOnClickListener(new LinearLayout.OnClickListener() {  
-                public void onClick(View v){
-                    onMessageClick(m);
-                }
-             });
-        	
-        	messagesPane.addView(messageFrame);
-        }
+        final Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
+		ParseQuery query = new ParseQuery("Message");
+    	query.orderByAscending("timestamp");
+    	query.whereEqualTo("event", event.getObjectId());
+    	query.findInBackground(new FindCallback() {
+
+			@Override
+			public void done(List<ParseObject> arg0, ParseException arg1) {
+				if(arg1 == null){
+					for(ParseObject obj : arg0){
+						LinearLayout messageFrame = getMessageFrame(obj);
+						messagesPane.addView(messageFrame);
+						toast.setText("Retrieved " + arg0.size() + " messages");
+   	             		toast.show();
+					}
+				}
+				else {
+					toast.setText("Error: " + arg1.getMessage());
+	             	toast.show();
+				}
+					
+			}
+    		
+    	});
+        //LinearLayout messagesPane = (LinearLayout) findViewById(R.id.messagesPane);
+        //messagesPane.removeAllViews();
+    	//messagesPane.addView(messageFrame);
+    }
+    
+    public LinearLayout getMessageFrame(final ParseObject obj){
+    	LinearLayout messageFrame = new LinearLayout(this);
+    	messageFrame.setOrientation(1);
+    	messageFrame.setPadding(1, 1, 1, 1);
+    	
+    	LinearLayout header = new LinearLayout(this);
+    	header.setOrientation(0);
+    	
+    	TextView posted = new TextView(this);
+    	posted.setText("Posted by ");
+    	
+    	TextView author = new TextView(this);
+    	author.setText(obj.getString("author"));
+    	author.setTypeface(Typeface.DEFAULT_BOLD);
+    	
+    	TextView timestamp = new TextView(this);
+    	Long time = Long.parseLong(obj.getString("timestamp"));
+    	SimpleDateFormat formatter = new SimpleDateFormat();
+    	timestamp.setText(" at " + formatter.format(new Date(time)) + '\n');
+    	
+    	header.addView(posted);
+    	header.addView(author);
+    	header.addView(timestamp);
+    	
+    	TextView messageText = new TextView(this);
+    	messageText.setText(obj.getString("text"));
+    	messageText.setTypeface(Typeface.DEFAULT_BOLD);
+    	
+    	messageFrame.addView(messageText);
+    	messageFrame.addView(header);
+		final Intent i = new Intent(this, ShowComments.class);
+    	
+    	messageFrame.setOnClickListener(new LinearLayout.OnClickListener() {  
+            public void onClick(View v){
+        		i.putExtra("messageKey", obj.getObjectId());
+        		startActivity(i);
+            }
+         });
+    	
+    	return messageFrame;
     }
     
     // gets the messages from the database 
     // TODO: get the messages from the EventPOJO instead
     public List<MessagePOJO> getMessages() {
     	
-    	List<MessagePOJO> messageList = new ArrayList<MessagePOJO>();
-    	
-    	// First we have to open our DbHelper class by creating a new object of that
-    	AndroidOpenDbHelper dbHelper = new AndroidOpenDbHelper(this);
+    	final List<MessagePOJO> messageList = new ArrayList<MessagePOJO>();
+		ParseQuery query = new ParseQuery("Message");
+    	query.orderByAscending("timestamp");
+    	query.whereEqualTo("event", event.getObjectId());
+    	query.findInBackground(new FindCallback() {
 
-    	// Then we need to get a writable SQLite database, because we are going to insert some values
-    	// SQLiteDatabase has methods to create, delete, execute SQL commands, and perform other common database management tasks.
-    	SQLiteDatabase db = dbHelper.getReadableDatabase();
-    	dbHelper.createCommentsTable(db);
-    	dbHelper.createMessagesTable(db);
-    	/*
-    	Cursor cursor = db.query(AndroidOpenDbHelper.TABLE_NAME_MESSAGES, null, 
-    			AndroidOpenDbHelper.COLUMN_NAME_MESSAGE_EVENT + "=" + event.getEventID(), null, null, null, null);
-    	startManagingCursor(cursor);
-    	
-    	while (cursor.moveToNext()) {
-    		int num = cursor.getInt(cursor.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_MESSAGE_ID));
-    		String text = cursor.getString(cursor.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_MESSAGE_TEXT));
-    		String author = cursor.getString(cursor.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_MESSAGE_AUTHOR));
-    		String timestamp = cursor.getString(cursor.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_MESSAGE_TIMESTAMP));
+			@Override
+			public void done(List<ParseObject> arg0, ParseException arg1) {
+				for(ParseObject obj : arg0){
+					MessagePOJO msg = new MessagePOJO();
+					msg.setAuthor(obj.getString("author"));
+					msg.setText(obj.getString("text"));
+					msg.setTimestamp(obj.getString("timestamp"));
+					messageList.add(msg);
+				}
+			}
     		
-    		MessagePOJO message = new MessagePOJO();
-    		message.setMessageId(num);
-    		message.setText(text);
-    		message.setAuthor(author);
-    		message.setTimestamp(timestamp);
-    		messageList.add(message);
-    	}
-    	
-    	db.close();
-    	*/
+    	});
     	return messageList;
     	
     }
@@ -254,7 +273,7 @@ public class ShowEvent extends Activity {
     // onClickFunction of postMessage button
     public void onPostMessage(View view){
     	Intent i = new Intent(this, PostMessage.class);
-    	i.putExtra("user", uname);
+    	i.putExtra("eventKey", event.getObjectId());
 		//i.putExtra("eventPOJO", event);
     	startActivity(i);
     }

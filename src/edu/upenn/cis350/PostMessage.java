@@ -1,5 +1,13 @@
 package edu.upenn.cis350;
 
+import com.parse.GetCallback;
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
+
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -16,16 +24,23 @@ import android.widget.Toast;
  */
 public class PostMessage extends Activity {
 	
-	private String uname;
-	private EventPOJO event;
+	private ParseObject event;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.postmessage);
+		Parse.initialize(this, "FWyFNrvpkliSb7nBNugCNttN5HWpcbfaOWEutejH", "SZoWtHw28U44nJy8uKtV2oAQ8suuCZnFLklFSk46");
 		Bundle extras = this.getIntent().getExtras();
 		if(extras != null){
-			uname = (String)extras.get("user");
-			event = (EventPOJO)extras.get("eventPOJO");
+			ParseQuery query = new ParseQuery("Event");
+			query.getInBackground(extras.getString("eventKey"), new GetCallback() {
+
+				@Override
+				public void done(ParseObject arg0, ParseException arg1) {
+					// TODO Auto-generated method stub
+					event = arg0;
+				}
+			});
 		}
 	}
 	 
@@ -33,62 +48,44 @@ public class PostMessage extends Activity {
 	public void onPostClick(View view){
 		TextView tv = (TextView)findViewById(R.id.messageBox);
 		MessagePOJO msg = new MessagePOJO();
-		msg.setAuthor(uname);
+		msg.setAuthor(ParseUser.getCurrentUser().getUsername());
 		msg.setText(tv.getText().toString());
 		msg.setTimestamp(System.currentTimeMillis() + "");
-		event.addToMessages(msg);
-		msg = insertMessage(msg);
-		Intent i = new Intent(this, ShowEvent.class);
-		i.putExtra("eventPOJO", event);
-		i.putExtra("message", msg);
-		i.putExtra("user", uname);
-		startActivity(i);
+		//event.addToMessages(msg);
+		insertMessage(msg, event.getObjectId());
 	}
 	
 	// inserts the message into the SQLite DB.
 	// TODO: Change to MySQL DB
-	public MessagePOJO insertMessage(MessagePOJO message) {
-    	// First we have to open our DbHelper class by creating a new object of that
-    	AndroidOpenDbHelper androidOpenDbHelperObj = new AndroidOpenDbHelper(this);
+	public void insertMessage(MessagePOJO message, String eventID) {
+		ParseObject mes = new ParseObject("Message");
+		mes.put("author", message.getAuthor());
+		mes.put("text", message.getText());
+		mes.put("timestamp", message.getTimestamp());
+		mes.put("event", eventID);
+    	final Toast success = Toast.makeText(this, "Message posted.", Toast.LENGTH_SHORT);
+    	final Toast failure = Toast.makeText(this, "Message NOT posted.", Toast.LENGTH_SHORT);
 
-    	// Then we need to get a writable SQLite database, because we are going to insert some values
-    	// SQLiteDatabase has methods to create, delete, execute SQL commands, and perform other common database management tasks.
-    	SQLiteDatabase sqliteDatabase = androidOpenDbHelperObj.getWritableDatabase();
-    	// Try to create database for comments if not already there
-    	androidOpenDbHelperObj.createMessagesTable(sqliteDatabase);
+    	final Intent i = new Intent(this, ShowEvent.class);
 
-    	// ContentValues class is used to store a set of values that the ContentResolver can process.
-    	ContentValues contentValues = new ContentValues();
+		mes.saveInBackground(new SaveCallback(){
 
-    	// Get values from the POJO class and passing them to the ContentValues class
-    	contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_MESSAGE_TEXT, message.getText());
-    	contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_MESSAGE_AUTHOR, message.getAuthor());
-    	contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_MESSAGE_TIMESTAMP, message.getTimestamp());
-    	contentValues.put(AndroidOpenDbHelper.COLUMN_NAME_MESSAGE_EVENT, event.getEventID());
+			@Override
+			public void done(ParseException e) {
+				// TODO Auto-generated method stub
+				if(e == null){
+					success.show();
+					i.putExtra("eventKey", event.getObjectId());
+					startActivity(i);
+				}
+				else{
+					failure.setText(e.getMessage());
+					failure.show();
+				}
 
-    	// Now we can insert the data in to relevant table
-    	// I am going pass the id value, which is going to change because of our insert method, to a long variable to show in Toast
-    	long insertedId = sqliteDatabase.insert(AndroidOpenDbHelper.TABLE_NAME_MESSAGES, null, contentValues);
-    	Cursor cursor = sqliteDatabase.query(androidOpenDbHelperObj.TABLE_NAME_MESSAGES,
-    			null, androidOpenDbHelperObj.COLUMN_NAME_MESSAGE_ID + " = " + insertedId, null,
-    			null, null, null);
-    	cursor.moveToFirst();
-    	int num = cursor.getInt(cursor.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_MESSAGE_ID));
-    	String text = cursor.getString(cursor.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_MESSAGE_TEXT));
-    	String author = cursor.getString(cursor.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_MESSAGE_AUTHOR));
-    	String timestamp = cursor.getString(cursor.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_MESSAGE_TIMESTAMP));
-
-    	MessagePOJO msg = new MessagePOJO();
-    	msg.setMessageId(num);
-    	msg.setText(text);
-    	msg.setAuthor(author);
-    	msg.setTimestamp(timestamp);
-
-    	sqliteDatabase.close();
-
-    	// I am not going to do the retrieve part in this post. So this is just a notification for satisfaction 
-    	Toast.makeText(this, "Message posted.", Toast.LENGTH_SHORT).show();
-    	return msg;
+			}
+		
+		});
     }
 
 }
