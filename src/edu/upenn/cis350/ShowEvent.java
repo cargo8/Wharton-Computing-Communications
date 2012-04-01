@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import com.parse.GetCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -20,6 +21,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /* Displays all information related to a particular Event as well as messages 
  * related to that event. Upon clicking on a message, the user will see
@@ -40,28 +42,56 @@ public class ShowEvent extends Activity {
         	//event = (EventPOJO)extras.get("eventPOJO");
            	//uname = extras.getString("user");
         	ParseQuery query = new ParseQuery("Event");
-        	ParseObject event = null;
-			try {
-				event = query.get(extras.getString("eventKey"));
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
         	
+        	final Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
+			query.getInBackground(extras.getString("eventKey"), new GetCallback() {
 
-           	//EventPOJO event = (EventPOJO)extras.get("eventPOJO");
-        	//System.out.println(event.getEventTitle());
-        	TextView temp = (TextView)findViewById(R.id.eventTitleText);
-        	temp.setText(event.getString("title"));
-        	temp = (TextView)findViewById(R.id.eventDescText);
-        	temp.setText(event.getString("description"));
-        	temp = (TextView)findViewById(R.id.eventActionsText);
-        	temp.setText(event.getString("actionItems"));
-        	temp = (TextView)findViewById(R.id.startDateDisplay2);
-        	temp.setText(event.getString("startDate"));
-        	temp = (TextView)findViewById(R.id.endDateDisplay2);
-        	temp.setText(event.getString("endDate"));
-        	temp = (TextView)findViewById(R.id.affilsText);
+				@Override
+				public void done(ParseObject event, ParseException e) {
+					if (event == null) {
+						toast.setText(e.getMessage());
+						toast.show();
+					} else {
+						TextView temp = (TextView)findViewById(R.id.eventTitleText);
+			        	temp.setText(event.getString("title"));
+			        	temp = (TextView)findViewById(R.id.eventDescText);
+			        	temp.setText(event.getString("description"));
+			        	temp = (TextView)findViewById(R.id.eventActionsText);
+			        	temp.setText(event.getString("actionItems"));
+			        	temp = (TextView)findViewById(R.id.startDateDisplay2);
+			        	temp.setText(event.getString("startDate"));
+			        	temp = (TextView)findViewById(R.id.endDateDisplay2);
+			        	temp.setText(event.getString("endDate"));
+			        	temp = (TextView)findViewById(R.id.affilsText);
+			        	
+			        	List<String> affilList = event.getList("affils");
+			        	StringBuilder affilText = new StringBuilder();
+			        	if(affilList != null){
+			        		for(String s : affilList){
+			        			affilText.append(s + "\t");
+			        		}
+			        		temp.setText(affilText.toString());
+			        	}
+			        	temp = (TextView)findViewById(R.id.systemsText);
+			        	
+			        	List<String> systemList = event.getList("systems");
+			        	StringBuilder systemText = new StringBuilder();
+			        	if(systemList != null){
+			        		for(String s : systemList){
+			        			systemText.append(s + "\t");
+			        		}
+			        		temp.setText(systemText.toString());
+			        	}
+			        	
+			        	temp = (TextView)findViewById(R.id.severityText);
+			        	temp.setBackgroundColor(event.getInt("severity"));
+			        	temp = (TextView)findViewById(R.id.typeText);
+			        	temp.setText(event.getString("type"));
+					}
+				}
+				
+			});
+        	
         	/*
         	CharSequence[] temp2 = extras.getCharSequenceArray("affils");
         	boolean[] temp3 = extras.getBooleanArray("affilsChecked");
@@ -73,15 +103,7 @@ public class ShowEvent extends Activity {
         		}
         	}
         	*/
-        	List<String> affilList = event.getList("affils");
-        	StringBuilder affilText = new StringBuilder();
-        	if(affilList != null){
-        		for(String s : affilList){
-        			affilText.append(s + "\t");
-        		}
-        		temp.setText(affilText.toString());
-        	}
-        	temp = (TextView)findViewById(R.id.systemsText);
+        	
         	/*
         	temp2 = extras.getCharSequenceArray("systems");
         	temp3 = extras.getBooleanArray("systemsChecked");
@@ -93,24 +115,14 @@ public class ShowEvent extends Activity {
         		}
         	}
         	*/
-        	List<String> systemList = event.getList("systems");
-        	StringBuilder systemText = new StringBuilder();
-        	if(systemList != null){
-        		for(String s : systemList){
-        			systemText.append(s + "\t");
-        		}
-        		temp.setText(systemText.toString());
-        	}
+        	
         	/*
         	temp = (TextView)findViewById(R.id.personText1);
         	temp.setText(event.getContact1());
         	temp = (TextView)findViewById(R.id.personText2);
         	temp.setText(event.getContact2());
         	*/
-        	temp = (TextView)findViewById(R.id.severityText);
-        	temp.setBackgroundColor(event.getInt("severity"));
-        	temp = (TextView)findViewById(R.id.typeText);
-        	temp.setText(event.getString("type"));
+
         	
         }
         populateMessages();
