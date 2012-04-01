@@ -12,6 +12,7 @@ import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -193,9 +194,20 @@ public class ShowEvent extends Activity {
     	TextView posted = new TextView(this);
     	posted.setText("Posted by ");
     	
-    	TextView author = new TextView(this);
-    	author.setText(obj.getString("author"));
-    	author.setTypeface(Typeface.DEFAULT_BOLD);
+    	final TextView author = new TextView(this);
+    	obj.getParseUser("author").fetchIfNeededInBackground(new GetCallback(){
+
+			@Override
+			public void done(ParseObject arg0, ParseException arg1) {
+				// TODO Auto-generated method stub
+				ParseUser user = (ParseUser)arg0;
+		    	author.setText(user.getUsername());
+		    	author.setTypeface(Typeface.DEFAULT_BOLD);
+			}
+    		
+    	});
+    	//author.setText(user.getUsername());
+    	//author.setTypeface(Typeface.DEFAULT_BOLD);
     	
     	TextView timestamp = new TextView(this);
     	Long time = obj.getLong("timestamp");

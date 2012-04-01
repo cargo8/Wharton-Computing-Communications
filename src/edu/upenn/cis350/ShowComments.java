@@ -64,11 +64,22 @@ public class ShowComments extends Activity {
 			            temp.setTextColor(Color.WHITE);
 			            temp.setText(msg.getString("text"));
 			            
-			        	temp = (TextView) findViewById(R.id.messageAuthor);
-			        	temp.setTextColor(Color.WHITE);
+			        	final TextView authorView = (TextView) findViewById(R.id.messageAuthor);
+			        	authorView.setTextColor(Color.WHITE);
 			        	//TODO(kuyumcu): change to ParseUser
-			        	String author = msg.getString("author");
-			        	temp.setText("Posted by " + author + " at ");
+			           	msg.getParseUser("author").fetchIfNeededInBackground(new GetCallback(){
+
+			    			@Override
+			    			public void done(ParseObject arg0, ParseException arg1) {
+			    				// TODO Auto-generated method stub
+			    				ParseUser user = (ParseUser)arg0;
+			    		    	String author = user.getUsername();
+			    		    	authorView.setText("Posted by " + author + " at ");
+			    			}
+			        		
+			        	});
+			        	
+			        	
 			        	
 			        	temp = (TextView) findViewById(R.id.messageTimestamp);
 			        	temp.setTextColor(Color.WHITE);
@@ -139,9 +150,18 @@ public class ShowComments extends Activity {
     	LinearLayout header = new LinearLayout(this);
     	header.setOrientation(0);
     	
-    	TextView author = new TextView(this);
-    	author.setText(comment.getString("author"));
-    	author.setTypeface(Typeface.DEFAULT_BOLD);
+    	final TextView author = new TextView(this);
+    	comment.getParseUser("author").fetchIfNeededInBackground(new GetCallback(){
+
+			@Override
+			public void done(ParseObject arg0, ParseException arg1) {
+				// TODO Auto-generated method stub
+				ParseUser user = (ParseUser)arg0;
+		    	author.setText(user.getUsername());
+		    	author.setTypeface(Typeface.DEFAULT_BOLD);
+			}
+    		
+    	});
     	
     	TextView timestamp = new TextView(this);
     	long time = comment.getLong("timestamp");

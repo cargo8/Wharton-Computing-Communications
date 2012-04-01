@@ -48,7 +48,7 @@ public class PostMessage extends Activity {
 	public void onPostClick(View view){
 		TextView tv = (TextView)findViewById(R.id.messageBox);
 		ParseObject mes = new ParseObject("Message");
-		mes.put("author", ParseUser.getCurrentUser().getUsername());
+		mes.put("author", ParseUser.getCurrentUser());
 		mes.put("text", tv.getText().toString());
 		mes.put("timestamp", System.currentTimeMillis());
 		mes.put("event", event.getObjectId());
