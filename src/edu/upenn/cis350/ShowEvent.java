@@ -6,6 +6,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -22,7 +27,6 @@ import android.widget.TextView;
  */
 public class ShowEvent extends Activity {
 	
-	private EventPOJO event;
 	private String uname;
 
     /** Called when the activity is first created. */
@@ -30,23 +34,32 @@ public class ShowEvent extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.showevent);
+		Parse.initialize(this, "FWyFNrvpkliSb7nBNugCNttN5HWpcbfaOWEutejH", "SZoWtHw28U44nJy8uKtV2oAQ8suuCZnFLklFSk46");
         Bundle extras = this.getIntent().getExtras();
         if(extras != null){
-        	event = (EventPOJO)extras.get("eventPOJO");
-           	uname = extras.getString("user");
+        	//event = (EventPOJO)extras.get("eventPOJO");
+           	//uname = extras.getString("user");
+        	ParseQuery query = new ParseQuery("Event");
+        	ParseObject event = null;
+			try {
+				event = query.get(extras.getString("eventKey"));
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
-           	EventPOJO event = (EventPOJO)extras.get("eventPOJO");
-        	System.out.println(event.getEventTitle());
+           	//EventPOJO event = (EventPOJO)extras.get("eventPOJO");
+        	//System.out.println(event.getEventTitle());
         	TextView temp = (TextView)findViewById(R.id.eventTitleText);
-        	temp.setText(event.getEventTitle());
+        	temp.setText(event.getString("title"));
         	temp = (TextView)findViewById(R.id.eventDescText);
-        	temp.setText(event.getEventDesc());
+        	temp.setText(event.getString("description"));
         	temp = (TextView)findViewById(R.id.eventActionsText);
-        	temp.setText(event.getEventActions());
+        	temp.setText(event.getString("actionItems"));
         	temp = (TextView)findViewById(R.id.startDateDisplay2);
-        	temp.setText(event.getStart());
+        	temp.setText(event.getString("startDate"));
         	temp = (TextView)findViewById(R.id.endDateDisplay2);
-        	temp.setText(event.getEnd());
+        	temp.setText(event.getString("endDate"));
         	temp = (TextView)findViewById(R.id.affilsText);
         	/*
         	CharSequence[] temp2 = extras.getCharSequenceArray("affils");
@@ -58,7 +71,7 @@ public class ShowEvent extends Activity {
         				affilText.append(temp2[i] + "\t");
         		}
         	}
-        	*/
+        	
         	List<String> affilList = event.getAffils();
         	StringBuilder affilText = new StringBuilder();
         	for(String s : affilList){
@@ -66,7 +79,7 @@ public class ShowEvent extends Activity {
         	}
         	temp.setText(affilText.toString());
         	temp = (TextView)findViewById(R.id.systemsText);
-        	/*
+        	
         	temp2 = extras.getCharSequenceArray("systems");
         	temp3 = extras.getBooleanArray("systemsChecked");
         	StringBuilder systemText = new StringBuilder();
@@ -76,21 +89,23 @@ public class ShowEvent extends Activity {
         				systemText.append(temp2[i] + "\t");
         		}
         	}
-        	*/
+        	
         	List<String> systemList = event.getSystems();
         	StringBuilder systemText = new StringBuilder();
         	for(String s : systemList){
         		systemText.append(s + "\t");
         	}
+        	
         	temp.setText(systemText.toString());
         	temp = (TextView)findViewById(R.id.personText1);
         	temp.setText(event.getContact1());
         	temp = (TextView)findViewById(R.id.personText2);
         	temp.setText(event.getContact2());
+        	*/
         	temp = (TextView)findViewById(R.id.severityText);
-        	temp.setBackgroundColor(event.getSeverity());
+        	temp.setBackgroundColor(event.getInt("severity"));
         	temp = (TextView)findViewById(R.id.typeText);
-        	temp.setText(event.getType());
+        	temp.setText(event.getString("type"));
         	
         }
         populateMessages();
@@ -99,9 +114,11 @@ public class ShowEvent extends Activity {
     @Override
     public void onBackPressed() {
        Intent i = new Intent(this, Agenda.class);
+       /*
        if(event != null)
     	   i.putExtra("eventPOJO", event);
        i.putExtra("user", uname);
+       */
        startActivity(i);
     }
     
@@ -161,6 +178,7 @@ public class ShowEvent extends Activity {
     // gets the messages from the database 
     // TODO: get the messages from the EventPOJO instead
     public List<MessagePOJO> getMessages() {
+    	
     	List<MessagePOJO> messageList = new ArrayList<MessagePOJO>();
     	
     	// First we have to open our DbHelper class by creating a new object of that
@@ -171,7 +189,7 @@ public class ShowEvent extends Activity {
     	SQLiteDatabase db = dbHelper.getReadableDatabase();
     	dbHelper.createCommentsTable(db);
     	dbHelper.createMessagesTable(db);
-   
+    	/*
     	Cursor cursor = db.query(AndroidOpenDbHelper.TABLE_NAME_MESSAGES, null, 
     			AndroidOpenDbHelper.COLUMN_NAME_MESSAGE_EVENT + "=" + event.getEventID(), null, null, null, null);
     	startManagingCursor(cursor);
@@ -191,7 +209,9 @@ public class ShowEvent extends Activity {
     	}
     	
     	db.close();
+    	*/
     	return messageList;
+    	
     }
 
     //TODO: Remove this if it's safe.
@@ -218,7 +238,7 @@ public class ShowEvent extends Activity {
     public void onPostMessage(View view){
     	Intent i = new Intent(this, PostMessage.class);
     	i.putExtra("user", uname);
-		i.putExtra("eventPOJO", event);
+		//i.putExtra("eventPOJO", event);
     	startActivity(i);
     }
 	

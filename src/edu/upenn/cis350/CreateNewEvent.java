@@ -245,6 +245,7 @@ public class CreateNewEvent extends Activity {
     	
     	final Toast success = Toast.makeText(this, "Event saved.", Toast.LENGTH_SHORT);
     	final Intent i = new Intent(this, ShowEvent.class);
+		i.putExtra("eventKey", event.getObjectId());
 
     	final Toast failure = Toast.makeText(this, "Could not save event. Try again.", Toast.LENGTH_SHORT);
 
