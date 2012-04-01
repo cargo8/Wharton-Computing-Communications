@@ -47,22 +47,11 @@ public class PostMessage extends Activity {
 	// onClick function for Post button
 	public void onPostClick(View view){
 		TextView tv = (TextView)findViewById(R.id.messageBox);
-		MessagePOJO msg = new MessagePOJO();
-		msg.setAuthor(ParseUser.getCurrentUser().getUsername());
-		msg.setText(tv.getText().toString());
-		msg.setTimestamp(System.currentTimeMillis() + "");
-		//event.addToMessages(msg);
-		insertMessage(msg, event.getObjectId());
-	}
-	
-	// inserts the message into the SQLite DB.
-	// TODO: Change to MySQL DB
-	public void insertMessage(MessagePOJO message, String eventID) {
 		ParseObject mes = new ParseObject("Message");
-		mes.put("author", message.getAuthor());
-		mes.put("text", message.getText());
-		mes.put("timestamp", message.getTimestamp());
-		mes.put("event", eventID);
+		mes.put("author", ParseUser.getCurrentUser().getUsername());
+		mes.put("text", tv.getText().toString());
+		mes.put("timestamp", System.currentTimeMillis());
+		mes.put("event", event.getObjectId());
     	final Toast success = Toast.makeText(this, "Message posted.", Toast.LENGTH_SHORT);
     	final Toast failure = Toast.makeText(this, "Message NOT posted.", Toast.LENGTH_SHORT);
 
@@ -86,6 +75,6 @@ public class PostMessage extends Activity {
 			}
 		
 		});
-    }
+	}
 
 }

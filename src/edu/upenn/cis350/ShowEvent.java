@@ -198,7 +198,7 @@ public class ShowEvent extends Activity {
     	author.setTypeface(Typeface.DEFAULT_BOLD);
     	
     	TextView timestamp = new TextView(this);
-    	Long time = Long.parseLong(obj.getString("timestamp"));
+    	Long time = obj.getLong("timestamp");
     	SimpleDateFormat formatter = new SimpleDateFormat();
     	timestamp.setText(" at " + formatter.format(new Date(time)) + '\n');
     	
@@ -216,39 +216,14 @@ public class ShowEvent extends Activity {
     	
     	messageFrame.setOnClickListener(new LinearLayout.OnClickListener() {  
             public void onClick(View v){
-        		i.putExtra("messageKey", obj.getObjectId());
+        		i.putExtra("messageID", obj.getObjectId());
         		startActivity(i);
             }
          });
     	
     	return messageFrame;
     }
-    
-    // gets the messages from the database 
-    // TODO: get the messages from the EventPOJO instead
-    public List<MessagePOJO> getMessages() {
-    	
-    	final List<MessagePOJO> messageList = new ArrayList<MessagePOJO>();
-		ParseQuery query = new ParseQuery("Message");
-    	query.orderByAscending("timestamp");
-    	query.whereEqualTo("event", event.getObjectId());
-    	query.findInBackground(new FindCallback() {
-
-			@Override
-			public void done(List<ParseObject> arg0, ParseException arg1) {
-				for(ParseObject obj : arg0){
-					MessagePOJO msg = new MessagePOJO();
-					msg.setAuthor(obj.getString("author"));
-					msg.setText(obj.getString("text"));
-					msg.setTimestamp(obj.getString("timestamp"));
-					messageList.add(msg);
-				}
-			}
-    		
-    	});
-    	return messageList;
-    	
-    }
+  
 
     //TODO: Remove this if it's safe.
     public void onMessageClick(View view) {
