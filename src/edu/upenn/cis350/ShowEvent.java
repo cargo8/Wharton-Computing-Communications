@@ -47,6 +47,7 @@ public class ShowEvent extends Activity {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+        	
 
            	//EventPOJO event = (EventPOJO)extras.get("eventPOJO");
         	//System.out.println(event.getEventTitle());
@@ -71,15 +72,17 @@ public class ShowEvent extends Activity {
         				affilText.append(temp2[i] + "\t");
         		}
         	}
-        	
-        	List<String> affilList = event.getAffils();
+        	*/
+        	List<String> affilList = event.getList("affils");
         	StringBuilder affilText = new StringBuilder();
-        	for(String s : affilList){
-        		affilText.append(s + "\t");
+        	if(affilList != null){
+        		for(String s : affilList){
+        			affilText.append(s + "\t");
+        		}
+        		temp.setText(affilText.toString());
         	}
-        	temp.setText(affilText.toString());
         	temp = (TextView)findViewById(R.id.systemsText);
-        	
+        	/*
         	temp2 = extras.getCharSequenceArray("systems");
         	temp3 = extras.getBooleanArray("systemsChecked");
         	StringBuilder systemText = new StringBuilder();
@@ -89,14 +92,16 @@ public class ShowEvent extends Activity {
         				systemText.append(temp2[i] + "\t");
         		}
         	}
-        	
-        	List<String> systemList = event.getSystems();
+        	*/
+        	List<String> systemList = event.getList("systems");
         	StringBuilder systemText = new StringBuilder();
-        	for(String s : systemList){
-        		systemText.append(s + "\t");
+        	if(systemList != null){
+        		for(String s : systemList){
+        			systemText.append(s + "\t");
+        		}
+        		temp.setText(systemText.toString());
         	}
-        	
-        	temp.setText(systemText.toString());
+        	/*
         	temp = (TextView)findViewById(R.id.personText1);
         	temp.setText(event.getContact1());
         	temp = (TextView)findViewById(R.id.personText2);

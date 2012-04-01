@@ -183,7 +183,7 @@ public class CreateNewEvent extends Activity {
     	//TODO closen: Phase out intent stuff - use eventPOJO for everything
     	//Intent i = new Intent(this, WhartonComputingCommunicationsActivity.class);
     	
-    	ParseObject event = new ParseObject("Event");
+    	final ParseObject event = new ParseObject("Event");
     	EditText temp = (EditText)findViewById(R.id.eventTitle);
     	event.put("title", temp.getText().toString());
     	temp = (EditText)findViewById(R.id.eventDesc);
@@ -196,22 +196,22 @@ public class CreateNewEvent extends Activity {
     	event.put("endDate", temp2.getText().toString());			// EVENT
 
     	//TODO: Affils + Systems
-//    	List<String> affiliations = new ArrayList<String>();
-//    	if(affils != null){
-//    		for(int x = 0; x < affils.length; x++){				// EVENT
-//    			if(affilsChecked[x])
-//    				affiliations.add(affils[x].toString());
-//    		}
-//    		event.put("affils", affiliations);
-//    	}
-//    	List<String> sys = new ArrayList<String>();
-//    	if(systems != null){
-//    		for(int x = 0; x < systems.length; x++){
-//    			if(systemsChecked[x])
-//    				sys.add(systems[x].toString());
-//    		}
-//    		event.put("systems", sys);
-//    	}
+    	List<String> affiliations = new ArrayList<String>();
+    	if(affils != null){
+    		for(int x = 0; x < affils.length; x++){				// EVENT
+    			if(affilsChecked[x])
+    				affiliations.add(affils[x].toString());
+    		}
+    		event.put("affils", affiliations);
+    	}
+    	List<String> sys = new ArrayList<String>();
+    	if(systems != null){
+    		for(int x = 0; x < systems.length; x++){
+    			if(systemsChecked[x])
+    				sys.add(systems[x].toString());
+    		}
+    		event.put("systems", sys);
+    	}
 
     	//TODO: User linking
 //    	Spinner spin1 = (Spinner)findViewById(R.id.personSpinner1);
@@ -254,6 +254,7 @@ public class CreateNewEvent extends Activity {
 			public void done(ParseException e) {
 				if (e == null) {
 					success.show();
+					i.putExtra("eventKey", event.getObjectId());
 			    	startActivity(i);	
 				} else {
 					failure.setText(e.getMessage());
