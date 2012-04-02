@@ -33,10 +33,23 @@ public class Register extends Activity {
     public void newUser(View view) {
     	String uname = ((EditText)findViewById(R.id.loginUsername)).getText().toString();
 		String pw = ((EditText)findViewById(R.id.loginPassword)).getText().toString();
+		String fname = ((EditText)findViewById(R.id.registerFname)).getText().toString();
+		String lname = ((EditText)findViewById(R.id.registerLname)).getText().toString();
+		String email1 = ((EditText)findViewById(R.id.registerEmail1)).getText().toString();
+		String email2 = ((EditText)findViewById(R.id.registerEmail2)).getText().toString();
+		String phone1 = ((EditText)findViewById(R.id.registerPhone1)).getText().toString();
+		String phone2 = ((EditText)findViewById(R.id.registerPhone2)).getText().toString();
     	
 		ParseUser user = new ParseUser();
     	user.setUsername(uname);
     	user.setPassword(pw);
+    	user.put("fname", fname);
+    	user.put("lname", lname);
+    	user.put("fullName", fname + " " + lname);
+    	user.put("email1", email1);
+    	user.put("email2", email2);
+    	user.put("phone1", phone1);
+    	user.put("phone2", phone2);
 
     	
 

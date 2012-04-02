@@ -10,6 +10,15 @@
         android:layout_height="wrap_content"
         android:text="Enter information below to register a new account:" />
     
+     <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="#fff"
+                android:text="LOGIN INFORMATION"
+                android:textColor="#000"
+                android:textSize="10.0sp"
+                android:textStyle="bold" />
+     
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -45,11 +54,137 @@
             android:layout_height="wrap_content"
             android:inputType="text" />
     </LinearLayout>
-
-    <Button 
+    
+     <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="#fff"
+                android:text="PERSONAL INFORMATION"
+                android:textColor="#000"
+                android:textSize="10.0sp"
+                android:textStyle="bold" />
+     
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Register"
-        android:onClick="newUser" />
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="First Name: "
+            android:textSize="12.0sp" />
+
+        <EditText
+            android:id="@+id/registerFname"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Last Name: "
+            android:textSize="12.0sp" />
+
+        <EditText
+            android:id="@+id/registerLname"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+    </LinearLayout>
+    
+     <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="#fff"
+                android:text="CONTACT INFORMATION"
+                android:textColor="#000"
+                android:textSize="10.0sp"
+                android:textStyle="bold" />
+     
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Primary Email Address: "
+            android:textSize="12.0sp" />
+
+        <EditText
+            android:id="@+id/registerEmail1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Secondary Email Address: "
+            android:textSize="12.0sp" />
+
+        <EditText
+            android:id="@+id/registerEmail2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Primary Phone Number: "
+            android:textSize="12.0sp" />
+
+        <EditText
+            android:id="@+id/registerPhone1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Secondary Phone NUmber: "
+            android:textSize="12.0sp" />
+
+        <EditText
+            android:id="@+id/registerPhone2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+    </LinearLayout>
+    
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:onClick="newUser"
+        android:text="Register" />
 
 </LinearLayout>
