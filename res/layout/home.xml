@@ -32,11 +32,4 @@
             android:text="@string/showAgenda" />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/nukeDB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="nuke"
-        android:text="Nuke ALL the Local Databases!" />
-
 </LinearLayout>
