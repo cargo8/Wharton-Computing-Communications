@@ -33,6 +33,7 @@ public class Register extends Activity {
     public void newUser(View view) {
     	String uname = ((EditText)findViewById(R.id.loginUsername)).getText().toString();
 		String pw = ((EditText)findViewById(R.id.loginPassword)).getText().toString();
+		String pw2 = ((EditText)findViewById(R.id.loginPassword2)).getText().toString();
 		String fname = ((EditText)findViewById(R.id.registerFname)).getText().toString();
 		String lname = ((EditText)findViewById(R.id.registerLname)).getText().toString();
 		String email1 = ((EditText)findViewById(R.id.registerEmail1)).getText().toString();
@@ -40,6 +41,11 @@ public class Register extends Activity {
 		String phone1 = ((EditText)findViewById(R.id.registerPhone1)).getText().toString();
 		String phone2 = ((EditText)findViewById(R.id.registerPhone2)).getText().toString();
     	
+		if (!pw.equals(pw2)) {
+			Toast.makeText(this, "Passwords do not match. Try again", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		
 		ParseUser user = new ParseUser();
     	user.setUsername(uname);
     	user.setPassword(pw);
