@@ -43,7 +43,7 @@
             android:id="@+id/loginPassword"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:inputType="text" />
+            android:inputType="textPassword" />
     </LinearLayout>
     
     <Button
