@@ -11,7 +11,7 @@ import com.parse.ParseUser;
 /* This activity is what the app will start with after logging in.
  * For now, it just shows a few buttons to create a new event
  * and to show the agenda.
- * TODO: Make it look more visually appealing
+ * TODO: Turn into a ListView
  */
 public class Home extends Activity {
 	
@@ -32,6 +32,11 @@ public class Home extends Activity {
     // onClick function for showAgenda button
     public void onShowAgenda(View view) {
     	Intent i = new Intent(this, Agenda.class);
+    	startActivity(i);
+    }
+    
+    public void onShowContacts(View view) {
+    	Intent i = new Intent(this, ContactList.class);
     	startActivity(i);
     }
     

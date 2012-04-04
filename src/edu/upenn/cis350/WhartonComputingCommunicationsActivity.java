@@ -47,6 +47,8 @@ public class WhartonComputingCommunicationsActivity extends Activity {
 	 */
 	public void login(View view) {
 		
+		//TODO(jmow): Normalize login and registration!
+		
 		String uname = ((EditText)findViewById(R.id.loginUsername)).getText().toString();
 		String pw = ((EditText)findViewById(R.id.loginPassword)).getText().toString();
 

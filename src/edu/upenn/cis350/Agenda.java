@@ -35,6 +35,10 @@ public class Agenda extends Activity {
 //        List<EventPOJO> eventList = getEvents();
 		ParseQuery query = new ParseQuery("Event");
     	query.orderByAscending("startDate");
+
+    	//TODO(jmow): Query only active eventss
+//    	Long now = System.currentTimeMillis();
+//    	query.whereGreaterThanOrEqualTo("endDate", now);
     	
     	final Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT); 
     			

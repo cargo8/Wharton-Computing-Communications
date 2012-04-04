@@ -30,6 +30,13 @@
             android:layout_height="wrap_content"
             android:onClick="onShowAgenda"
             android:text="@string/showAgenda" />
+        
+        <Button
+            android:id="@+id/showContactsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onShowContacts"
+            android:text="View Contact List" />
     </LinearLayout>
 
 </LinearLayout>

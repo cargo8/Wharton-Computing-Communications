@@ -26,6 +26,7 @@
         <activity android:name=".Home" />
         <activity android:name=".Register" />
         <activity android:name=".PostMessage" />
+        <activity android:name=".ContactList" />
         
     </application>
 	<uses-permission android:name="android.permission.INTERNET" />
