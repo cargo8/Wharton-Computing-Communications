@@ -43,7 +43,7 @@ public class Home extends Activity {
     @Override
     public void onBackPressed() {
     	ParseUser.logOut();
-    	Intent i = new Intent(this, WhartonComputingCommunicationsActivity.class);
+    	Intent i = new Intent(this, Login.class);
     	startActivity(i);
     }    
 }

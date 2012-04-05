@@ -60,7 +60,7 @@ public class Register extends Activity {
     	
 
     	final Toast successToast = Toast.makeText(this, "User " + uname + " created.", Toast.LENGTH_SHORT);
-		final Intent i = new Intent(this, WhartonComputingCommunicationsActivity.class);
+		final Intent i = new Intent(this, Login.class);
 		
 		final Toast failToast = Toast.makeText(this, "Could not create user. Try again.", Toast.LENGTH_SHORT);
 		

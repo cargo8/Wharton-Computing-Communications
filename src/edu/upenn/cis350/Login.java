@@ -11,12 +11,13 @@ import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseUser;
+import com.parse.PushService;
 
 /* This activity shows a login screen to the user.
  * If the user does not have an account, they can create an account
  * by clicking on the register button
  */
-public class WhartonComputingCommunicationsActivity extends Activity {
+public class Login extends Activity {
 
 	// fields for changing activities
 	public static final int ACTIVITY_Home = 0;
@@ -33,6 +34,7 @@ public class WhartonComputingCommunicationsActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Parse.initialize(this, "FWyFNrvpkliSb7nBNugCNttN5HWpcbfaOWEutejH", "SZoWtHw28U44nJy8uKtV2oAQ8suuCZnFLklFSk46");
+		PushService.subscribe(this, "", Login.class);
 		ParseUser currentUser = ParseUser.getCurrentUser();
 		if (currentUser != null) {
 		    Intent i = new Intent(this, Home.class);
@@ -81,7 +83,7 @@ public class WhartonComputingCommunicationsActivity extends Activity {
 
 	@Override
 	public void onBackPressed() {
-		Intent i = new Intent(this, WhartonComputingCommunicationsActivity.class);
+		Intent i = new Intent(this, Login.class);
 		startActivity(i);
 	}
 }
