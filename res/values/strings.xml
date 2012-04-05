@@ -7,7 +7,12 @@
     <string name="createEvent">Create New Event</string>
     <string name="showEvent">Show Events</string>
     <string name="showAgenda">Show Agenda</string>
-    
+
+    <string-array name="home_options_array">
+        <item>Create New Event</item>
+        <item>Show Agenda</item>
+        <item>Show Contacts</item>
+    </string-array>
     
     <!--  Event Strings -->
     <string name="eventWelcome">Event Details</string>
