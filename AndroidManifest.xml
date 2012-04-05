@@ -27,6 +27,7 @@
         <activity android:name=".Register" />
         <activity android:name=".PostMessage" />
         <activity android:name=".ContactList" />
+        <activity android:name=".ShowContact" />
         
     </application>
 	<uses-permission android:name="android.permission.INTERNET" />

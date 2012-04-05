@@ -1,5 +1,7 @@
 package edu.upenn.cis350;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.parse.FindCallback;
@@ -9,12 +11,19 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import android.app.Activity;
+import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ContactList extends Activity {
+public class ContactList extends ListActivity {
 
 	/**
 	 *  Called when the activity is first created.
@@ -25,10 +34,9 @@ public class ContactList extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Parse.initialize(this, "FWyFNrvpkliSb7nBNugCNttN5HWpcbfaOWEutejH", "SZoWtHw28U44nJy8uKtV2oAQ8suuCZnFLklFSk46");
-        setContentView(R.layout.contacts);
-        
+                
         ParseQuery query = new ParseQuery("_User");
-        query.orderByDescending("fullName");
+        query.orderByAscending("lname");
         
     	final Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT); 
     	
@@ -37,13 +45,27 @@ public class ContactList extends Activity {
 			@Override
 			public void done(List<ParseObject> contactList, ParseException e) {
 				if (e == null) {
-					LinearLayout panel = (LinearLayout) findViewById(R.id.contactList);
+					List<String> names = new ArrayList<String>();
+					final HashMap<String, String> identifiers = new HashMap<String, String>();
 					for (ParseObject c : contactList) {
-						LinearLayout contactFrame = createContactFrame(c);
-						panel.addView(contactFrame);
+						String formattedName = c.getString("lname") + ", " + c.getString("fname");
+						names.add(formattedName);
+						identifiers.put(formattedName, c.getObjectId());
 					}
-					toast.setText("Retrieved " + contactList.size() + " contacts");
-					toast.show();
+			        setListAdapter(new ArrayAdapter<String>(getApplicationContext(), R.layout.contact_list_item, names));
+
+			        ListView lv = getListView();
+			        lv.setTextFilterEnabled(true);
+			        
+			        lv.setOnItemClickListener(new OnItemClickListener() {
+						@Override
+						public void onItemClick(AdapterView<?> parent, View view,
+								int position, long id) {
+							Intent i = new Intent(getApplicationContext(), ShowContact.class);
+							i.putExtra("contactID", identifiers.get(((TextView) view).getText()));
+							startActivity(i);
+						}
+			          });
 				} else {
 					toast.setText("Error: " + e.getMessage());
 					toast.show();
@@ -53,24 +75,5 @@ public class ContactList extends Activity {
 			}
     		
     	});
-    }
-    
-    /**
-     * Creates a LinearLayout frame for the Contact to display
-     * @param contact ParseObject representing contact to be displayed
-     * @return LinearLayout frame for contact to be displayed
-     */
-    public LinearLayout createContactFrame(ParseObject contact) {
-    	final LinearLayout frame = new LinearLayout(this);
-    	// Vertical Orientation
-    	frame.setOrientation(1);
-    	frame.setPadding(1, 1, 1, 1);
-    	
-    	TextView name = new TextView(this);
-    	name.setText(contact.getString("fullName"));
-    	
-    	frame.addView(name);
-    	
-		return frame;
     }
 }
