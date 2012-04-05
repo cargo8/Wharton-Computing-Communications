@@ -16,7 +16,8 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:text=""
-            android:textSize="20.0sp" />
+            android:textSize="20.0sp"
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="fill_parent"

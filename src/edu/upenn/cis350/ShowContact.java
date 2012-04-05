@@ -36,25 +36,35 @@ public class ShowContact extends Activity {
 					@Override
 					public void done(ParseObject contact, ParseException e) {
 			        	TextView temp = (TextView) findViewById(R.id.contactHeader);
-						temp.setText(contact.getString("fullName"));
+						String tempString = contact.getString("fullName");
+
+						temp.setText(tempString);
 						
 						temp = (TextView) findViewById(R.id.contactPhone1);
-						temp.setText(contact.getString("phone1"));
+						tempString = contact.getString("phone1");
+						if ("".equals(tempString)) tempString = "None";
+						temp.setText(tempString);
 						Linkify.addLinks(temp, Linkify.PHONE_NUMBERS);
 						temp.setLinkTextColor(temp.getTextColors().getDefaultColor());
 						
 						temp = (TextView) findViewById(R.id.contactPhone2);
-						temp.setText(contact.getString("phone2"));
+						tempString = contact.getString("phone2");
+						if ("".equals(tempString)) tempString = "None";
+						temp.setText(tempString);
 						Linkify.addLinks(temp, Linkify.PHONE_NUMBERS);
 						temp.setLinkTextColor(temp.getTextColors().getDefaultColor());
 
 						temp = (TextView) findViewById(R.id.contactEmail1);
-						temp.setText(contact.getString("email1"));
+						tempString = contact.getString("email1");
+						if ("".equals(tempString)) tempString = "None";
+						temp.setText(tempString);
 						Linkify.addLinks(temp, Linkify.EMAIL_ADDRESSES);
 						temp.setLinkTextColor(temp.getTextColors().getDefaultColor());
 
 						temp = (TextView) findViewById(R.id.contactEmail2);
-						temp.setText(contact.getString("email2"));
+						tempString = contact.getString("email2");
+						if ("".equals(tempString)) tempString = "None";
+						temp.setText(tempString);
 						Linkify.addLinks(temp, Linkify.EMAIL_ADDRESSES);
 						temp.setLinkTextColor(temp.getTextColors().getDefaultColor());
 
