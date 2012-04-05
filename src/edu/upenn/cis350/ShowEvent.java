@@ -235,29 +235,11 @@ public class ShowEvent extends Activity {
     	
     	return messageFrame;
     }
-  
-
-    //TODO: Remove this if it's safe.
-    public void onMessageClick(View view) {
-    	Intent i = new Intent(this, ShowComments.class);
-    	MessagePOJO message = new MessagePOJO();
-    	message.setText("Message");
-    	message.setAuthor("Joe Cruz");
-    	message.setTimestamp("March 18, 2012");
-    	i.putExtra("messagePOJO", message);
-    	i.putExtra("user", uname);
-    	startActivity(i);
-    }
     
-    // method called when a user clicks on a message layout
-    public void onMessageClick(MessagePOJO message){
-    	Intent i = new Intent(this, ShowComments.class);
-    	i.putExtra("messagePOJO", message);
-    	i.putExtra("user", uname);
-    	startActivity(i);
-    }
-    
-    // onClickFunction of postMessage button
+    /**
+     * onClickFunction of postMessage button
+     * @param view
+     */
     public void onPostMessage(View view){
     	Intent i = new Intent(this, PostMessage.class);
     	i.putExtra("eventKey", event.getObjectId());
