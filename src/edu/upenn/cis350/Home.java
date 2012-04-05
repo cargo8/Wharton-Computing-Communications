@@ -1,6 +1,5 @@
 package edu.upenn.cis350;
 
-import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,9 +9,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.parse.Parse;
 import com.parse.ParseUser;
 
 /* This activity is what the app will start with after logging in.
@@ -41,6 +38,8 @@ public class Home extends ListActivity {
 	    		onShowAgenda();
 	    	} else if ("Show Contacts".equals(label)) {
 	    		onShowContacts();
+	    	} else if ("Edit Profile".equals(label)) {
+	    		onEditProfile();
 	    	}
 	      }
 	    }
@@ -61,6 +60,11 @@ public class Home extends ListActivity {
     
     public void onShowContacts() {
     	Intent i = new Intent(this, ContactList.class);
+    	startActivity(i);
+    }
+    
+    public void onEditProfile() {
+    	Intent i = new Intent(this, EditProfile.class);
     	startActivity(i);
     }
     

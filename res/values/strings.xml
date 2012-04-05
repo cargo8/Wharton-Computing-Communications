@@ -12,6 +12,7 @@
         <item>Create New Event</item>
         <item>Show Agenda</item>
         <item>Show Contacts</item>
+        <item>Edit Profile</item>
     </string-array>
     
     <!--  Event Strings -->

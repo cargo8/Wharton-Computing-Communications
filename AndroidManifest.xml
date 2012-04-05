@@ -27,6 +27,7 @@
         <activity android:name=".PostMessage" />
         <activity android:name=".ContactList" />
         <activity android:name=".ShowContact" />
+        <activity android:name=".EditProfile" />
 
         <service android:name="com.parse.PushService" />
 
