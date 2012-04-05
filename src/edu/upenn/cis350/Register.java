@@ -31,7 +31,7 @@ public class Register extends Activity {
      * @param view
      */
     public void newUser(View view) {
-    	String uname = ((EditText)findViewById(R.id.loginUsername)).getText().toString();
+    	String uname = ((EditText)findViewById(R.id.loginUsername)).getText().toString().toLowerCase();
 		String pw = ((EditText)findViewById(R.id.loginPassword)).getText().toString();
 		String pw2 = ((EditText)findViewById(R.id.loginPassword2)).getText().toString();
 		String fname = ((EditText)findViewById(R.id.registerFname)).getText().toString();

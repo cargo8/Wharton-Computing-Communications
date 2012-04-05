@@ -11,7 +11,6 @@ import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
-import com.parse.SignUpCallback;
 
 /* This activity displays a form for the user to register a user name for the app.
  * In the future, this will contain more fields to create a more robust "contact"
@@ -56,7 +55,7 @@ public class EditProfile extends Activity {
      * @param view
      */
     public void updateUser(View view) {
-    	String uname = ((EditText)findViewById(R.id.loginUsername)).getText().toString();
+    	String uname = ((EditText)findViewById(R.id.loginUsername)).getText().toString().toLowerCase();
 		String pw = ((EditText)findViewById(R.id.loginPassword)).getText().toString();
 		String pw2 = ((EditText)findViewById(R.id.loginPassword2)).getText().toString();
 		String fname = ((EditText)findViewById(R.id.registerFname)).getText().toString();

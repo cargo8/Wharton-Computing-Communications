@@ -51,7 +51,7 @@ public class Login extends Activity {
 		
 		//TODO(jmow): Normalize login and registration!
 		
-		String uname = ((EditText)findViewById(R.id.loginUsername)).getText().toString();
+		String uname = ((EditText)findViewById(R.id.loginUsername)).getText().toString().toLowerCase();
 		String pw = ((EditText)findViewById(R.id.loginPassword)).getText().toString();
 
 		final Toast successToast = Toast.makeText(this, "Login Successful.", Toast.LENGTH_SHORT);
