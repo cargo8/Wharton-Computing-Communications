@@ -60,8 +60,8 @@ public class EditEvent extends Activity {
     private boolean[] affilsChecked;
     private CharSequence[] systems;
     private boolean[] systemsChecked;
-    private Map<String, String> contactMap = new HashMap<String, String>();
-    private Map<String, String> contactMap2 = new HashMap<String, String>();
+    private Map<String, String> userIdMap = new HashMap<String, String>();
+    private Map<String, String> fullNameMap = new HashMap<String, String>();
 
     private Date date1;
     private Date date2;
@@ -275,14 +275,14 @@ public class EditEvent extends Activity {
 						String formattedName = obj.getString("lname") + ", " + obj.getString("fname");
 						adapter.add(formattedName);
 						adapter2.add(formattedName);
-						contactMap.put(formattedName, obj.getObjectId());
-						contactMap2.put(formattedName, obj.getString("fullName"));
-						if(formattedName.equals(event.getString("contact1")))
+						userIdMap.put(formattedName, obj.getObjectId());
+						fullNameMap.put(formattedName, obj.getString("fullName"));
+						if(fullNameMap.get(formattedName).equals(event.getString("contact1")))
 							found1 = true;
 						if(!found1)
 							pos1++;
 						
-						if(formattedName.equals(event.getString("contact2")))
+						if(fullNameMap.get(formattedName).equals(event.getString("contact2")))
 							found2 = true;
 						if(!found2)
 							pos2++;
@@ -341,12 +341,12 @@ public class EditEvent extends Activity {
     	//TODO: User linking
     	Spinner spin1 = (Spinner)findViewById(R.id.personSpinner1);
     	String contact1 = spin1.getSelectedItem().toString();
-    	event.put("contact1", contactMap2.get(contact1));
-    	event.put("contact1ID", contactMap.get(contact1));
+    	event.put("contact1", fullNameMap.get(contact1));
+    	event.put("contact1ID", userIdMap.get(contact1));
     	spin1 = (Spinner)findViewById(R.id.personSpinner2);
     	String contact2 = spin1.getSelectedItem().toString();
-    	event.put("contact2", contactMap2.get(contact2));	// EVENT
-    	event.put("contact2ID", contactMap.get(contact2));
+    	event.put("contact2", fullNameMap.get(contact2));	// EVENT
+    	event.put("contact2ID", userIdMap.get(contact2));
 
     	if(((RadioButton)findViewById(R.id.radioRed)).isChecked()){
     		event.put("severity", Color.RED);
