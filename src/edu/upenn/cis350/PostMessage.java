@@ -6,6 +6,7 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.PushService;
 import com.parse.SaveCallback;
 
 import android.app.Activity;
@@ -47,23 +48,25 @@ public class PostMessage extends Activity {
 	// onClick function for Post button
 	public void onPostClick(View view){
 		TextView tv = (TextView)findViewById(R.id.messageBox);
-		ParseObject mes = new ParseObject("Message");
-		mes.put("author", ParseUser.getCurrentUser());
-		mes.put("text", tv.getText().toString());
-		mes.put("timestamp", System.currentTimeMillis());
-		mes.put("event", event.getObjectId());
+		final ParseObject message = new ParseObject("Message");
+		message.put("author", ParseUser.getCurrentUser());
+		message.put("text", tv.getText().toString());
+		message.put("timestamp", System.currentTimeMillis());
+		message.put("event", event.getObjectId());
     	final Toast success = Toast.makeText(this, "Message posted.", Toast.LENGTH_SHORT);
     	final Toast failure = Toast.makeText(this, "Message NOT posted.", Toast.LENGTH_SHORT);
 
     	final Intent i = new Intent(this, ShowEvent.class);
 
-		mes.saveInBackground(new SaveCallback(){
+		message.saveInBackground(new SaveCallback(){
 
 			@Override
 			public void done(ParseException e) {
 				// TODO Auto-generated method stub
 				if(e == null){
 					success.show();
+					//TODO: figure out why there is a invalid channel name sometimes
+					PushService.subscribe(getApplicationContext(), message.getObjectId().toString(), ShowMessage.class);
 					i.putExtra("eventKey", event.getObjectId());
 					startActivity(i);
 				}
