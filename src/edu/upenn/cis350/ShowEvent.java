@@ -174,6 +174,7 @@ public class ShowEvent extends Activity {
 				if(arg1 == null){
 					for(ParseObject obj : arg0){
 						LinearLayout messageFrame = getMessageFrame(obj);
+						
 						messagesPane.addView(messageFrame);
 						toast.setText("Retrieved " + arg0.size() + " messages");
    	             		toast.show();
@@ -210,7 +211,7 @@ public class ShowEvent extends Activity {
 			public void done(ParseObject arg0, ParseException arg1) {
 				// TODO Auto-generated method stub
 				ParseUser user = (ParseUser)arg0;
-		    	author.setText(user.getUsername());
+		    	author.setText(user.getString("fullName"));
 		    	author.setTypeface(Typeface.DEFAULT_BOLD);
 			}
     		
@@ -221,7 +222,14 @@ public class ShowEvent extends Activity {
     	TextView timestamp = new TextView(this);
     	Long time = obj.getLong("timestamp");
     	SimpleDateFormat formatter = new SimpleDateFormat();
-    	timestamp.setText(" at " + formatter.format(new Date(time)) + '\n');
+    	timestamp.setText(" at " + formatter.format(new Date(time)));
+    	
+    	TextView comments = new TextView(this);
+    	int noOfComments = obj.getInt("count");
+    	if(noOfComments > 0)
+    		comments.setText(noOfComments + " comment" + (noOfComments == 1 ? "" : "s") + '\n');
+    	else
+    		comments.setText("No comments" + '\n');
     	
     	header.addView(posted);
     	header.addView(author);
@@ -233,6 +241,8 @@ public class ShowEvent extends Activity {
     	
     	messageFrame.addView(messageText);
     	messageFrame.addView(header);
+    	messageFrame.addView(comments);
+    	
 		final Intent i = new Intent(this, ShowMessage.class);
     	
     	messageFrame.setOnClickListener(new LinearLayout.OnClickListener() {  
@@ -275,20 +285,42 @@ public class ShowEvent extends Activity {
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		Intent i = new Intent(this, EditEvent.class);
-		i.putExtra("eventKey", event.getObjectId());
-		startActivity(i);
-		return true;
+		if(item.getItemId() == R.id.editEvent){
+			Intent i = new Intent(this, EditEvent.class);
+			i.putExtra("eventKey", event.getObjectId());
+			startActivity(i);
+			return true;
+		}
+		else if(item.getItemId() == R.id.markComplete){
+			event.put("type", "Resolved");
+			event.saveInBackground(new SaveCallback(){
+
+				@Override
+				public void done(ParseException arg0) {
+					// TODO Auto-generated method stub
+			     	Toast temp = Toast.makeText(getApplicationContext(), "Marked as Resolved", Toast.LENGTH_SHORT);
+			     	temp.show();
+				}
+				
+			});
+			return true;
+		}
+		return false;
 	}
 
  // onClick function for Post button
  	public void onPostClick(View view){
  		TextView tv = (TextView)findViewById(R.id.newMessageText);
+ 		if (tv.getText().toString().equals("")) {
+			Toast.makeText(this, "Please enter a message.", Toast.LENGTH_SHORT).show();
+			return;
+		}
  		ParseObject mes = new ParseObject("Message");
  		mes.put("author", ParseUser.getCurrentUser());
  		mes.put("text", tv.getText().toString());
  		mes.put("timestamp", System.currentTimeMillis());
  		mes.put("event", event.getObjectId());
+ 		mes.put("count", 0);
      	final Toast success = Toast.makeText(this, "Message posted.", Toast.LENGTH_SHORT);
      	final Toast failure = Toast.makeText(this, "Message NOT posted.", Toast.LENGTH_SHORT);
 
