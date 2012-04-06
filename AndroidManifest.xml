@@ -33,6 +33,8 @@
         <activity android:name=".ContactList" />
         <activity android:name=".ShowContact" />
         <activity android:name=".EditProfile" />
+        <activity android:name=".EditEvent" />
+        
 
         <service android:name="com.parse.PushService" />
 
