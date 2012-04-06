@@ -109,6 +109,7 @@ public class ShowMessage extends Activity {
 			Toast.makeText(this, "Please enter a comment.", Toast.LENGTH_SHORT).show();
 			return;
 		}
+		message.increment("count");
 		comment.put("text", commentText.getText().toString());
 		comment.put("message", message);
 		comment.put("author", ParseUser.getCurrentUser());
