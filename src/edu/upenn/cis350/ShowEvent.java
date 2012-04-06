@@ -345,7 +345,7 @@ public class ShowEvent extends Activity {
 				// TODO Auto-generated method stub
 				if(e == null){
 					success.show();
-					createMessagePush(event.getObjectId(), msg);
+					createMessagePush(event, msg);
 					i.putExtra("eventKey", event.getObjectId());
 					startActivity(i);
 				}
@@ -363,11 +363,12 @@ public class ShowEvent extends Activity {
 	 * @param eventId The messageID that this message is posted on
 	 * @param message The message parse object.
 	 */
-	public void createMessagePush(String eventId, ParseObject message) {
+	public void createMessagePush(ParseObject event, ParseObject message) {
 		ParsePush pushMessage = new ParsePush();
 		ParseUser user = ParseUser.getCurrentUser();
-		pushMessage.setChannel("push_" + eventId);
-		pushMessage.setMessage(user.getString("fullName") + " posted a message: \"" + message.getString("text") + "\"");
+		pushMessage.setChannel("push_" + event.getObjectId());
+		pushMessage.setMessage(user.getString("fullName") + " posted: \"" + message.getString("text") + "\" about " +
+				"the event \"" + event.getString("title") + "\"");
 		// expire after 5 days
 		pushMessage.setExpirationTimeInterval(432000);
 		pushMessage.sendInBackground();
