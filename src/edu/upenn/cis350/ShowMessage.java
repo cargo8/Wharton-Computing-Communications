@@ -33,14 +33,14 @@ public class ShowMessage extends Activity {
 
 	private String msgId;
 	private ParseObject message;
-	
+
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.show_message);
 		Parse.initialize(this, "FWyFNrvpkliSb7nBNugCNttN5HWpcbfaOWEutejH", "SZoWtHw28U44nJy8uKtV2oAQ8suuCZnFLklFSk46");
-		
+
 		Bundle extras = this.getIntent().getExtras();
 
 		if (extras == null){
@@ -93,8 +93,8 @@ public class ShowMessage extends Activity {
 
 		}
 	}
-	
-	
+
+
 	/**
 	 * Post a new comment to this message
 	 * 
@@ -115,7 +115,7 @@ public class ShowMessage extends Activity {
 		comment.put("timestamp", System.currentTimeMillis());
 
 		final Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
-		
+
 		comment.saveInBackground(new SaveCallback() {
 
 			@Override
@@ -130,11 +130,7 @@ public class ShowMessage extends Activity {
 					toast.show();
 					createPush(message.getObjectId().toString(), comment);
 					commentText.setText("");
-					try {
-						PushService.subscribe(getApplicationContext(), "push_" + message.getObjectId().toString(), Login.class);
-					} catch (IllegalArgumentException e2) {
-						Toast.makeText(getApplicationContext(), e2.getMessage(), Toast.LENGTH_SHORT).show();
-					}
+					PushService.subscribe(getApplicationContext(), "push_" + message.getObjectId().toString(), Login.class);
 					getComments(message);
 				}
 			}
@@ -152,7 +148,7 @@ public class ShowMessage extends Activity {
 		ParseUser user = ParseUser.getCurrentUser();
 		pushMessage.setChannel("push_" + messageId);
 		pushMessage.setMessage(user.getString("fullName") + " commented on a message: " +
-					"\"" + comment.getString("text") + "\"");
+				"\"" + comment.getString("text") + "\"");
 		// expire after 5 days
 		pushMessage.setExpirationTimeInterval(432000);
 		pushMessage.sendInBackground();
@@ -234,12 +230,12 @@ public class ShowMessage extends Activity {
 
 		});
 	}
-	
-    @Override
-    public void onBackPressed() {
-       Intent i = new Intent(this, ShowEvent.class);
-       i.putExtra("eventKey", message.getString("event"));
-       startActivity(i);
-    }
+
+	@Override
+	public void onBackPressed() {
+		Intent i = new Intent(this, ShowEvent.class);
+		i.putExtra("eventKey", message.getString("event"));
+		startActivity(i);
+	}
 
 }

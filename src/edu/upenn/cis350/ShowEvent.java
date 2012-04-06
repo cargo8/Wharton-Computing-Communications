@@ -33,23 +33,23 @@ import com.parse.SaveCallback;
  * a new view where they can comment on a particular message.
  */
 public class ShowEvent extends Activity {
-	
+
 	private String uname;
 	private ParseObject event;
 
-    /** Called when the activity is first created. */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.show_event);
+	/** Called when the activity is first created. */
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.show_event);
 		Parse.initialize(this, "FWyFNrvpkliSb7nBNugCNttN5HWpcbfaOWEutejH", "SZoWtHw28U44nJy8uKtV2oAQ8suuCZnFLklFSk46");
-        Bundle extras = this.getIntent().getExtras();
-        if(extras != null){
-        	//event = (EventPOJO)extras.get("eventPOJO");
-           	//uname = extras.getString("user");
-        	ParseQuery query = new ParseQuery("Event");
-        	
-        	final Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
+		Bundle extras = this.getIntent().getExtras();
+		if(extras != null){
+			//event = (EventPOJO)extras.get("eventPOJO");
+			//uname = extras.getString("user");
+			ParseQuery query = new ParseQuery("Event");
+
+			final Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
 			query.getInBackground(extras.getString("eventKey"), new GetCallback() {
 
 				@Override
@@ -60,58 +60,58 @@ public class ShowEvent extends Activity {
 					} else {
 						event = event1;
 						TextView temp = (TextView)findViewById(R.id.eventTitleText);
-			        	temp.setText(event.getString("title"));
-			        	temp = (TextView)findViewById(R.id.eventDescText);
-			        	temp.setText("\n" + event.getString("description") + "\n");
-			        	//temp = (TextView)findViewById(R.id.eventActionsText);
-			        	//temp.setText(event.getString("actionItems" + "\n"));
-			        	temp = (TextView)findViewById(R.id.startDateDisplay2);
-			    		SimpleDateFormat formatter = new SimpleDateFormat();
-			        	Date date1 = new Date(event.getLong("startDate"));
-			        	temp.setText(formatter.format(date1));
-			        	temp = (TextView)findViewById(R.id.endDateDisplay2);
-			        	Date date2 = new Date(event.getLong("endDate"));
-			        	temp.setText(formatter.format(date2));
-			        	temp = (TextView)findViewById(R.id.affilsText);
-			        	
-			        	List<String> affilList = event.getList("affils");
-			        	StringBuilder affilText = new StringBuilder();
-			        	if(affilList != null){
-			        		for(String s : affilList){
-			        			affilText.append(s + "\t");
-			        		}
-			        		temp.setText(affilText.toString());
-			        	}
-			        	temp = (TextView)findViewById(R.id.systemsText);
-			        	
-			        	List<String> systemList = event.getList("systems");
-			        	StringBuilder systemText = new StringBuilder();
-			        	if(systemList != null){
-			        		for(String s : systemList){
-			        			systemText.append(s + "\t");
-			        		}
-			        		temp.setText(systemText.toString());
-			        	}
-			        	
-			        	temp = (TextView)findViewById(R.id.personText1);
-			        	temp.setText(event.getString("contact1"));
-			        	temp.setTextColor(Color.WHITE);
-			        	
-			        	temp = (TextView)findViewById(R.id.personText2);
-			        	temp.setText(event.getString("contact2"));
-			        	temp.setTextColor(Color.WHITE);
+						temp.setText(event.getString("title"));
+						temp = (TextView)findViewById(R.id.eventDescText);
+						temp.setText("\n" + event.getString("description") + "\n");
+						//temp = (TextView)findViewById(R.id.eventActionsText);
+						//temp.setText(event.getString("actionItems" + "\n"));
+						temp = (TextView)findViewById(R.id.startDateDisplay2);
+						SimpleDateFormat formatter = new SimpleDateFormat();
+						Date date1 = new Date(event.getLong("startDate"));
+						temp.setText(formatter.format(date1));
+						temp = (TextView)findViewById(R.id.endDateDisplay2);
+						Date date2 = new Date(event.getLong("endDate"));
+						temp.setText(formatter.format(date2));
+						temp = (TextView)findViewById(R.id.affilsText);
 
-			        	temp = (TextView)findViewById(R.id.severityText);
-			        	temp.setBackgroundColor(event.getInt("severity"));
-			        	temp = (TextView)findViewById(R.id.typeText);
-			        	temp.setText(event.getString("type"));
-			        	populateMessages();
+						List<String> affilList = event.getList("affils");
+						StringBuilder affilText = new StringBuilder();
+						if(affilList != null){
+							for(String s : affilList){
+								affilText.append(s + "\t");
+							}
+							temp.setText(affilText.toString());
+						}
+						temp = (TextView)findViewById(R.id.systemsText);
+
+						List<String> systemList = event.getList("systems");
+						StringBuilder systemText = new StringBuilder();
+						if(systemList != null){
+							for(String s : systemList){
+								systemText.append(s + "\t");
+							}
+							temp.setText(systemText.toString());
+						}
+
+						temp = (TextView)findViewById(R.id.personText1);
+						temp.setText(event.getString("contact1"));
+						temp.setTextColor(Color.WHITE);
+
+						temp = (TextView)findViewById(R.id.personText2);
+						temp.setText(event.getString("contact2"));
+						temp.setTextColor(Color.WHITE);
+
+						temp = (TextView)findViewById(R.id.severityText);
+						temp.setBackgroundColor(event.getInt("severity"));
+						temp = (TextView)findViewById(R.id.typeText);
+						temp.setText(event.getString("type"));
+						populateMessages();
 					}
 				}
-				
+
 			});
-        	
-        	/*
+
+			/*
         	CharSequence[] temp2 = extras.getCharSequenceArray("affils");
         	boolean[] temp3 = extras.getBooleanArray("affilsChecked");
         	StringBuilder affilText = new StringBuilder();
@@ -121,9 +121,9 @@ public class ShowEvent extends Activity {
         				affilText.append(temp2[i] + "\t");
         		}
         	}
-        	*/
-        	
-        	/*
+			 */
+
+			/*
         	temp2 = extras.getCharSequenceArray("systems");
         	temp3 = extras.getBooleanArray("systemsChecked");
         	StringBuilder systemText = new StringBuilder();
@@ -133,148 +133,148 @@ public class ShowEvent extends Activity {
         				systemText.append(temp2[i] + "\t");
         		}
         	}
-        	*/
-        	
-        	
+			 */
 
-        	
 
-        	
-        }
-    }
-    
-    @Override
-    public void onBackPressed() {
-       Intent i = new Intent(this, Agenda.class);
-       /*
+
+
+
+
+		}
+	}
+
+	@Override
+	public void onBackPressed() {
+		Intent i = new Intent(this, Agenda.class);
+		/*
        if(event != null)
     	   i.putExtra("eventPOJO", event);
        i.putExtra("user", uname);
-       */
-       startActivity(i);
-    }
-    
-    // onClick function of backToAgenda button (deprected)
-    public void onBackToAgendaClick(View view){
-    	Intent i = new Intent(this, Agenda.class);
-    	startActivity(i);
-    }
-    
-    // populates the messages in the bottom half of the view from the DB
-    public void populateMessages() {
-        
-        final LinearLayout messagesPane = (LinearLayout) findViewById(R.id.messagesPane);
-        messagesPane.removeAllViews();
-        final Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
+		 */
+		startActivity(i);
+	}
+
+	// onClick function of backToAgenda button (deprected)
+	public void onBackToAgendaClick(View view){
+		Intent i = new Intent(this, Agenda.class);
+		startActivity(i);
+	}
+
+	// populates the messages in the bottom half of the view from the DB
+	public void populateMessages() {
+
+		final LinearLayout messagesPane = (LinearLayout) findViewById(R.id.messagesPane);
+		messagesPane.removeAllViews();
+		final Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
 		ParseQuery query = new ParseQuery("Message");
-    	query.orderByAscending("timestamp");
-    	query.whereEqualTo("event", event.getObjectId());
-    	query.findInBackground(new FindCallback() {
+		query.orderByAscending("timestamp");
+		query.whereEqualTo("event", event.getObjectId());
+		query.findInBackground(new FindCallback() {
 
 			@Override
 			public void done(List<ParseObject> arg0, ParseException arg1) {
 				if(arg1 == null){
 					for(ParseObject obj : arg0){
 						LinearLayout messageFrame = getMessageFrame(obj);
-						
+
 						messagesPane.addView(messageFrame);
 						toast.setText("Retrieved " + arg0.size() + " messages");
-   	             		toast.show();
+						toast.show();
 					}
 				}
 				else {
 					toast.setText("Error: " + arg1.getMessage());
-	             	toast.show();
+					toast.show();
 				}
-					
+
 			}
-    		
-    	});
-        //LinearLayout messagesPane = (LinearLayout) findViewById(R.id.messagesPane);
-        //messagesPane.removeAllViews();
-    	//messagesPane.addView(messageFrame);
-    }
-    
-    public LinearLayout getMessageFrame(final ParseObject obj){
-    	LinearLayout messageFrame = new LinearLayout(this);
-    	messageFrame.setOrientation(1);
-    	messageFrame.setPadding(1, 1, 1, 1);
-    	
-    	LinearLayout header = new LinearLayout(this);
-    	header.setOrientation(0);
-    	
-    	TextView posted = new TextView(this);
-    	posted.setText("Posted by ");
-    	
-    	final TextView author = new TextView(this);
-    	obj.getParseUser("author").fetchIfNeededInBackground(new GetCallback(){
+
+		});
+		//LinearLayout messagesPane = (LinearLayout) findViewById(R.id.messagesPane);
+		//messagesPane.removeAllViews();
+		//messagesPane.addView(messageFrame);
+	}
+
+	public LinearLayout getMessageFrame(final ParseObject obj){
+		LinearLayout messageFrame = new LinearLayout(this);
+		messageFrame.setOrientation(1);
+		messageFrame.setPadding(1, 1, 1, 1);
+
+		LinearLayout header = new LinearLayout(this);
+		header.setOrientation(0);
+
+		TextView posted = new TextView(this);
+		posted.setText("Posted by ");
+
+		final TextView author = new TextView(this);
+		obj.getParseUser("author").fetchIfNeededInBackground(new GetCallback(){
 
 			@Override
 			public void done(ParseObject arg0, ParseException arg1) {
 				// TODO Auto-generated method stub
 				ParseUser user = (ParseUser)arg0;
-		    	author.setText(user.getString("fullName"));
-		    	author.setTypeface(Typeface.DEFAULT_BOLD);
+				author.setText(user.getString("fullName"));
+				author.setTypeface(Typeface.DEFAULT_BOLD);
 			}
-    		
-    	});
-    	//author.setText(user.getUsername());
-    	//author.setTypeface(Typeface.DEFAULT_BOLD);
-    	
-    	TextView timestamp = new TextView(this);
-    	Long time = obj.getLong("timestamp");
-    	SimpleDateFormat formatter = new SimpleDateFormat();
-    	timestamp.setText(" at " + formatter.format(new Date(time)));
-    	
-    	TextView comments = new TextView(this);
-    	int noOfComments = obj.getInt("count");
-    	if(noOfComments > 0)
-    		comments.setText(noOfComments + " comment" + (noOfComments == 1 ? "" : "s") + '\n');
-    	else
-    		comments.setText("No comments" + '\n');
-    	
-    	header.addView(posted);
-    	header.addView(author);
-    	header.addView(timestamp);
-    	
-    	TextView messageText = new TextView(this);
-    	messageText.setText(obj.getString("text"));
-    	messageText.setTypeface(Typeface.DEFAULT_BOLD);
-    	
-    	messageFrame.addView(messageText);
-    	messageFrame.addView(header);
-    	messageFrame.addView(comments);
-    	
+
+		});
+		//author.setText(user.getUsername());
+		//author.setTypeface(Typeface.DEFAULT_BOLD);
+
+		TextView timestamp = new TextView(this);
+		Long time = obj.getLong("timestamp");
+		SimpleDateFormat formatter = new SimpleDateFormat();
+		timestamp.setText(" at " + formatter.format(new Date(time)));
+
+		TextView comments = new TextView(this);
+		int noOfComments = obj.getInt("count");
+		if(noOfComments > 0)
+			comments.setText(noOfComments + " comment" + (noOfComments == 1 ? "" : "s") + '\n');
+		else
+			comments.setText("No comments" + '\n');
+
+		header.addView(posted);
+		header.addView(author);
+		header.addView(timestamp);
+
+		TextView messageText = new TextView(this);
+		messageText.setText(obj.getString("text"));
+		messageText.setTypeface(Typeface.DEFAULT_BOLD);
+
+		messageFrame.addView(messageText);
+		messageFrame.addView(header);
+		messageFrame.addView(comments);
+
 		final Intent i = new Intent(this, ShowMessage.class);
-    	
-    	messageFrame.setOnClickListener(new LinearLayout.OnClickListener() {  
-            public void onClick(View v){
-        		i.putExtra("messageID", obj.getObjectId());
-        		startActivity(i);
-            }
-         });
-    	
-    	return messageFrame;
-    }
-    
-    /**
-     * On Click Function of contact1 textView
-     */
-    public void goToContact1(View view){
-    	Intent i = new Intent(this, ShowContact.class);
-    	i.putExtra("contactID", event.getString("contact1ID"));
-    	startActivity(i);
-    }
-    
-    /**
-     * On Click Function of contact2 textView
-     */
-    public void goToContact2(View view){
-    	Intent i = new Intent(this, ShowContact.class);
-    	i.putExtra("contactID", event.getString("contact2ID"));
-    	startActivity(i);
-    }
-    
+
+		messageFrame.setOnClickListener(new LinearLayout.OnClickListener() {  
+			public void onClick(View v){
+				i.putExtra("messageID", obj.getObjectId());
+				startActivity(i);
+			}
+		});
+
+		return messageFrame;
+	}
+
+	/**
+	 * On Click Function of contact1 textView
+	 */
+	public void goToContact1(View view){
+		Intent i = new Intent(this, ShowContact.class);
+		i.putExtra("contactID", event.getString("contact1ID"));
+		startActivity(i);
+	}
+
+	/**
+	 * On Click Function of contact2 textView
+	 */
+	public void goToContact2(View view){
+		Intent i = new Intent(this, ShowContact.class);
+		i.putExtra("contactID", event.getString("contact2ID"));
+		startActivity(i);
+	}
+
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
@@ -301,17 +301,13 @@ public class ShowEvent extends Activity {
 				public void done(ParseException arg0) {
 					createEventUpdatePush(event.getObjectId(), event);
 					Toast temp = Toast.makeText(getApplicationContext(), "Marked as Resolved", Toast.LENGTH_SHORT);
-			     	temp.show();
+					temp.show();
 				}
-				
+
 			});
 			return true;
 		} else if (item.getItemId() == R.id.eventSubscribe) {
-			try {
-				PushService.subscribe(getApplicationContext(), "push_" + event.getObjectId(), Login.class);
-			} catch (IllegalArgumentException e2) {
-				Toast.makeText(getApplicationContext(), e2.getMessage(), Toast.LENGTH_SHORT).show();
-			}
+			PushService.subscribe(getApplicationContext(), "push_" + event.getObjectId(), Login.class);
 			Toast.makeText(this, "Subscribed to event", Toast.LENGTH_SHORT).show();
 			return true;
 		} else if (item.getItemId() == R.id.eventUnsubscribe) {
@@ -325,41 +321,41 @@ public class ShowEvent extends Activity {
 	 * Posts a message
 	 * @param view
 	 */
- 	public void onPostClick(View view){
- 		TextView tv = (TextView)findViewById(R.id.newMessageText);
- 		if (tv.getText().toString().equals("")) {
+	public void onPostClick(View view){
+		TextView tv = (TextView)findViewById(R.id.newMessageText);
+		if (tv.getText().toString().equals("")) {
 			Toast.makeText(this, "Please enter a message.", Toast.LENGTH_SHORT).show();
 			return;
 		}
- 		final ParseObject msg = new ParseObject("Message");
- 		msg.put("author", ParseUser.getCurrentUser());
- 		msg.put("text", tv.getText().toString());
- 		msg.put("timestamp", System.currentTimeMillis());
- 		msg.put("event", event.getObjectId());
- 		msg.put("count", 0);
-     	final Toast success = Toast.makeText(this, "Message posted.", Toast.LENGTH_SHORT);
-     	final Toast failure = Toast.makeText(this, "Message NOT posted.", Toast.LENGTH_SHORT);
+		final ParseObject msg = new ParseObject("Message");
+		msg.put("author", ParseUser.getCurrentUser());
+		msg.put("text", tv.getText().toString());
+		msg.put("timestamp", System.currentTimeMillis());
+		msg.put("event", event.getObjectId());
+		msg.put("count", 0);
+		final Toast success = Toast.makeText(this, "Message posted.", Toast.LENGTH_SHORT);
+		final Toast failure = Toast.makeText(this, "Message NOT posted.", Toast.LENGTH_SHORT);
 
-     	final Intent i = new Intent(this, ShowEvent.class);
+		final Intent i = new Intent(this, ShowEvent.class);
 
- 		msg.saveInBackground(new SaveCallback(){
+		msg.saveInBackground(new SaveCallback(){
 
- 			@Override
- 			public void done(ParseException e) {
- 				// TODO Auto-generated method stub
- 				if(e == null){
- 					success.show();
- 					createMessagePush(event.getObjectId(), msg);
- 					i.putExtra("eventKey", event.getObjectId());
- 					startActivity(i);
- 				}
- 				else{
- 					failure.setText(e.getMessage());
- 					failure.show();
- 				}
- 			}
- 		});
- 	}
+			@Override
+			public void done(ParseException e) {
+				// TODO Auto-generated method stub
+				if(e == null){
+					success.show();
+					createMessagePush(event.getObjectId(), msg);
+					i.putExtra("eventKey", event.getObjectId());
+					startActivity(i);
+				}
+				else{
+					failure.setText(e.getMessage());
+					failure.show();
+				}
+			}
+		});
+	}
 
 	/**
 	 * Creates a push notification for this message
@@ -376,7 +372,7 @@ public class ShowEvent extends Activity {
 		pushMessage.setExpirationTimeInterval(432000);
 		pushMessage.sendInBackground();
 	}
-	
+
 	/**
 	 * Creates a push notification for Resolving event
 	 * @param eventId Event ID for event that is Resolved

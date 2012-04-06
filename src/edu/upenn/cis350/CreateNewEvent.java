@@ -307,11 +307,7 @@ public class CreateNewEvent extends Activity {
 				if (e == null) {
 					success.show();
 					String id = event.getObjectId();
-					try {
-						PushService.subscribe(getApplicationContext(), "push_" + id, Login.class);
-					} catch (IllegalArgumentException e2) {
-						Toast.makeText(getApplicationContext(), "Push Error: " + e2.getMessage(), Toast.LENGTH_LONG).show();
-					}
+					PushService.subscribe(getApplicationContext(), "push_" + id, Login.class);
 					//TODO(jmow): somehow auto-subscribe the secondary contact person for event
 					//TODO: Subscribe affiliated groups
 					i.putExtra("eventKey", id);
