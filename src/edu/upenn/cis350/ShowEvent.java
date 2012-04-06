@@ -41,7 +41,7 @@ public class ShowEvent extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.showevent);
+        setContentView(R.layout.show_event);
 		Parse.initialize(this, "FWyFNrvpkliSb7nBNugCNttN5HWpcbfaOWEutejH", "SZoWtHw28U44nJy8uKtV2oAQ8suuCZnFLklFSk46");
         Bundle extras = this.getIntent().getExtras();
         if(extras != null){

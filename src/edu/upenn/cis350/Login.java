@@ -40,7 +40,7 @@ public class Login extends Activity {
 		    Intent i = new Intent(this, Home.class);
 		    startActivity(i);
 		} else {
-			setContentView(R.layout.main);
+			setContentView(R.layout.login);
 		}
 	}
 

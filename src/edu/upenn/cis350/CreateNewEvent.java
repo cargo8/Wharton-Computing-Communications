@@ -133,7 +133,7 @@ public class CreateNewEvent extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Parse.initialize(this, "FWyFNrvpkliSb7nBNugCNttN5HWpcbfaOWEutejH", "SZoWtHw28U44nJy8uKtV2oAQ8suuCZnFLklFSk46");
-		setContentView(R.layout.eventform);
+		setContentView(R.layout.event_form);
 
 		// capture our View elements
 		mDateDisplay = (TextView) findViewById(R.id.startDateDisplay);

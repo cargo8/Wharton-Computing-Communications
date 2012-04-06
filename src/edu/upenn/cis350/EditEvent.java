@@ -131,7 +131,7 @@ public class EditEvent extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 		Parse.initialize(this, "FWyFNrvpkliSb7nBNugCNttN5HWpcbfaOWEutejH", "SZoWtHw28U44nJy8uKtV2oAQ8suuCZnFLklFSk46");
-        setContentView(R.layout.eventform);
+        setContentView(R.layout.event_form);
         Bundle extras = this.getIntent().getExtras();
         if(extras != null){
         	//event = (EventPOJO)extras.get("eventPOJO");
