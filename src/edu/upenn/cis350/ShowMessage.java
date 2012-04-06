@@ -2,20 +2,12 @@ package edu.upenn.cis350;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -30,8 +22,8 @@ import com.parse.ParseObject;
 import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.PushService;
 import com.parse.SaveCallback;
-import com.parse.SendCallback;
 
 /* This activity displays the comments related to a particular message.
  * Each message has its own comments related to it.
@@ -40,14 +32,14 @@ public class ShowMessage extends Activity {
 
 	private String msgId;
 	private ParseObject message;
-
+	
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.showcomments);
 		Parse.initialize(this, "FWyFNrvpkliSb7nBNugCNttN5HWpcbfaOWEutejH", "SZoWtHw28U44nJy8uKtV2oAQ8suuCZnFLklFSk46");
-
+		
 		Bundle extras = this.getIntent().getExtras();
 
 		if (extras == null){
@@ -118,14 +110,11 @@ public class ShowMessage extends Activity {
 			return;
 		}
 		comment.put("text", commentText.getText().toString());
-
 		comment.put("message", message);
 		comment.put("author", ParseUser.getCurrentUser());
 		comment.put("timestamp", System.currentTimeMillis());
 
 		final Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
-		
-		
 		
 		comment.saveInBackground(new SaveCallback() {
 
@@ -140,6 +129,7 @@ public class ShowMessage extends Activity {
 					toast.show();
 					createPush(message.getObjectId().toString(), comment);
 					commentText.setText("");
+					PushService.subscribe(getApplicationContext(), message.getObjectId().toString(), Login.class);
 					getComments(message);
 				}
 			}
@@ -148,13 +138,14 @@ public class ShowMessage extends Activity {
 
 	/**
 	 * Creates a push notification for this comment
-	 * 
 	 */
 	public void createPush(String messageId, ParseObject comment) {
 		ParsePush pushMessage = new ParsePush();
 		ParseUser user = ParseUser.getCurrentUser();
 		pushMessage.setChannel(messageId);
 		pushMessage.setMessage(user.getString("fullName") + " just commented on a message.");
+		// expire after 5 days
+		pushMessage.setExpirationTimeInterval(432000);
 		pushMessage.sendInBackground();
 	}
 

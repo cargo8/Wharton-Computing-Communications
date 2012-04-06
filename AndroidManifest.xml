@@ -42,12 +42,7 @@
                 <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".ShowMessage.PushReceiver" >
-            <intent-filter>
-                <action android:name=".ShowMessage" >
-                </action>
-            </intent-filter>
-        </receiver>
+        
     </application>
 
 </manifest>

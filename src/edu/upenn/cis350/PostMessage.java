@@ -66,7 +66,7 @@ public class PostMessage extends Activity {
 				if(e == null){
 					success.show();
 					//TODO: figure out why there is a invalid channel name sometimes
-					PushService.subscribe(getApplicationContext(), message.getObjectId().toString(), ShowMessage.class);
+					PushService.subscribe(getApplicationContext(), message.getObjectId().toString(), Login.class);
 					i.putExtra("eventKey", event.getObjectId());
 					startActivity(i);
 				}
