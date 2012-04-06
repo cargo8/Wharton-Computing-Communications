@@ -44,6 +44,12 @@ public class Home extends ListActivity {
 	      }
 	    }
 	  );
+	  
+	  lazySubscribeToEvents();
+	}
+	
+	private void lazySubscribeToEvents() {
+		//TODO(jmow)
 	}
 	
     // onClick function for createEvent button

@@ -307,8 +307,24 @@ public class CreateNewEvent extends Activity {
 				if (e == null) {
 					success.show();
 					String id = event.getObjectId();
+					/* Subscribe to push notifications for this event */
 					PushService.subscribe(getApplicationContext(), "push_" + id, Login.class);
-					//TODO(jmow): somehow auto-subscribe the secondary contact person for event
+					
+					/* Lazily subscribe the two set contacts to push notifications for this event */
+					//TODO(jmow): somehow auto-subscribe the primary & secondary contact people for event
+					/*
+					 * I want to create this lazy subscription for the two contacts set in the events.
+					 * TODO: On Login subscribe every user to a channel that is uniquely their object ID
+					 * TODO: Add 2 ParsePush's that send directly to the two users who are set
+					 * TODO: On Login check the lazy subscription datastore and subscribe to any events for your ID
+					 * 
+					 */
+//					ParseObject lazySub = new ParseObject("LazySubscription");
+//					lazySub.put("userID", event.getString("contact1ID"));
+//					lazySub.saveEventually();
+//					lazySub.put("userID", event.getString("contact2ID"));
+//					lazySub.saveEventually();
+					
 					//TODO: Subscribe affiliated groups
 					i.putExtra("eventKey", id);
 					startActivity(i);	
