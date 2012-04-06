@@ -31,6 +31,8 @@ public class ShowContact extends Activity {
 	        } else {
 	        	contactId = extras.getString("contactID");
 	        	ParseQuery query = new ParseQuery("_User");
+	        	query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
+	        	
 	        	query.getInBackground(contactId, new GetCallback() {
 
 					@Override

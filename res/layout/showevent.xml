@@ -17,6 +17,7 @@
         android:layout_height="wrap_content"
         android:text="@string/eventWelcome"
         android:textSize="20.0sp"
+        android:textStyle="bold"
         android:gravity="center_horizontal" />
     
      <!--   

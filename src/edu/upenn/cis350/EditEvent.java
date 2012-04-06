@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -20,33 +21,24 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
 
-/* This activity displays the form for creating a new event.
- * Once the event is submitted, it is written to the DB and the 
- * user is shown the ShowEvent view for this Event
- */
-public class CreateNewEvent extends Activity {
-
+public class EditEvent extends Activity {
 	
+	private ParseObject event;
 	// fields for dateDisplay popup (START DATE FIELDS)
 	private TextView mDateDisplay;
     private Button mPickDate;
@@ -129,19 +121,108 @@ public class CreateNewEvent extends Activity {
         	        date2.setMinutes(minute);
            	        updateDisplay();
            	    }
-           	};           	
+           	};        
 	
-    /** Called when the activity is first created. */
+	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 		Parse.initialize(this, "FWyFNrvpkliSb7nBNugCNttN5HWpcbfaOWEutejH", "SZoWtHw28U44nJy8uKtV2oAQ8suuCZnFLklFSk46");
         setContentView(R.layout.eventform);
+        Bundle extras = this.getIntent().getExtras();
+        if(extras != null){
+        	//event = (EventPOJO)extras.get("eventPOJO");
+           	//uname = extras.getString("user");
+        	ParseQuery query = new ParseQuery("Event");
+        	
+        	final Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
+			query.getInBackground(extras.getString("eventKey"), new GetCallback() {
+
+				@Override
+				public void done(ParseObject event1, ParseException e) {
+					if (event1 == null) {
+						toast.setText(e.getMessage());
+						toast.show();
+					} else {
+						event = event1;
+						EditText temp = (EditText)findViewById(R.id.eventTitle);
+			        	temp.setText(event.getString("title"));
+			        	temp = (EditText)findViewById(R.id.eventDesc);
+			        	temp.setText(event.getString("description"));
+			        	//temp = (TextView)findViewById(R.id.eventActionsText);
+			        	//temp.setText(event.getString("actionItems" + "\n"));
+			        	TextView temp2 = (TextView)findViewById(R.id.startDateDisplay);
+			        	date1 = new Date(event.getLong("startDate"));
+			        	temp2.setText(date1.toString());
+			        	temp2 = (TextView)findViewById(R.id.endDateDisplay);
+			        	date2 = new Date(event.getLong("endDate"));
+			        	temp2.setText(date2.toString());
+			        	populateSpinners();
+			        	/*
+			        	temp = (TextView)findViewById(R.id.affilsText);
+			        	
+			        	List<String> affilList = event.getList("affils");
+			        	StringBuilder affilText = new StringBuilder();
+			        	if(affilList != null){
+			        		for(String s : affilList){
+			        			affilText.append(s + "\t");
+			        		}
+			        		temp.setText(affilText.toString());
+			        	}
+			        	temp = (TextView)findViewById(R.id.systemsText);
+			        	
+			        	List<String> systemList = event.getList("systems");
+			        	StringBuilder systemText = new StringBuilder();
+			        	if(systemList != null){
+			        		for(String s : systemList){
+			        			systemText.append(s + "\t");
+			        		}
+			        		temp.setText(systemText.toString());
+			        	}
+			        	*/	
+			            final RadioButton radioRed = (RadioButton) findViewById(R.id.radioRed);
+			            radioRed.setBackgroundColor(Color.RED);
+			            final RadioButton radioYellow = (RadioButton) findViewById(R.id.radioYellow);
+			            radioYellow.setBackgroundColor(Color.YELLOW);
+			            final RadioButton radioGreen = (RadioButton) findViewById(R.id.radioGreen);
+			            radioGreen.setBackgroundColor(Color.GREEN);
+			        	int col = event.getInt("severity");
+			        	RadioButton tempRad;
+			        	//green
+			        	if(col == -16711936){
+			        		radioGreen.setChecked(true);
+			        	}
+			        	//yellow
+			        	else if(col == -256){
+			        		radioYellow.setChecked(true);
+			        	}
+			        	//red
+			        	else if(col == -65536){
+			        		radioRed.setChecked(true);
+			        	}
+			        	
+			        	String type = event.getString("type");
+			        	if(type.equals("Scheduled")){
+			        		tempRad = (RadioButton)findViewById(R.id.radioScheduled);
+			        		tempRad.setChecked(true);
+			        	}
+			        	else if(type.equals("Emergency")){
+			        		tempRad = (RadioButton)findViewById(R.id.radioEmergency);
+			        		tempRad.setChecked(true);
+			        	}
+					}
+				}
+				
+			});
+			
+
+        	
+        }
         
-        // capture our View elements
         mDateDisplay = (TextView) findViewById(R.id.startDateDisplay);
         mPickDate = (Button) findViewById(R.id.pickStartDate);
-
+        mDateDisplay2 = (TextView) findViewById(R.id.endDateDisplay);
+        mPickDate2 = (Button) findViewById(R.id.pickEndDate);
         // get the current date
         final Calendar c = Calendar.getInstance();
         mYear = c.get(Calendar.YEAR);
@@ -158,26 +239,8 @@ public class CreateNewEvent extends Activity {
         mDay2 = mDay;
         mHour2 = mHour;
         mMinute2 = mMinute;
-        // display the current date (this method is below)
-        date1 = new Date(System.currentTimeMillis());
-        date2 = new Date(System.currentTimeMillis() + 86400000);
-        updateDisplay();
-        
-        //populate spinner
-        populateSpinners();
-        
-        //set up severity buttons
-        //TODO closen: add listeners
-        final RadioButton radioRed = (RadioButton) findViewById(R.id.radioRed);
-        radioRed.setBackgroundColor(Color.RED);
-        final RadioButton radioYellow = (RadioButton) findViewById(R.id.radioYellow);
-        radioYellow.setBackgroundColor(Color.YELLOW);
-        final RadioButton radioGreen = (RadioButton) findViewById(R.id.radioGreen);
-        radioGreen.setBackgroundColor(Color.GREEN);
-
     }
     
-    // helper method to populate spinners with dummy info
     private void populateSpinners() {
     	
         final Spinner spinner = (Spinner) findViewById(R.id.personSpinner1);
@@ -200,23 +263,32 @@ public class CreateNewEvent extends Activity {
 			@Override
 			public void done(List<ParseObject> contactList, ParseException e) {
 				if (e == null) {
-					int pos = 0;
-					boolean found = false;
+					int pos1 = 0;
+					int pos2 = 0;
+					boolean found1 = false;
+					boolean found2 = false;
 					for(ParseObject obj : contactList){
 						// typesafe??
 						String formattedName = obj.getString("lname") + ", " + obj.getString("fname");
 						adapter.add(formattedName);
 						adapter2.add(formattedName);
 						contactMap.put(formattedName, obj.getObjectId());
-						if(obj.getString("lname").equals(ParseUser.getCurrentUser().get("lname")))
-							found = true;
-						if(!found)
-							pos++;
-						}
+						if(formattedName.equals(event.getString("contact1")))
+							found1 = true;
+						if(!found1)
+							pos1++;
+						
+						if(formattedName.equals(event.getString("contact2")))
+							found2 = true;
+						if(!found2)
+							pos2++;
+					}
 			        spinner.setAdapter(adapter);
 			        spinner2.setAdapter(adapter2);
-			        spinner.setSelection(pos);
-
+			        spinner.setSelection(pos1);
+			        spinner2.setSelection(pos2);
+			        
+			        
 				} else {
 					toast.setText("Error: " + e.getMessage());
 					toast.show();
@@ -228,13 +300,9 @@ public class CreateNewEvent extends Activity {
     	});
     	
 	}
-
-	// onClick function of submit button
+    
     public void onCreateEventSubmit(View view){
-    	//TODO closen: Phase out intent stuff - use eventPOJO for everything
-    	//Intent i = new Intent(this, WhartonComputingCommunicationsActivity.class);
     	
-    	final ParseObject event = new ParseObject("Event");
     	EditText temp = (EditText)findViewById(R.id.eventTitle);
     	event.put("title", temp.getText().toString());
     	temp = (EditText)findViewById(R.id.eventDesc);
@@ -247,6 +315,7 @@ public class CreateNewEvent extends Activity {
     	event.put("endDate", date2.getTime());
     	
     	//TODO: Affils + Systems
+    	/*
     	List<String> affiliations = new ArrayList<String>();
     	if(affils != null){
     		for(int x = 0; x < affils.length; x++){				// EVENT
@@ -263,6 +332,7 @@ public class CreateNewEvent extends Activity {
     		}
     		event.put("systems", sys);
     	}
+    	*/
 
     	//TODO: User linking
     	Spinner spin1 = (Spinner)findViewById(R.id.personSpinner1);
@@ -439,6 +509,5 @@ public class CreateNewEvent extends Activity {
         }
         return null;
     }
-    
 
 }
