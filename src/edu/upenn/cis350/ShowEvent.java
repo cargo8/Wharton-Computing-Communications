@@ -13,6 +13,7 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -231,7 +232,7 @@ public class ShowEvent extends Activity {
     	
     	messageFrame.addView(messageText);
     	messageFrame.addView(header);
-		final Intent i = new Intent(this, ShowComments.class);
+		final Intent i = new Intent(this, ShowMessage.class);
     	
     	messageFrame.setOnClickListener(new LinearLayout.OnClickListener() {  
             public void onClick(View v){
@@ -272,6 +273,7 @@ public class ShowEvent extends Activity {
     	startActivity(i);
     }
     
+
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.showeventmenu, menu);
@@ -288,5 +290,39 @@ public class ShowEvent extends Activity {
 		startActivity(i);
 		return true;
 	}
+
+ // onClick function for Post button
+ 	public void onPostClick(View view){
+ 		TextView tv = (TextView)findViewById(R.id.messageBox);
+ 		ParseObject mes = new ParseObject("Message");
+ 		mes.put("author", ParseUser.getCurrentUser());
+ 		mes.put("text", tv.getText().toString());
+ 		mes.put("timestamp", System.currentTimeMillis());
+ 		mes.put("event", event.getObjectId());
+     	final Toast success = Toast.makeText(this, "Message posted.", Toast.LENGTH_SHORT);
+     	final Toast failure = Toast.makeText(this, "Message NOT posted.", Toast.LENGTH_SHORT);
+
+     	final Intent i = new Intent(this, ShowEvent.class);
+
+ 		mes.saveInBackground(new SaveCallback(){
+
+ 			@Override
+ 			public void done(ParseException e) {
+ 				// TODO Auto-generated method stub
+ 				if(e == null){
+ 					success.show();
+ 					i.putExtra("eventKey", event.getObjectId());
+ 					startActivity(i);
+ 				}
+ 				else{
+ 					failure.setText(e.getMessage());
+ 					failure.show();
+ 				}
+
+ 			}
+ 		
+ 		});
+ 	}
+
 	
 }
