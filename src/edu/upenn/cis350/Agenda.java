@@ -32,13 +32,11 @@ public class Agenda extends Activity {
         setContentView(R.layout.agenda);
 		Parse.initialize(this, "FWyFNrvpkliSb7nBNugCNttN5HWpcbfaOWEutejH", "SZoWtHw28U44nJy8uKtV2oAQ8suuCZnFLklFSk46");
         
-//        List<EventPOJO> eventList = getEvents();
 		ParseQuery query = new ParseQuery("Event");
     	query.orderByAscending("startDate");
 
-    	//TODO(jmow): Query only active eventss
-//    	Long now = System.currentTimeMillis();
-//    	query.whereGreaterThanOrEqualTo("endDate", now);
+    	Long now = System.currentTimeMillis();
+    	query.whereGreaterThanOrEqualTo("endDate", now);
     	
     	final Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT); 
     			
