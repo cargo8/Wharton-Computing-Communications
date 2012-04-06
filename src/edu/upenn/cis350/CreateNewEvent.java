@@ -160,7 +160,7 @@ public class CreateNewEvent extends Activity {
         mMinute2 = mMinute;
         // display the current date (this method is below)
         date1 = new Date(System.currentTimeMillis());
-        date2 = new Date(System.currentTimeMillis());
+        date2 = new Date(System.currentTimeMillis() + 86400000);
         updateDisplay();
         
         //populate spinner
