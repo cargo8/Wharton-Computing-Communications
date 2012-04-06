@@ -34,9 +34,12 @@ public class Agenda extends Activity {
         
 		ParseQuery query = new ParseQuery("Event");
     	query.orderByAscending("startDate");
-
+    	
+    	// Only show events with end date greater than now
     	Long now = System.currentTimeMillis();
     	query.whereGreaterThanOrEqualTo("endDate", now);
+    	
+    	query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
     	
     	final Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT); 
     			
