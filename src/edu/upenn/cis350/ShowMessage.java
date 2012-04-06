@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -124,6 +125,7 @@ public class ShowMessage extends Activity {
 					toast.show();
 					return;
 				} else {
+					message.saveInBackground();
 					toast.setText("Comment posted");
 					toast.show();
 					createPush(message.getObjectId().toString(), comment);
@@ -228,5 +230,12 @@ public class ShowMessage extends Activity {
 
 		});
 	}
+	
+    @Override
+    public void onBackPressed() {
+       Intent i = new Intent(this, ShowEvent.class);
+       i.putExtra("eventKey", message.getString("event"));
+       startActivity(i);
+    }
 
 }
