@@ -50,6 +50,22 @@
                 android:textSize="10.0sp"
                 android:textStyle="bold" />
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/resolvedEvents"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="#fff"
+                android:text="RECENTLY RESOLVED EVENTS"
+                android:textColor="#000"
+                android:textSize="10.0sp"
+                android:textStyle="bold" />
+        </LinearLayout>
     </LinearLayout>
 
 </ScrollView>

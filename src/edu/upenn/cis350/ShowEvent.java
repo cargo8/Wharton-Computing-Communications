@@ -295,10 +295,27 @@ public class ShowEvent extends Activity {
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		Intent i = new Intent(this, EditEvent.class);
-		i.putExtra("eventKey", event.getObjectId());
-		startActivity(i);
-		return true;
+		if(item.getItemId() == R.id.editEvent){
+			Intent i = new Intent(this, EditEvent.class);
+			i.putExtra("eventKey", event.getObjectId());
+			startActivity(i);
+			return true;
+		}
+		else if(item.getItemId() == R.id.markComplete){
+			event.put("type", "Resolved");
+			event.saveInBackground(new SaveCallback(){
+
+				@Override
+				public void done(ParseException arg0) {
+					// TODO Auto-generated method stub
+			     	Toast temp = Toast.makeText(getApplicationContext(), "Marked as Resolved", Toast.LENGTH_SHORT);
+			     	temp.show();
+				}
+				
+			});
+			return true;
+		}
+		return false;
 	}
 
  // onClick function for Post button
