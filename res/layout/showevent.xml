@@ -216,14 +216,28 @@
 	       		android:text="@string/messageList"
 	       		android:padding="6sp"
 	       		android:textStyle="bold" />
-	    
-	     <Button 
-	        android:id="@+id/postMessage"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="@string/newMessageBut"
-	        android:onClick="onPostMessage" />
     
+    </LinearLayout>
+    
+	<LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <EditText
+            android:id="@+id/newMessageText"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="7.0"
+            android:inputType="text" />
+
+        <Button
+            android:id="@+id/newMessageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onPostMessage"
+            android:text="@string/postMessageBut" />
     </LinearLayout>
     
 	<LinearLayout
