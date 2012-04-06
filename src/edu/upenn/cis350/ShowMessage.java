@@ -126,6 +126,7 @@ public class ShowMessage extends Activity {
 					toast.show();
 					return;
 				} else {
+					message.saveInBackground();
 					toast.setText("Comment posted");
 					toast.show();
 					createPush(message.getObjectId().toString(), comment);
