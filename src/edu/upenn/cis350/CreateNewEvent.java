@@ -68,6 +68,7 @@ public class CreateNewEvent extends Activity {
     private CharSequence[] systems;
     private boolean[] systemsChecked;
     private Map<String, String> contactMap = new HashMap<String, String>();
+    private Map<String, String> contactMap2 = new HashMap<String, String>();
     private Date date1;
     private Date date2;
     
@@ -208,6 +209,7 @@ public class CreateNewEvent extends Activity {
 						adapter.add(formattedName);
 						adapter2.add(formattedName);
 						contactMap.put(formattedName, obj.getObjectId());
+						contactMap2.put(formattedName, obj.getString("fullName"));
 						if(obj.getString("lname").equals(ParseUser.getCurrentUser().get("lname")))
 							found = true;
 						if(!found)
@@ -267,11 +269,11 @@ public class CreateNewEvent extends Activity {
     	//TODO: User linking
     	Spinner spin1 = (Spinner)findViewById(R.id.personSpinner1);
     	String contact1 = spin1.getSelectedItem().toString();
-    	event.put("contact1", contact1);
+    	event.put("contact1", contactMap2.get(contact1));
     	event.put("contact1ID", contactMap.get(contact1));
     	spin1 = (Spinner)findViewById(R.id.personSpinner2);
     	String contact2 = spin1.getSelectedItem().toString();
-    	event.put("contact2", contact2);	// EVENT
+    	event.put("contact2", contactMap2.get(contact2));	// EVENT
     	event.put("contact2ID", contactMap.get(contact2));
 
     	if(((RadioButton)findViewById(R.id.radioRed)).isChecked()){
