@@ -20,6 +20,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -268,5 +271,22 @@ public class ShowEvent extends Activity {
     	i.putExtra("contactID", event.getString("contact2ID"));
     	startActivity(i);
     }
+    
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.showeventmenu, menu);
+		return true;
+	}
+
+	/**
+	 * Method that gets called when the menuitem is clicked
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent i = new Intent(this, EditEvent.class);
+		i.putExtra("eventKey", event.getObjectId());
+		startActivity(i);
+		return true;
+	}
 	
 }

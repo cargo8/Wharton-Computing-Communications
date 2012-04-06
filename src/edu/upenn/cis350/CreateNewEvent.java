@@ -159,7 +159,9 @@ public class CreateNewEvent extends Activity {
         mHour2 = mHour;
         mMinute2 = mMinute;
         // display the current date (this method is below)
-        //updateDisplay();
+        date1 = new Date(System.currentTimeMillis());
+        date2 = new Date(System.currentTimeMillis());
+        updateDisplay();
         
         //populate spinner
         populateSpinners();

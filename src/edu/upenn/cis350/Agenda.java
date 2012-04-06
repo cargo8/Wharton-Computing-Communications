@@ -1,5 +1,6 @@
 package edu.upenn.cis350;
 
+import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
@@ -109,8 +110,10 @@ public class Agenda extends Activity {
     	eventFrame.addView(titleFrame);
     	
     	TextView timeframe = new TextView(this);
-    	timeframe.setText("Start: " + event.getString("startDate") + 
-    			", Est. Finish: " + event.getString("endDate"));
+    	Date date1 = new Date(event.getLong("startDate"));
+    	Date date2 = new Date(event.getLong("endDate"));
+    	timeframe.setText("Start: " + date1.toString() + 
+    			", Est. Finish: " + date2.toString());
     	timeframe.setTextSize((float)12.0);
     	eventFrame.addView(timeframe);
     	
