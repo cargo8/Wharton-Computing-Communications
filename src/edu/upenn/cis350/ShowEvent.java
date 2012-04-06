@@ -229,7 +229,7 @@ public class ShowEvent extends Activity {
     	
     	messageFrame.addView(messageText);
     	messageFrame.addView(header);
-		final Intent i = new Intent(this, ShowComments.class);
+		final Intent i = new Intent(this, ShowMessage.class);
     	
     	messageFrame.setOnClickListener(new LinearLayout.OnClickListener() {  
             public void onClick(View v){
