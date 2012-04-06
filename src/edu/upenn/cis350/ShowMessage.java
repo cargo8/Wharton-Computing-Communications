@@ -130,7 +130,11 @@ public class ShowMessage extends Activity {
 					toast.show();
 					createPush(message.getObjectId().toString(), comment);
 					commentText.setText("");
-					PushService.subscribe(getApplicationContext(), message.getObjectId().toString(), Login.class);
+					try {
+						PushService.subscribe(getApplicationContext(), message.getObjectId().toString(), Login.class);
+					} catch (IllegalArgumentException e2) {
+						Toast.makeText(getApplicationContext(), e2.getMessage(), Toast.LENGTH_SHORT).show();
+					}
 					getComments(message);
 				}
 			}
@@ -163,7 +167,7 @@ public class ShowMessage extends Activity {
 	public LinearLayout createCommentFrame(ParseObject comment) {
 		LinearLayout commentFrame = new LinearLayout(this);
 		commentFrame.setOrientation(1);
-		commentFrame.setPadding(1, 1, 1, 1);
+		commentFrame.setPadding(15, 15, 15, 15);
 
 		LinearLayout header = new LinearLayout(this);
 		header.setOrientation(0);

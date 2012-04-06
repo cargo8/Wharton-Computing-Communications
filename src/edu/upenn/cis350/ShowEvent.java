@@ -1,10 +1,21 @@
 package edu.upenn.cis350;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.GetCallback;
@@ -16,20 +27,6 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.PushService;
 import com.parse.SaveCallback;
-
-import android.app.Activity;
-import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Typeface;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 /* Displays all information related to a particular Event as well as messages 
  * related to that event. Upon clicking on a message, the user will see
@@ -98,9 +95,12 @@ public class ShowEvent extends Activity {
 			        	
 			        	temp = (TextView)findViewById(R.id.personText1);
 			        	temp.setText(event.getString("contact1"));
+			        	temp.setTextColor(Color.WHITE);
+			        	
 			        	temp = (TextView)findViewById(R.id.personText2);
 			        	temp.setText(event.getString("contact2"));
-			        	
+			        	temp.setTextColor(Color.WHITE);
+
 			        	temp = (TextView)findViewById(R.id.severityText);
 			        	temp.setBackgroundColor(event.getInt("severity"));
 			        	temp = (TextView)findViewById(R.id.typeText);
@@ -307,7 +307,11 @@ public class ShowEvent extends Activity {
 			});
 			return true;
 		} else if (item.getItemId() == R.id.eventSubscribe) {
-			PushService.subscribe(getApplicationContext(), event.getObjectId(), Login.class);
+			try {
+				PushService.subscribe(getApplicationContext(), event.getObjectId(), Login.class);
+			} catch (IllegalArgumentException e2) {
+				Toast.makeText(getApplicationContext(), e2.getMessage(), Toast.LENGTH_SHORT).show();
+			}
 			Toast.makeText(this, "Subscribed to event", Toast.LENGTH_SHORT).show();
 			return true;
 		} else if (item.getItemId() == R.id.eventUnsubscribe) {
