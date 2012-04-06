@@ -308,12 +308,12 @@ public class CreateNewEvent extends Activity {
 					success.show();
 					String id = event.getObjectId();
 					try {
-						PushService.subscribe(getApplicationContext(), id, Login.class);
+						PushService.subscribe(getApplicationContext(), "push_" + id, Login.class);
 					} catch (IllegalArgumentException e2) {
-						Toast.makeText(getApplicationContext(), e2.getMessage(), Toast.LENGTH_SHORT).show();
+						Toast.makeText(getApplicationContext(), "Push Error: " + e2.getMessage(), Toast.LENGTH_LONG).show();
 					}
 					//TODO(jmow): somehow auto-subscribe the secondary contact person for event
-					//TODO(jmow): notify on event update / edit
+					//TODO: Subscribe affiliated groups
 					i.putExtra("eventKey", id);
 					startActivity(i);	
 				} else {

@@ -131,7 +131,7 @@ public class ShowMessage extends Activity {
 					createPush(message.getObjectId().toString(), comment);
 					commentText.setText("");
 					try {
-						PushService.subscribe(getApplicationContext(), message.getObjectId().toString(), Login.class);
+						PushService.subscribe(getApplicationContext(), "push_" + message.getObjectId().toString(), Login.class);
 					} catch (IllegalArgumentException e2) {
 						Toast.makeText(getApplicationContext(), e2.getMessage(), Toast.LENGTH_SHORT).show();
 					}
@@ -150,7 +150,7 @@ public class ShowMessage extends Activity {
 	public void createPush(String messageId, ParseObject comment) {
 		ParsePush pushMessage = new ParsePush();
 		ParseUser user = ParseUser.getCurrentUser();
-		pushMessage.setChannel(messageId);
+		pushMessage.setChannel("push_" + messageId);
 		pushMessage.setMessage(user.getString("fullName") + " commented on a message: " +
 					"\"" + comment.getString("text") + "\"");
 		// expire after 5 days

@@ -15,6 +15,7 @@ import com.parse.ParseObject;
 import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.PushService;
 import com.parse.SaveCallback;
 
 import android.app.Activity;
@@ -382,7 +383,7 @@ public class EditEvent extends Activity {
 			public void done(ParseException e) {
 				if (e == null) {
 					success.show();
-					createPush(event.getObjectId(), event);
+					subscribeOrCreatePush(event.getObjectId(), event);
 					i.putExtra("eventKey", event.getObjectId());
 			    	startActivity(i);	
 				} else {
@@ -398,10 +399,23 @@ public class EditEvent extends Activity {
 	 * 
 	 * @param eventId The eventId that has been updated
 	 */
-	public void createPush(String eventId, ParseObject event) {
+	public void subscribeOrCreatePush(String eventId, ParseObject event) {
+		if (PushService.getSubscriptions(this).contains(eventId)) {
+			push(eventId, event);
+		} else {
+			try {
+				PushService.subscribe(this, "push_" + eventId, Login.class);
+			} catch(IllegalArgumentException e) {
+				Toast.makeText(getApplicationContext(), "Push Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+			}
+			push(eventId, event);
+		}
+	}
+	
+	public void push(String eventId, ParseObject event) {
 		ParsePush pushMessage = new ParsePush();
 		ParseUser user = ParseUser.getCurrentUser();
-		pushMessage.setChannel(eventId);
+		pushMessage.setChannel("push_" + eventId);
 		pushMessage.setMessage(user.getString("fullName") + " updated the event \"" + event.getString("title") + "\"");
 		// expire after 5 days
 		pushMessage.setExpirationTimeInterval(432000);

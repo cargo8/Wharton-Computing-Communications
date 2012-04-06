@@ -122,7 +122,12 @@ public class Agenda extends Activity {
     	eventFrame.addView(timeframe);
     	
     	TextView description = new TextView(this);
-    	description.setText(event.getString("description"));
+    	String desc = event.getString("description");
+    	if ("".equals(desc)) {
+        	description.setText("No description.");
+    	} else {
+    		description.setText(desc);
+    	}
     	description.setTextSize((float)14.0);
     	eventFrame.addView(description);
     	
