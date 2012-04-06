@@ -209,7 +209,7 @@ public class ShowEvent extends Activity {
 			public void done(ParseObject arg0, ParseException arg1) {
 				// TODO Auto-generated method stub
 				ParseUser user = (ParseUser)arg0;
-		    	author.setText(user.getUsername());
+		    	author.setText(user.getString("fullName"));
 		    	author.setTypeface(Typeface.DEFAULT_BOLD);
 			}
     		
