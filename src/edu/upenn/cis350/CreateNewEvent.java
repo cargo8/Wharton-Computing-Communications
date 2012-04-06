@@ -13,6 +13,7 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.PushService;
 import com.parse.SaveCallback;
 
 import android.app.Activity;
@@ -310,7 +311,11 @@ public class CreateNewEvent extends Activity {
 			public void done(ParseException e) {
 				if (e == null) {
 					success.show();
-					i.putExtra("eventKey", event.getObjectId());
+					String id = event.getObjectId();
+					PushService.subscribe(getApplicationContext(), id, Login.class);
+					//TODO(jmow): somehow auto-subscribe the secondary contact person for event
+					//TODO(jmow): notify on event update / edit
+					i.putExtra("eventKey", id);
 			    	startActivity(i);	
 				} else {
 					failure.setText(e.getMessage());

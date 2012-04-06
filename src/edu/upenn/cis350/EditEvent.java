@@ -12,6 +12,7 @@ import com.parse.GetCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -381,6 +382,7 @@ public class EditEvent extends Activity {
 			public void done(ParseException e) {
 				if (e == null) {
 					success.show();
+					createPush(event.getObjectId(), event);
 					i.putExtra("eventKey", event.getObjectId());
 			    	startActivity(i);	
 				} else {
@@ -390,6 +392,21 @@ public class EditEvent extends Activity {
 			}
     	});
     }
+    
+	/**
+	 * Creates a push notification for this update
+	 * 
+	 * @param eventId The eventId that has been updated
+	 */
+	public void createPush(String eventId, ParseObject event) {
+		ParsePush pushMessage = new ParsePush();
+		ParseUser user = ParseUser.getCurrentUser();
+		pushMessage.setChannel(eventId);
+		pushMessage.setMessage(user.getString("fullName") + " updated the event \"" + event.getString("title") + "\"");
+		// expire after 5 days
+		pushMessage.setExpirationTimeInterval(432000);
+		pushMessage.sendInBackground();
+	}
     
     // onClick function of pickStartDateButton
     public void showStartDateDialog(View view){

@@ -139,12 +139,16 @@ public class ShowMessage extends Activity {
 
 	/**
 	 * Creates a push notification for this comment
+	 * 
+	 * @param messageId The messageID that this comment is posted on
+	 * @param comment The comment parse object.
 	 */
 	public void createPush(String messageId, ParseObject comment) {
 		ParsePush pushMessage = new ParsePush();
 		ParseUser user = ParseUser.getCurrentUser();
 		pushMessage.setChannel(messageId);
-		pushMessage.setMessage(user.getString("fullName") + " just commented on a message.");
+		pushMessage.setMessage(user.getString("fullName") + " commented on a message: " +
+					"\"" + comment.getString("text") + "\"");
 		// expire after 5 days
 		pushMessage.setExpirationTimeInterval(432000);
 		pushMessage.sendInBackground();

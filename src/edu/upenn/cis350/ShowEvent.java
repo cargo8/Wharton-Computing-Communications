@@ -11,8 +11,10 @@ import com.parse.GetCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.PushService;
 import com.parse.SaveCallback;
 
 import android.app.Activity;
@@ -304,35 +306,46 @@ public class ShowEvent extends Activity {
 				
 			});
 			return true;
+		} else if (item.getItemId() == R.id.eventSubscribe) {
+			PushService.subscribe(getApplicationContext(), event.getObjectId(), Login.class);
+			Toast.makeText(this, "Subscribed to event", Toast.LENGTH_SHORT).show();
+			return true;
+		} else if (item.getItemId() == R.id.eventUnsubscribe) {
+			PushService.unsubscribe(getApplicationContext(), event.getObjectId());
+			Toast.makeText(this, "Unsubscribed from event", Toast.LENGTH_SHORT).show();
 		}
 		return false;
 	}
 
- // onClick function for Post button
+	/**
+	 * Posts a message
+	 * @param view
+	 */
  	public void onPostClick(View view){
  		TextView tv = (TextView)findViewById(R.id.newMessageText);
  		if (tv.getText().toString().equals("")) {
 			Toast.makeText(this, "Please enter a message.", Toast.LENGTH_SHORT).show();
 			return;
 		}
- 		ParseObject mes = new ParseObject("Message");
- 		mes.put("author", ParseUser.getCurrentUser());
- 		mes.put("text", tv.getText().toString());
- 		mes.put("timestamp", System.currentTimeMillis());
- 		mes.put("event", event.getObjectId());
- 		mes.put("count", 0);
+ 		final ParseObject msg = new ParseObject("Message");
+ 		msg.put("author", ParseUser.getCurrentUser());
+ 		msg.put("text", tv.getText().toString());
+ 		msg.put("timestamp", System.currentTimeMillis());
+ 		msg.put("event", event.getObjectId());
+ 		msg.put("count", 0);
      	final Toast success = Toast.makeText(this, "Message posted.", Toast.LENGTH_SHORT);
      	final Toast failure = Toast.makeText(this, "Message NOT posted.", Toast.LENGTH_SHORT);
 
      	final Intent i = new Intent(this, ShowEvent.class);
 
- 		mes.saveInBackground(new SaveCallback(){
+ 		msg.saveInBackground(new SaveCallback(){
 
  			@Override
  			public void done(ParseException e) {
  				// TODO Auto-generated method stub
  				if(e == null){
  					success.show();
+ 					createPush(event.getObjectId(), msg);
  					i.putExtra("eventKey", event.getObjectId());
  					startActivity(i);
  				}
@@ -340,11 +353,24 @@ public class ShowEvent extends Activity {
  					failure.setText(e.getMessage());
  					failure.show();
  				}
-
  			}
- 		
  		});
  	}
 
+	/**
+	 * Creates a push notification for this comment
+	 * 
+	 * @param eventId The messageID that this comment is posted on
+	 * @param message The comment parse object.
+	 */
+	public void createPush(String eventId, ParseObject message) {
+		ParsePush pushMessage = new ParsePush();
+		ParseUser user = ParseUser.getCurrentUser();
+		pushMessage.setChannel(eventId);
+		pushMessage.setMessage(user.getString("fullName") + " posted a message: \"" + message.getString("text") + "\"");
+		// expire after 5 days
+		pushMessage.setExpirationTimeInterval(432000);
+		pushMessage.sendInBackground();
+	}
 	
 }
