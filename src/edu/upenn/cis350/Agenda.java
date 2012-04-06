@@ -1,5 +1,6 @@
 package edu.upenn.cis350;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -112,10 +113,11 @@ public class Agenda extends Activity {
     	eventFrame.addView(titleFrame);
     	
     	TextView timeframe = new TextView(this);
+    	SimpleDateFormat formatter = new SimpleDateFormat();
     	Date date1 = new Date(event.getLong("startDate"));
     	Date date2 = new Date(event.getLong("endDate"));
-    	timeframe.setText("Start: " + date1.toString() + 
-    			", Est. Finish: " + date2.toString());
+    	timeframe.setText("Start: " + formatter.format(date1) + 
+    			", Est. Finish: " + formatter.format(date2));
     	timeframe.setTextSize((float)12.0);
     	eventFrame.addView(timeframe);
     	
