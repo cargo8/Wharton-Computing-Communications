@@ -130,7 +130,7 @@ public class ShowMessage extends Activity {
 					toast.show();
 					createPush(message, comment);
 					commentText.setText("");
-					PushService.subscribe(getApplicationContext(), "push_" + message.getObjectId().toString(), Login.class);
+					PushService.subscribe(getApplicationContext(), "push_" + message.getObjectId(), Login.class);
 					getComments(message);
 				}
 			}

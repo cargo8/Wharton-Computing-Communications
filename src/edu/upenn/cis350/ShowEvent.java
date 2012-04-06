@@ -345,6 +345,7 @@ public class ShowEvent extends Activity {
 				// TODO Auto-generated method stub
 				if(e == null){
 					success.show();
+					PushService.subscribe(getApplicationContext(), "push_" + msg.getObjectId(), Login.class);
 					createMessagePush(event, msg);
 					i.putExtra("eventKey", event.getObjectId());
 					startActivity(i);
@@ -367,7 +368,7 @@ public class ShowEvent extends Activity {
 		ParsePush pushMessage = new ParsePush();
 		ParseUser user = ParseUser.getCurrentUser();
 		pushMessage.setChannel("push_" + event.getObjectId());
-		pushMessage.setMessage(user.getString("fullName") + " posted: \"" + message.getString("text") + "\" about " +
+		pushMessage.setMessage(user.getString("fullName") + " posted: \"" + message.getString("text") + "\" on " +
 				"the event \"" + event.getString("title") + "\"");
 		// expire after 5 days
 		pushMessage.setExpirationTimeInterval(432000);
