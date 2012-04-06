@@ -13,6 +13,7 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -268,5 +269,38 @@ public class ShowEvent extends Activity {
     	i.putExtra("contactID", event.getString("contact2ID"));
     	startActivity(i);
     }
+    
+ // onClick function for Post button
+ 	public void onPostClick(View view){
+ 		TextView tv = (TextView)findViewById(R.id.messageBox);
+ 		ParseObject mes = new ParseObject("Message");
+ 		mes.put("author", ParseUser.getCurrentUser());
+ 		mes.put("text", tv.getText().toString());
+ 		mes.put("timestamp", System.currentTimeMillis());
+ 		mes.put("event", event.getObjectId());
+     	final Toast success = Toast.makeText(this, "Message posted.", Toast.LENGTH_SHORT);
+     	final Toast failure = Toast.makeText(this, "Message NOT posted.", Toast.LENGTH_SHORT);
+
+     	final Intent i = new Intent(this, ShowEvent.class);
+
+ 		mes.saveInBackground(new SaveCallback(){
+
+ 			@Override
+ 			public void done(ParseException e) {
+ 				// TODO Auto-generated method stub
+ 				if(e == null){
+ 					success.show();
+ 					i.putExtra("eventKey", event.getObjectId());
+ 					startActivity(i);
+ 				}
+ 				else{
+ 					failure.setText(e.getMessage());
+ 					failure.show();
+ 				}
+
+ 			}
+ 		
+ 		});
+ 	}
 	
 }
