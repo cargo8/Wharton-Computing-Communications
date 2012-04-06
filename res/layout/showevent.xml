@@ -13,55 +13,39 @@
     
         <TextView
         android:layout_width="fill_parent"
+        android:id="@+id/eventTitleText"
         android:layout_height="wrap_content"
         android:text="@string/eventWelcome"
         android:textSize="20.0sp"
         android:gravity="center_horizontal" />
     
-        
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-            
-      	<TextView
-      		android:layout_width="wrap_content"
-       		android:layout_height="wrap_content"
-       		android:text="@string/eventTitle"
-       		android:paddingRight="10dp"
-       		android:textSize="15.0sp" />
-          
-       	<TextView
-       	    android:id="@+id/eventTitleText"
-       	    android:layout_width="fill_parent"
-       	    android:text="@string/defaultTitle"
-       	    android:layout_height="wrap_content"/>
-            
-    </LinearLayout>
-    
+     <!--   
     <TextView
  		android:layout_width="fill_parent"
    		android:layout_height="wrap_content"
    		android:text="@string/eventDesc"
    		android:textSize="15.0sp" />
+   		-->
           
    	<TextView
    	    android:id="@+id/eventDescText"
    	    android:layout_width="fill_parent"
-   	    android:layout_height="wrap_content"
-   	    android:text="@string/defaultDescText" />   	    
+   	    android:layout_height="wrap_content" />   	    
    	
+   	<!-- 
    <TextView
  		android:layout_width="fill_parent"
    		android:layout_height="wrap_content"
    		android:text="@string/eventActions"
    		android:textSize="15.0sp" />
+   		
+   		
    	<TextView
    	    android:id="@+id/eventActionsText"
    	    android:layout_width="fill_parent"
-   	    android:layout_height="wrap_content"
-   	    android:text="@string/defaultActionsText"/> 
-    
+   	    android:layout_height="wrap_content"/> 
+    	-->
+    	
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -164,6 +148,7 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:onClick="goToContact1"
         android:orientation="horizontal" >
             
       	<TextView
@@ -183,6 +168,7 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:onClick="goToContact2"
         android:orientation="horizontal" >
             
       	<TextView

@@ -2,11 +2,17 @@ package edu.upenn.cis350;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import android.app.Activity;
@@ -21,15 +27,18 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 
 /* This activity displays the form for creating a new event.
  * Once the event is submitted, it is written to the DB and the 
@@ -58,6 +67,9 @@ public class CreateNewEvent extends Activity {
     private boolean[] affilsChecked;
     private CharSequence[] systems;
     private boolean[] systemsChecked;
+    private Map<String, String> contactMap = new HashMap<String, String>();
+    private Date date1;
+    private Date date2;
     
     //dialog constants
     static final int START_DATE_DIALOG_ID = 0;
@@ -77,8 +89,9 @@ public class CreateNewEvent extends Activity {
                     mYear = year;
                     mMonth = monthOfYear;
                     mDay = dayOfMonth;
+                    date1 = new Date(year - 1900, monthOfYear, dayOfMonth);                    
                     showDialog(START_TIME_DIALOG_ID);
-                    updateDisplay();
+                    //updateDisplay();
                 }
             };
      // the callback received when the user "sets" the date in the dialog (END DATE)
@@ -90,8 +103,9 @@ public class CreateNewEvent extends Activity {
                    mYear2 = year;
                    mMonth2 = monthOfYear;
                    mDay2 = dayOfMonth;
+                   date2 = new Date(year - 1900, monthOfYear, dayOfMonth);
                    showDialog(END_TIME_DIALOG_ID);
-                   updateDisplay();
+                   //updateDisplay();
                }
            };
      // the callback received when the user "sets" the time in the dialog (start time)      
@@ -100,6 +114,8 @@ public class CreateNewEvent extends Activity {
     	 		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         	        mHour = hourOfDay;
         	        mMinute = minute;
+        	        date1.setHours(hourOfDay);
+        	        date1.setMinutes(minute);
         	        updateDisplay();
         	    }
         	};
@@ -109,6 +125,8 @@ public class CreateNewEvent extends Activity {
          		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
            	        mHour2 = hourOfDay;
            	        mMinute2 = minute;
+        	        date2.setHours(hourOfDay);
+        	        date2.setMinutes(minute);
            	        updateDisplay();
            	    }
            	};           	
@@ -141,7 +159,7 @@ public class CreateNewEvent extends Activity {
         mHour2 = mHour;
         mMinute2 = mMinute;
         // display the current date (this method is below)
-        updateDisplay();
+        //updateDisplay();
         
         //populate spinner
         populateSpinners();
@@ -159,23 +177,54 @@ public class CreateNewEvent extends Activity {
     
     // helper method to populate spinners with dummy info
     private void populateSpinners() {
-        Spinner spinner = (Spinner) findViewById(R.id.personSpinner1);
-        ArrayAdapter <CharSequence> adapter =
+    	
+        final Spinner spinner = (Spinner) findViewById(R.id.personSpinner1);
+        final ArrayAdapter <CharSequence> adapter =
         	  new ArrayAdapter <CharSequence> (this, android.R.layout.simple_spinner_item );
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        for(int i = 1; i <= 10; i++){
-        	adapter.add("Person " + i);
-        }
-        spinner.setAdapter(adapter);
         
-        Spinner spinner2 = (Spinner) findViewById(R.id.personSpinner2);
-        ArrayAdapter <CharSequence> adapter2 =
+        final Spinner spinner2 = (Spinner) findViewById(R.id.personSpinner2);
+        final ArrayAdapter <CharSequence> adapter2 =
         	  new ArrayAdapter <CharSequence> (this, android.R.layout.simple_spinner_item );
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        for(int i = 1; i <= 10; i++){
-        	adapter2.add("Person " + i);
-        }
-        spinner2.setAdapter(adapter2);
+        
+        ParseQuery query = new ParseQuery("_User");
+        query.orderByAscending("lname");
+        
+    	final Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT); 
+    	
+    	query.findInBackground(new FindCallback() {
+
+			@Override
+			public void done(List<ParseObject> contactList, ParseException e) {
+				if (e == null) {
+					int pos = 0;
+					boolean found = false;
+					for(ParseObject obj : contactList){
+						// typesafe??
+						String formattedName = obj.getString("lname") + ", " + obj.getString("fname");
+						adapter.add(formattedName);
+						adapter2.add(formattedName);
+						contactMap.put(formattedName, obj.getObjectId());
+						if(obj.getString("lname").equals(ParseUser.getCurrentUser().get("lname")))
+							found = true;
+						if(!found)
+							pos++;
+						}
+			        spinner.setAdapter(adapter);
+			        spinner2.setAdapter(adapter2);
+			        spinner.setSelection(pos);
+
+				} else {
+					toast.setText("Error: " + e.getMessage());
+					toast.show();
+					return;
+				}
+				
+			}
+    		
+    	});
+    	
 	}
 
 	// onClick function of submit button
@@ -188,13 +237,13 @@ public class CreateNewEvent extends Activity {
     	event.put("title", temp.getText().toString());
     	temp = (EditText)findViewById(R.id.eventDesc);
     	event.put("description", temp.getText().toString());		// EVENT
-    	temp = (EditText)findViewById(R.id.eventActions);
-    	event.put("actionItems", temp.getText().toString());	// EVENT
+    	//temp = (EditText)findViewById(R.id.eventActions);
+    	//event.put("actionItems", temp.getText().toString());	// EVENT
     	TextView temp2 = (TextView)findViewById(R.id.startDateDisplay);
-    	event.put("startDate", temp2.getText().toString());			// EVENT
+    	event.put("startDate", date1.getTime());
     	temp2 = (TextView)findViewById(R.id.endDateDisplay);
-    	event.put("endDate", temp2.getText().toString());			// EVENT
-
+    	event.put("endDate", date2.getTime());
+    	
     	//TODO: Affils + Systems
     	List<String> affiliations = new ArrayList<String>();
     	if(affils != null){
@@ -214,10 +263,14 @@ public class CreateNewEvent extends Activity {
     	}
 
     	//TODO: User linking
-//    	Spinner spin1 = (Spinner)findViewById(R.id.personSpinner1);
-//    	event.setContact1(spin1.getSelectedItem().toString());	// EVENT
-//    	spin1 = (Spinner)findViewById(R.id.personSpinner2);
-//    	event.setContact2(spin1.getSelectedItem().toString());	// EVENT
+    	Spinner spin1 = (Spinner)findViewById(R.id.personSpinner1);
+    	String contact1 = spin1.getSelectedItem().toString();
+    	event.put("contact1", contact1);
+    	event.put("contact1ID", contactMap.get(contact1));
+    	spin1 = (Spinner)findViewById(R.id.personSpinner2);
+    	String contact2 = spin1.getSelectedItem().toString();
+    	event.put("contact2", contact2);	// EVENT
+    	event.put("contact2ID", contactMap.get(contact2));
 
     	if(((RadioButton)findViewById(R.id.radioRed)).isChecked()){
     		event.put("severity", Color.RED);
@@ -292,6 +345,11 @@ public class CreateNewEvent extends Activity {
     
     // updates the date in the TextView
     private void updateDisplay() {
+    	if(date1 != null)
+    		mDateDisplay.setText(date1.toString());
+    	if(date2 != null)
+    		mDateDisplay2.setText(date2.toString());
+    	/*
         mDateDisplay.setText(
             new StringBuilder()
                     // Month is 0 based so add 1
@@ -308,6 +366,7 @@ public class CreateNewEvent extends Activity {
                         .append(mYear2).append(" ")
                         .append(pad(mHour2)).append(":")
                         .append(pad(mMinute2)).append(" "));
+                        */
     }
     
     private static String pad(int c) {

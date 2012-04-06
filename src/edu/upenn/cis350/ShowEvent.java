@@ -59,13 +59,15 @@ public class ShowEvent extends Activity {
 						TextView temp = (TextView)findViewById(R.id.eventTitleText);
 			        	temp.setText(event.getString("title"));
 			        	temp = (TextView)findViewById(R.id.eventDescText);
-			        	temp.setText(event.getString("description"));
-			        	temp = (TextView)findViewById(R.id.eventActionsText);
-			        	temp.setText(event.getString("actionItems"));
+			        	temp.setText("\n" + event.getString("description") + "\n");
+			        	//temp = (TextView)findViewById(R.id.eventActionsText);
+			        	//temp.setText(event.getString("actionItems" + "\n"));
 			        	temp = (TextView)findViewById(R.id.startDateDisplay2);
-			        	temp.setText(event.getString("startDate"));
+			        	Date date1 = new Date(event.getLong("startDate"));
+			        	temp.setText(date1.toString());
 			        	temp = (TextView)findViewById(R.id.endDateDisplay2);
-			        	temp.setText(event.getString("endDate"));
+			        	Date date2 = new Date(event.getLong("endDate"));
+			        	temp.setText(date2.toString());
 			        	temp = (TextView)findViewById(R.id.affilsText);
 			        	
 			        	List<String> affilList = event.getList("affils");
@@ -86,6 +88,11 @@ public class ShowEvent extends Activity {
 			        		}
 			        		temp.setText(systemText.toString());
 			        	}
+			        	
+			        	temp = (TextView)findViewById(R.id.personText1);
+			        	temp.setText(event.getString("contact1"));
+			        	temp = (TextView)findViewById(R.id.personText2);
+			        	temp.setText(event.getString("contact2"));
 			        	
 			        	temp = (TextView)findViewById(R.id.severityText);
 			        	temp.setBackgroundColor(event.getInt("severity"));
@@ -121,12 +128,9 @@ public class ShowEvent extends Activity {
         	}
         	*/
         	
-        	/*
-        	temp = (TextView)findViewById(R.id.personText1);
-        	temp.setText(event.getContact1());
-        	temp = (TextView)findViewById(R.id.personText2);
-        	temp.setText(event.getContact2());
-        	*/
+        	
+
+        	
 
         	
         }
@@ -244,6 +248,24 @@ public class ShowEvent extends Activity {
     	Intent i = new Intent(this, PostMessage.class);
     	i.putExtra("eventKey", event.getObjectId());
 		//i.putExtra("eventPOJO", event);
+    	startActivity(i);
+    }
+    
+    /**
+     * On Click Function of contact1 textView
+     */
+    public void goToContact1(View view){
+    	Intent i = new Intent(this, ShowContact.class);
+    	i.putExtra("contactID", event.getString("contact1ID"));
+    	startActivity(i);
+    }
+    
+    /**
+     * On Click Function of contact2 textView
+     */
+    public void goToContact2(View view){
+    	Intent i = new Intent(this, ShowContact.class);
+    	i.putExtra("contactID", event.getString("contact2ID"));
     	startActivity(i);
     }
 	
