@@ -46,6 +46,7 @@ public class Agenda extends Activity {
     			
     	final LinearLayout eventPane = (LinearLayout) findViewById(R.id.agendaEvents);
         final LinearLayout emergencyPane = (LinearLayout) findViewById(R.id.agendaEmergency);
+        final LinearLayout resolvedPane = (LinearLayout) findViewById(R.id.resolvedEvents);
         
     	query.findInBackground(new FindCallback() {
     	    
@@ -61,8 +62,8 @@ public class Agenda extends Activity {
     	                	emergencyPane.addView(eventFrame);
     	            	} else if ("Scheduled".equals(type)) {
     	            		eventPane.addView(eventFrame);
-    	            	} else {
-    	            		eventPane.addView(eventFrame);
+    	            	} else if ("Resolved".equals(type)){
+    	            		resolvedPane.addView(eventFrame);
     	            	}
     	        	}
     	        	
@@ -86,7 +87,7 @@ public class Agenda extends Activity {
     	final LinearLayout eventFrame = new LinearLayout(this);
     	// Vertical Orientation
     	eventFrame.setOrientation(1);
-    	eventFrame.setPadding(1, 1, 1, 1);
+    	eventFrame.setPadding(15, 15, 15, 15);
     	
     	LinearLayout titleFrame = new LinearLayout(this);
     	titleFrame.setOrientation(0);
@@ -98,9 +99,9 @@ public class Agenda extends Activity {
     	severity.setBackgroundColor(event.getNumber("severity").intValue());
     	
     	TextView title = new TextView(this);
-    	title.setText(event.getString("title"));
+    	title.setText("   " + event.getString("title"));
     	// textSize="16.0sp"
-    	title.setTextSize((float)16.0);
+    	title.setTextSize((float)18.0);
     	// gravity="center_horizontal"
     	//title.setGravity(0x01);
     	// textStyle="bold"
@@ -120,7 +121,7 @@ public class Agenda extends Activity {
     	
     	TextView description = new TextView(this);
     	description.setText(event.getString("description"));
-    	description.setTextSize((float)12.0);
+    	description.setTextSize((float)14.0);
     	eventFrame.addView(description);
     	
 		final Intent i = new Intent(this, ShowEvent.class);
