@@ -14,6 +14,7 @@ import com.parse.ParseObject;
 import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.PushService;
 import com.parse.SaveCallback;
 
 import android.app.Activity;
@@ -305,6 +306,13 @@ public class ShowEvent extends Activity {
 				
 			});
 			return true;
+		} else if (item.getItemId() == R.id.eventSubscribe) {
+			PushService.subscribe(getApplicationContext(), event.getObjectId(), Login.class);
+			Toast.makeText(this, "Subscribed to event", Toast.LENGTH_SHORT).show();
+			return true;
+		} else if (item.getItemId() == R.id.eventUnsubscribe) {
+			PushService.unsubscribe(getApplicationContext(), event.getObjectId());
+			Toast.makeText(this, "Unsubscribed from event", Toast.LENGTH_SHORT).show();
 		}
 		return false;
 	}
