@@ -63,9 +63,11 @@ public class ShowEvent extends Activity {
 			        	//temp = (TextView)findViewById(R.id.eventActionsText);
 			        	//temp.setText(event.getString("actionItems" + "\n"));
 			        	temp = (TextView)findViewById(R.id.startDateDisplay2);
-			        	temp.setText(event.getString("startDate"));
+			        	Date date1 = new Date(event.getLong("startDate"));
+			        	temp.setText(date1.toString());
 			        	temp = (TextView)findViewById(R.id.endDateDisplay2);
-			        	temp.setText(event.getString("endDate"));
+			        	Date date2 = new Date(event.getLong("endDate"));
+			        	temp.setText(date2.toString());
 			        	temp = (TextView)findViewById(R.id.affilsText);
 			        	
 			        	List<String> affilList = event.getList("affils");

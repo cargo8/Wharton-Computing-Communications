@@ -2,6 +2,7 @@ package edu.upenn.cis350;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,6 +68,8 @@ public class CreateNewEvent extends Activity {
     private CharSequence[] systems;
     private boolean[] systemsChecked;
     private Map<String, String> contactMap = new HashMap<String, String>();
+    private Date date1;
+    private Date date2;
     
     //dialog constants
     static final int START_DATE_DIALOG_ID = 0;
@@ -86,8 +89,9 @@ public class CreateNewEvent extends Activity {
                     mYear = year;
                     mMonth = monthOfYear;
                     mDay = dayOfMonth;
+                    date1 = new Date(year - 1900, monthOfYear, dayOfMonth);                    
                     showDialog(START_TIME_DIALOG_ID);
-                    updateDisplay();
+                    //updateDisplay();
                 }
             };
      // the callback received when the user "sets" the date in the dialog (END DATE)
@@ -99,8 +103,9 @@ public class CreateNewEvent extends Activity {
                    mYear2 = year;
                    mMonth2 = monthOfYear;
                    mDay2 = dayOfMonth;
+                   date2 = new Date(year - 1900, monthOfYear, dayOfMonth);
                    showDialog(END_TIME_DIALOG_ID);
-                   updateDisplay();
+                   //updateDisplay();
                }
            };
      // the callback received when the user "sets" the time in the dialog (start time)      
@@ -109,6 +114,8 @@ public class CreateNewEvent extends Activity {
     	 		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         	        mHour = hourOfDay;
         	        mMinute = minute;
+        	        date1.setHours(hourOfDay);
+        	        date1.setMinutes(minute);
         	        updateDisplay();
         	    }
         	};
@@ -118,6 +125,8 @@ public class CreateNewEvent extends Activity {
          		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
            	        mHour2 = hourOfDay;
            	        mMinute2 = minute;
+        	        date2.setHours(hourOfDay);
+        	        date2.setMinutes(minute);
            	        updateDisplay();
            	    }
            	};           	
@@ -150,7 +159,7 @@ public class CreateNewEvent extends Activity {
         mHour2 = mHour;
         mMinute2 = mMinute;
         // display the current date (this method is below)
-        updateDisplay();
+        //updateDisplay();
         
         //populate spinner
         populateSpinners();
@@ -231,10 +240,10 @@ public class CreateNewEvent extends Activity {
     	//temp = (EditText)findViewById(R.id.eventActions);
     	//event.put("actionItems", temp.getText().toString());	// EVENT
     	TextView temp2 = (TextView)findViewById(R.id.startDateDisplay);
-    	event.put("startDate", temp2.getText().toString());			// EVENT
+    	event.put("startDate", date1.getTime());
     	temp2 = (TextView)findViewById(R.id.endDateDisplay);
-    	event.put("endDate", temp2.getText().toString());			// EVENT
-
+    	event.put("endDate", date2.getTime());
+    	
     	//TODO: Affils + Systems
     	List<String> affiliations = new ArrayList<String>();
     	if(affils != null){
@@ -336,6 +345,11 @@ public class CreateNewEvent extends Activity {
     
     // updates the date in the TextView
     private void updateDisplay() {
+    	if(date1 != null)
+    		mDateDisplay.setText(date1.toString());
+    	if(date2 != null)
+    		mDateDisplay2.setText(date2.toString());
+    	/*
         mDateDisplay.setText(
             new StringBuilder()
                     // Month is 0 based so add 1
@@ -352,6 +366,7 @@ public class CreateNewEvent extends Activity {
                         .append(mYear2).append(" ")
                         .append(pad(mHour2)).append(":")
                         .append(pad(mMinute2)).append(" "));
+                        */
     }
     
     private static String pad(int c) {
