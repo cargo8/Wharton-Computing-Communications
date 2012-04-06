@@ -245,12 +245,12 @@ public class ShowEvent extends Activity {
      * onClickFunction of postMessage button
      * @param view
      */
-    public void onPostMessage(View view){
-    	Intent i = new Intent(this, PostMessage.class);
-    	i.putExtra("eventKey", event.getObjectId());
-		//i.putExtra("eventPOJO", event);
-    	startActivity(i);
-    }
+//    public void onPostMessage(View view){
+//    	Intent i = new Intent(this, PostMessage.class);
+//    	i.putExtra("eventKey", event.getObjectId());
+//		//i.putExtra("eventPOJO", event);
+//    	startActivity(i);
+//    }
     
     /**
      * On Click Function of contact1 textView
@@ -272,7 +272,7 @@ public class ShowEvent extends Activity {
     
  // onClick function for Post button
  	public void onPostClick(View view){
- 		TextView tv = (TextView)findViewById(R.id.messageBox);
+ 		TextView tv = (TextView)findViewById(R.id.newMessageText);
  		ParseObject mes = new ParseObject("Message");
  		mes.put("author", ParseUser.getCurrentUser());
  		mes.put("text", tv.getText().toString());
