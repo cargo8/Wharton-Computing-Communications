@@ -67,11 +67,12 @@ public class ShowEvent extends Activity {
 			        	//temp = (TextView)findViewById(R.id.eventActionsText);
 			        	//temp.setText(event.getString("actionItems" + "\n"));
 			        	temp = (TextView)findViewById(R.id.startDateDisplay2);
+			    		SimpleDateFormat formatter = new SimpleDateFormat();
 			        	Date date1 = new Date(event.getLong("startDate"));
-			        	temp.setText(date1.toString());
+			        	temp.setText(formatter.format(date1));
 			        	temp = (TextView)findViewById(R.id.endDateDisplay2);
 			        	Date date2 = new Date(event.getLong("endDate"));
-			        	temp.setText(date2.toString());
+			        	temp.setText(formatter.format(date2));
 			        	temp = (TextView)findViewById(R.id.affilsText);
 			        	
 			        	List<String> affilList = event.getList("affils");
@@ -253,17 +254,6 @@ public class ShowEvent extends Activity {
     	
     	return messageFrame;
     }
-    
-    /**
-     * onClickFunction of postMessage button
-     * @param view
-     */
-//    public void onPostMessage(View view){
-//    	Intent i = new Intent(this, PostMessage.class);
-//    	i.putExtra("eventKey", event.getObjectId());
-//		//i.putExtra("eventPOJO", event);
-//    	startActivity(i);
-//    }
     
     /**
      * On Click Function of contact1 textView

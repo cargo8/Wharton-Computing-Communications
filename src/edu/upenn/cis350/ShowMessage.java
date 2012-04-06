@@ -68,14 +68,12 @@ public class ShowMessage extends Activity {
 
 						final TextView authorView = (TextView) findViewById(R.id.messageAuthor);
 						authorView.setTextColor(Color.WHITE);
-						//TODO(kuyumcu): change to ParseUser
 						msg.getParseUser("author").fetchIfNeededInBackground(new GetCallback(){
 
 							@Override
 							public void done(ParseObject arg0, ParseException arg1) {
-								// TODO Auto-generated method stub
 								ParseUser user = (ParseUser)arg0;
-								String author = user.getUsername();
+								String author = user.getString("fullName");
 								authorView.setText("Posted by " + author + " at ");
 							}
 
@@ -172,7 +170,7 @@ public class ShowMessage extends Activity {
 			public void done(ParseObject arg0, ParseException arg1) {
 				// TODO Auto-generated method stub
 				ParseUser user = (ParseUser)arg0;
-				author.setText(user.getUsername());
+				author.setText(user.getString("fullName"));
 				author.setTypeface(Typeface.DEFAULT_BOLD);
 			}
 
