@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -36,6 +37,7 @@ public class ShowEvent extends Activity {
 
 	private String uname;
 	private ParseObject event;
+	private ProgressDialog dialog;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -50,6 +52,8 @@ public class ShowEvent extends Activity {
 			ParseQuery query = new ParseQuery("Event");
 
 			final Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
+			dialog = ProgressDialog.show(this, "", 
+                    "Loading. Please wait...", true);
 			query.getInBackground(extras.getString("eventKey"), new GetCallback() {
 
 				@Override
@@ -181,6 +185,7 @@ public class ShowEvent extends Activity {
 						toast.setText("Retrieved " + arg0.size() + " messages");
 						toast.show();
 					}
+					dialog.cancel();
 				}
 				else {
 					toast.setText("Error: " + arg1.getMessage());

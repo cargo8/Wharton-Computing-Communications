@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -48,7 +49,8 @@ public class Agenda extends Activity {
     	final LinearLayout eventPane = (LinearLayout) findViewById(R.id.agendaEvents);
         final LinearLayout emergencyPane = (LinearLayout) findViewById(R.id.agendaEmergency);
         final LinearLayout resolvedPane = (LinearLayout) findViewById(R.id.resolvedEvents);
-        
+        final ProgressDialog dialog = ProgressDialog.show(this, "", 
+                "Loading. Please wait...", true);
     	query.findInBackground(new FindCallback() {
     	    
     		@Override
@@ -67,7 +69,7 @@ public class Agenda extends Activity {
     	            		resolvedPane.addView(eventFrame);
     	            	}
     	        	}
-    	        	
+    	        	 dialog.cancel();
     	             toast.setText("Retrieved " + eventList.size() + " events");
     	             toast.show();
     	        } else {

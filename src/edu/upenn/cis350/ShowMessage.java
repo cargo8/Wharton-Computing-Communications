@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -33,6 +34,7 @@ public class ShowMessage extends Activity {
 
 	private String msgId;
 	private ParseObject message;
+	private ProgressDialog dialog;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -50,6 +52,8 @@ public class ShowMessage extends Activity {
 			msgId = extras.getString("messageID");
 			ParseQuery msgQuery = new ParseQuery("Message");
 			final Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
+			dialog = ProgressDialog.show(this, "", 
+                    "Loading. Please wait...", true);
 			msgQuery.getInBackground(msgId, new GetCallback() {
 
 				@Override
@@ -225,6 +229,7 @@ public class ShowMessage extends Activity {
 						LinearLayout commentFrame = createCommentFrame(c);
 						commentsPane.addView(commentFrame);
 					}
+					dialog.cancel();
 				}
 			}
 

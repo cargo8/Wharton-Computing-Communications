@@ -1,5 +1,6 @@
 package edu.upenn.cis350;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -22,6 +23,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -66,6 +68,8 @@ public class EditEvent extends Activity {
 
     private Date date1;
     private Date date2;
+    
+    private ProgressDialog dialog;
     
     //dialog constants
     static final int START_DATE_DIALOG_ID = 0;
@@ -140,6 +144,8 @@ public class EditEvent extends Activity {
         	ParseQuery query = new ParseQuery("Event");
         	
         	final Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
+			dialog = ProgressDialog.show(this, "", 
+                    "Loading. Please wait...", true);
 			query.getInBackground(extras.getString("eventKey"), new GetCallback() {
 
 				@Override
@@ -155,12 +161,13 @@ public class EditEvent extends Activity {
 			        	temp.setText(event.getString("description"));
 			        	//temp = (TextView)findViewById(R.id.eventActionsText);
 			        	//temp.setText(event.getString("actionItems" + "\n"));
+			        	SimpleDateFormat formatter = new SimpleDateFormat();
 			        	TextView temp2 = (TextView)findViewById(R.id.startDateDisplay);
 			        	date1 = new Date(event.getLong("startDate"));
-			        	temp2.setText(date1.toString());
+			        	temp2.setText(formatter.format(date1));
 			        	temp2 = (TextView)findViewById(R.id.endDateDisplay);
 			        	date2 = new Date(event.getLong("endDate"));
-			        	temp2.setText(date2.toString());
+			        	temp2.setText(formatter.format(date2));
 			        	populateSpinners();
 			        	/*
 			        	temp = (TextView)findViewById(R.id.affilsText);
@@ -292,7 +299,7 @@ public class EditEvent extends Activity {
 			        spinner2.setAdapter(adapter2);
 			        spinner.setSelection(pos1);
 			        spinner2.setSelection(pos2);
-			        
+			        dialog.cancel();
 			        
 				} else {
 					toast.setText("Error: " + e.getMessage());
