@@ -12,6 +12,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -31,6 +32,7 @@ import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.PushService;
@@ -307,8 +309,28 @@ public class CreateNewEvent extends Activity {
 				if (e == null) {
 					success.show();
 					String id = event.getObjectId();
-					PushService.subscribe(getApplicationContext(), "push_" + id, Login.class);
-					//TODO(jmow): somehow auto-subscribe the secondary contact person for event
+					/* Subscribe to push notifications for this event */
+					Context context = getApplicationContext();
+					PushService.subscribe(context, "push_" + id, Login.class);
+
+					/* Lazy subscription for the two contacts set in the events.
+					 * 
+					 * Done: On Login subscribe every user to a channel that is uniquely their object ID
+					 * Done: Add 2 ParsePush's that send directly to the two users who are set
+					 * Done: On Login check the lazy subscription datastore and subscribe to any events for your ID
+					 * 
+					 */
+					ParseUser user = ParseUser.getCurrentUser();
+					String currentId = user.getObjectId();
+
+					String userId1 = event.getString("contact1ID");
+					String userId2 = event.getString("contact2ID");
+
+					if (!currentId.equals(userId1))
+						PushUtils.lazySubscribeContact(context, event, userId1);
+					if (!currentId.equals(userId2) && !userId1.equals(userId2))
+						PushUtils.lazySubscribeContact(context, event, userId2);
+
 					//TODO: Subscribe affiliated groups
 					i.putExtra("eventKey", id);
 					startActivity(i);	

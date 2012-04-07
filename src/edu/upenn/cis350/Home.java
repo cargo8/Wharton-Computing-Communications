@@ -44,6 +44,8 @@ public class Home extends ListActivity {
 	      }
 	    }
 	  );
+	  
+	  PushUtils.lazySubscribeToEvents(this);
 	}
 	
     // onClick function for createEvent button
