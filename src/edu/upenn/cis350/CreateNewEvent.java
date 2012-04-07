@@ -1,5 +1,6 @@
 package edu.upenn.cis350;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -371,10 +372,11 @@ public class CreateNewEvent extends Activity {
 
 	// updates the date in the TextView
 	private void updateDisplay() {
+    	SimpleDateFormat formatter = new SimpleDateFormat();
 		if(date1 != null)
-			mDateDisplay.setText(date1.toString());
+			mDateDisplay.setText(formatter.format(date1));
 		if(date2 != null)
-			mDateDisplay2.setText(date2.toString());
+			mDateDisplay2.setText(formatter.format(date2));
 		/*
         mDateDisplay.setText(
             new StringBuilder()
