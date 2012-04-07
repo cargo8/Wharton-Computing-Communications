@@ -88,10 +88,10 @@ public class Login extends Activity {
 	@Override
 	public void onBackPressed() {
 	    new AlertDialog.Builder(this)
-	        .setTitle("Exit Wharton Computing Communications")
+	        .setTitle("Exit Application")
 	        .setMessage("Are you sure you want to exit?")
 	        .setNegativeButton(android.R.string.no, null)
-	        .setPositiveButton(android.R.string.yes, new OnClickListener() {
+	        .setPositiveButton("Logout", new OnClickListener() {
 
 	            public void onClick(DialogInterface arg0, int arg1) {
 	                Login.super.onBackPressed();
