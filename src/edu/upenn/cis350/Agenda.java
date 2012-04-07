@@ -159,7 +159,10 @@ public class Agenda extends Activity {
 							temp.setText(desc);
 						}
 					}
-
+					temp = (TextView) v.findViewById(R.id.listEventSeverity);
+					if (temp != null) {
+						temp.setBackgroundColor(event.getInt("severity"));
+					}
 					v.setOnClickListener(new OnClickListener() {
 						
 						@Override
