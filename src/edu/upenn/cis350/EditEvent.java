@@ -384,7 +384,7 @@ public class EditEvent extends Activity {
 			public void done(ParseException e) {
 				if (e == null) {
 					success.show();
-					subscribeOrCreatePush(event.getObjectId(), event);
+					PushUtils.createEventChangedPush(getApplicationContext(), event.getObjectId(), event);
 					
 					ParseUser user = ParseUser.getCurrentUser();
 					String currentId = user.getObjectId();
@@ -394,9 +394,9 @@ public class EditEvent extends Activity {
 
 					Context context = getApplicationContext();
 					if (!currentId.equals(userId1))
-						PushUtils.lazySubscribe(context, event, userId1);
+						PushUtils.lazySubscribeContact(context, event, userId1);
 					if (!currentId.equals(userId2) && !userId1.equals(userId2))
-						PushUtils.lazySubscribe(context, event, userId2);
+						PushUtils.lazySubscribeContact(context, event, userId2);
 					
 					i.putExtra("eventKey", event.getObjectId());
 					startActivity(i);	
@@ -406,30 +406,6 @@ public class EditEvent extends Activity {
 				}
 			}
 		});
-	}
-
-	/**
-	 * Creates a push notification for this update
-	 * 
-	 * @param eventId The eventId that has been updated
-	 */
-	public void subscribeOrCreatePush(String eventId, ParseObject event) {
-		if (PushService.getSubscriptions(this).contains(eventId)) {
-			push(eventId, event);
-		} else {
-			PushService.subscribe(this, "push_" + eventId, Login.class);
-			push(eventId, event);
-		}
-	}
-
-	public void push(String eventId, ParseObject event) {
-		ParsePush pushMessage = new ParsePush();
-		ParseUser user = ParseUser.getCurrentUser();
-		pushMessage.setChannel("push_" + eventId);
-		pushMessage.setMessage(user.getString("fullName") + " updated the event \"" + event.getString("title") + "\"");
-		// expire after 5 days
-		pushMessage.setExpirationTimeInterval(432000);
-		pushMessage.sendInBackground();
 	}
 
 	// onClick function of pickStartDateButton

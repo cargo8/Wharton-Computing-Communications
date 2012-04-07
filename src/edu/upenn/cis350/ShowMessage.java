@@ -128,31 +128,13 @@ public class ShowMessage extends Activity {
 					message.saveInBackground();
 					toast.setText("Comment posted");
 					toast.show();
-					createPush(message, comment);
+					PushUtils.createCommentPush(message, comment);
 					commentText.setText("");
 					PushService.subscribe(getApplicationContext(), "push_" + message.getObjectId(), Login.class);
 					getComments(message);
 				}
 			}
 		});
-	}
-
-	/**
-	 * Creates a push notification for this comment
-	 * 
-	 * @param messageId The messageID that this comment is posted on
-	 * @param comment The comment parse object.
-	 */
-	public void createPush(ParseObject message, ParseObject comment) {
-		ParsePush pushMessage = new ParsePush();
-		ParseUser user = ParseUser.getCurrentUser();
-		pushMessage.setChannel("push_" + message.getObjectId());
-		pushMessage.setMessage(user.getString("fullName") + " commented: " +
-				"\"" + comment.getString("text") + "\" on the message \"" +
-				message.getString("text") + "\"");
-		// expire after 5 days
-		pushMessage.setExpirationTimeInterval(432000);
-		pushMessage.sendInBackground();
 	}
 
 	/**

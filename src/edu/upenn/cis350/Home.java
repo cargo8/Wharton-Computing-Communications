@@ -1,9 +1,6 @@
 package edu.upenn.cis350;
 
-import java.util.List;
-
 import android.app.ListActivity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -12,14 +9,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.parse.PushService;
 
 /* This activity is what the app will start with after logging in.
  * For now, it just shows a few buttons to create a new event
@@ -54,31 +45,7 @@ public class Home extends ListActivity {
 	    }
 	  );
 	  
-	  lazySubscribeToEvents();
-	}
-	
-	private void lazySubscribeToEvents() {
-		ParseQuery query = new ParseQuery("LazySubscription");
-		query.whereEqualTo("userID", ParseUser.getCurrentUser().getObjectId());
-		query.findInBackground(new FindCallback() {
-
-			@Override
-			public void done(List<ParseObject> subscriptions, ParseException e) {
-				Context context = getApplicationContext();
-				if (e == null) {
-					for (ParseObject sub : subscriptions) {
-						PushService.subscribe(context, "push_" + sub.getString("eventID"), Login.class);
-						sub.deleteEventually();
-					}
-					//TODO: remove in production
-					Toast.makeText(context, "Subscribed to " + subscriptions.size() + " events", Toast.LENGTH_SHORT);
-				} else {
-					//TODO: remove in production
-					Toast.makeText(context, "Subscribe error: " + e.getMessage(), Toast.LENGTH_SHORT);
-				}
-			}
-			
-		});
+	  PushUtils.lazySubscribeToEvents(this);
 	}
 	
     // onClick function for createEvent button

@@ -299,7 +299,7 @@ public class ShowEvent extends Activity {
 
 				@Override
 				public void done(ParseException arg0) {
-					createEventUpdatePush(event.getObjectId(), event);
+					PushUtils.createEventResolvedPush(event.getObjectId(), event);
 					Toast temp = Toast.makeText(getApplicationContext(), "Marked as Resolved", Toast.LENGTH_SHORT);
 					temp.show();
 				}
@@ -342,11 +342,10 @@ public class ShowEvent extends Activity {
 
 			@Override
 			public void done(ParseException e) {
-				// TODO Auto-generated method stub
 				if(e == null){
 					success.show();
 					PushService.subscribe(getApplicationContext(), "push_" + msg.getObjectId(), Login.class);
-					createMessagePush(event, msg);
+					PushUtils.createMessagePush(event, msg);
 					i.putExtra("eventKey", event.getObjectId());
 					startActivity(i);
 				}
@@ -356,37 +355,5 @@ public class ShowEvent extends Activity {
 				}
 			}
 		});
-	}
-
-	/**
-	 * Creates a push notification for this message
-	 * 
-	 * @param eventId The messageID that this message is posted on
-	 * @param message The message parse object.
-	 */
-	public void createMessagePush(ParseObject event, ParseObject message) {
-		ParsePush pushMessage = new ParsePush();
-		ParseUser user = ParseUser.getCurrentUser();
-		pushMessage.setChannel("push_" + event.getObjectId());
-		pushMessage.setMessage(user.getString("fullName") + " posted: \"" + message.getString("text") + "\" on " +
-				"the event \"" + event.getString("title") + "\"");
-		// expire after 5 days
-		pushMessage.setExpirationTimeInterval(432000);
-		pushMessage.sendInBackground();
-	}
-
-	/**
-	 * Creates a push notification for Resolving event
-	 * @param eventId Event ID for event that is Resolved
-	 * @param event Event that is resolved
-	 */
-	public void createEventUpdatePush(String eventId, ParseObject event) {
-		ParsePush pushMessage = new ParsePush();
-		ParseUser user = ParseUser.getCurrentUser();
-		pushMessage.setChannel("push_" + eventId);
-		pushMessage.setMessage(user.getString("fullName") + " marked \"" + event.getString("title") + "\" as Resolved.");
-		// expire after 5 days
-		pushMessage.setExpirationTimeInterval(432000);
-		pushMessage.sendInBackground();
 	}
 }

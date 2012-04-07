@@ -327,9 +327,9 @@ public class CreateNewEvent extends Activity {
 					String userId2 = event.getString("contact2ID");
 
 					if (!currentId.equals(userId1))
-						PushUtils.lazySubscribe(context, event, userId1);
+						PushUtils.lazySubscribeContact(context, event, userId1);
 					if (!currentId.equals(userId2) && !userId1.equals(userId2))
-						PushUtils.lazySubscribe(context, event, userId2);
+						PushUtils.lazySubscribeContact(context, event, userId2);
 
 					//TODO: Subscribe affiliated groups
 					i.putExtra("eventKey", id);
