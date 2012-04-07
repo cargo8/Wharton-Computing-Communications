@@ -64,6 +64,21 @@ public abstract class PushUtils {
 			
 		});
 	}
+	
+	/**
+	 * Generic utility method to send push notifications
+	 * 
+	 * @param channel The channel on which to broadcast the notification, must start with letter
+	 * @param message The message to be broadcast in the notification
+	 * @param expireIn The number of seconds this notification should last before expiring
+	 */
+	public static void createPush(String channel, String message, Long expireIn) {
+		ParsePush push = new ParsePush();
+		push.setChannel(channel);
+		push.setMessage(message);
+		push.setExpirationTimeInterval(expireIn);
+		push.sendInBackground();
+	}
 
 	/**
 	 * Creates a push notification for Posting a Comment to a Message
