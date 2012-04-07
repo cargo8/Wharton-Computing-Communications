@@ -12,6 +12,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -31,6 +32,7 @@ import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.PushService;
@@ -308,23 +310,27 @@ public class CreateNewEvent extends Activity {
 					success.show();
 					String id = event.getObjectId();
 					/* Subscribe to push notifications for this event */
-					PushService.subscribe(getApplicationContext(), "push_" + id, Login.class);
-					
-					/* Lazily subscribe the two set contacts to push notifications for this event */
-					//TODO(jmow): somehow auto-subscribe the primary & secondary contact people for event
-					/*
-					 * I want to create this lazy subscription for the two contacts set in the events.
-					 * TODO: On Login subscribe every user to a channel that is uniquely their object ID
-					 * TODO: Add 2 ParsePush's that send directly to the two users who are set
-					 * TODO: On Login check the lazy subscription datastore and subscribe to any events for your ID
+					Context context = getApplicationContext();
+					PushService.subscribe(context, "push_" + id, Login.class);
+
+					/* Lazy subscription for the two contacts set in the events.
+					 * 
+					 * Done: On Login subscribe every user to a channel that is uniquely their object ID
+					 * Done: Add 2 ParsePush's that send directly to the two users who are set
+					 * Done: On Login check the lazy subscription datastore and subscribe to any events for your ID
 					 * 
 					 */
-//					ParseObject lazySub = new ParseObject("LazySubscription");
-//					lazySub.put("userID", event.getString("contact1ID"));
-//					lazySub.saveEventually();
-//					lazySub.put("userID", event.getString("contact2ID"));
-//					lazySub.saveEventually();
-					
+					ParseUser user = ParseUser.getCurrentUser();
+					String currentId = user.getObjectId();
+
+					String userId1 = event.getString("contact1ID");
+					String userId2 = event.getString("contact2ID");
+
+					if (!currentId.equals(userId1))
+						PushUtils.lazySubscribe(context, event, userId1);
+					if (!currentId.equals(userId2) && !userId1.equals(userId2))
+						PushUtils.lazySubscribe(context, event, userId2);
+
 					//TODO: Subscribe affiliated groups
 					i.putExtra("eventKey", id);
 					startActivity(i);	

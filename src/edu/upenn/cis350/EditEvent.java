@@ -23,6 +23,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -384,6 +385,19 @@ public class EditEvent extends Activity {
 				if (e == null) {
 					success.show();
 					subscribeOrCreatePush(event.getObjectId(), event);
+					
+					ParseUser user = ParseUser.getCurrentUser();
+					String currentId = user.getObjectId();
+					
+					String userId1 = event.getString("contact1ID");
+					String userId2 = event.getString("contact2ID");
+
+					Context context = getApplicationContext();
+					if (!currentId.equals(userId1))
+						PushUtils.lazySubscribe(context, event, userId1);
+					if (!currentId.equals(userId2) && !userId1.equals(userId2))
+						PushUtils.lazySubscribe(context, event, userId2);
+					
 					i.putExtra("eventKey", event.getObjectId());
 					startActivity(i);	
 				} else {

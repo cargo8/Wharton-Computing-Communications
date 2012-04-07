@@ -37,6 +37,7 @@ public class Login extends Activity {
 		PushService.subscribe(this, "", Login.class);
 		ParseUser currentUser = ParseUser.getCurrentUser();
 		if (currentUser != null) {
+			PushService.subscribe(this, "user_" + currentUser.getObjectId(), Login.class);
 		    Intent i = new Intent(this, Home.class);
 		    startActivity(i);
 		} else {
