@@ -1,6 +1,9 @@
 package edu.upenn.cis350;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -84,7 +87,15 @@ public class Login extends Activity {
 
 	@Override
 	public void onBackPressed() {
-		Intent i = new Intent(this, Login.class);
-		startActivity(i);
+	    new AlertDialog.Builder(this)
+	        .setTitle("Exit Wharton Computing Communications")
+	        .setMessage("Are you sure you want to exit?")
+	        .setNegativeButton(android.R.string.no, null)
+	        .setPositiveButton(android.R.string.yes, new OnClickListener() {
+
+	            public void onClick(DialogInterface arg0, int arg1) {
+	                Login.super.onBackPressed();
+	            }
+	        }).create().show();
 	}
 }
