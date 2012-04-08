@@ -272,7 +272,7 @@ public class ShowEvent extends Activity {
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.showeventmenu, menu);
+		inflater.inflate(R.menu.show_event_menu, menu);
 		return true;
 	}
 

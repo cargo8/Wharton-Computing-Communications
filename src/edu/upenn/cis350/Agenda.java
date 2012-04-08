@@ -14,6 +14,9 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -30,6 +33,8 @@ import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.PushService;
+import com.parse.SaveCallback;
 
 
 /* This activity shows the events in a list form.
@@ -94,12 +99,24 @@ public class Agenda extends Activity {
 		});
 	}
 
-	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.agenda_menu, menu);
+		return true;
+	}
+	
 	/**
-	 * Returns to Home screen on back press no matter what
+	 * Method that gets called when the menuitem is clicked
 	 */
-	public void onBackPressed() {
-		finish();
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if(item.getItemId() == R.id.refreshAgenda){
+			Intent i = new Intent(this, Agenda.class);
+			finish();
+			startActivity(i);
+			return true;
+		}
+		return false;
 	}
 
 	private class EventListAdapter extends ArrayAdapter<ListItem> {
