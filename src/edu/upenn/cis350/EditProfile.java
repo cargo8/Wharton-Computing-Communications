@@ -82,7 +82,6 @@ public class EditProfile extends Activity {
     	user.put("phone2", phone2);
 
 		user.saveEventually();
-		Intent i = new Intent(this, Login.class);
-		startActivity(i);
+		finish();
     }
 }

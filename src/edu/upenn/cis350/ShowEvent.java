@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -36,6 +37,7 @@ public class ShowEvent extends Activity {
 
 	private String uname;
 	private ParseObject event;
+	private ProgressDialog dialog;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -50,11 +52,14 @@ public class ShowEvent extends Activity {
 			ParseQuery query = new ParseQuery("Event");
 
 			final Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
+			dialog = ProgressDialog.show(this, "", 
+                    "Loading. Please wait...", true);
 			query.getInBackground(extras.getString("eventKey"), new GetCallback() {
 
 				@Override
 				public void done(ParseObject event1, ParseException e) {
 					if (event1 == null) {
+						dialog.cancel();
 						toast.setText(e.getMessage());
 						toast.show();
 					} else {
@@ -145,21 +150,9 @@ public class ShowEvent extends Activity {
 
 	@Override
 	public void onBackPressed() {
-		Intent i = new Intent(this, Agenda.class);
-		/*
-       if(event != null)
-    	   i.putExtra("eventPOJO", event);
-       i.putExtra("user", uname);
-		 */
-		startActivity(i);
+		finish();
 	}
-
-	// onClick function of backToAgenda button (deprected)
-	public void onBackToAgendaClick(View view){
-		Intent i = new Intent(this, Agenda.class);
-		startActivity(i);
-	}
-
+	
 	// populates the messages in the bottom half of the view from the DB
 	public void populateMessages() {
 
@@ -181,6 +174,7 @@ public class ShowEvent extends Activity {
 						toast.setText("Retrieved " + arg0.size() + " messages");
 						toast.show();
 					}
+					dialog.cancel();
 				}
 				else {
 					toast.setText("Error: " + arg1.getMessage());
@@ -278,7 +272,7 @@ public class ShowEvent extends Activity {
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.showeventmenu, menu);
+		inflater.inflate(R.menu.show_event_menu, menu);
 		return true;
 	}
 
@@ -290,6 +284,7 @@ public class ShowEvent extends Activity {
 		if(item.getItemId() == R.id.editEvent){
 			Intent i = new Intent(this, EditEvent.class);
 			i.putExtra("eventKey", event.getObjectId());
+			finish();
 			startActivity(i);
 			return true;
 		}
@@ -299,7 +294,7 @@ public class ShowEvent extends Activity {
 
 				@Override
 				public void done(ParseException arg0) {
-					createEventUpdatePush(event.getObjectId(), event);
+					PushUtils.createEventResolvedPush(event.getObjectId(), event);
 					Toast temp = Toast.makeText(getApplicationContext(), "Marked as Resolved", Toast.LENGTH_SHORT);
 					temp.show();
 				}
@@ -342,12 +337,13 @@ public class ShowEvent extends Activity {
 
 			@Override
 			public void done(ParseException e) {
-				// TODO Auto-generated method stub
 				if(e == null){
 					success.show();
 					PushService.subscribe(getApplicationContext(), "push_" + msg.getObjectId(), Login.class);
-					createMessagePush(event, msg);
+					PushUtils.createMessagePush(event, msg);
 					i.putExtra("eventKey", event.getObjectId());
+					//TODO(kuyumcu): Replace starting the activity over with just refetching the messages.
+					finish();
 					startActivity(i);
 				}
 				else{
@@ -356,37 +352,5 @@ public class ShowEvent extends Activity {
 				}
 			}
 		});
-	}
-
-	/**
-	 * Creates a push notification for this message
-	 * 
-	 * @param eventId The messageID that this message is posted on
-	 * @param message The message parse object.
-	 */
-	public void createMessagePush(ParseObject event, ParseObject message) {
-		ParsePush pushMessage = new ParsePush();
-		ParseUser user = ParseUser.getCurrentUser();
-		pushMessage.setChannel("push_" + event.getObjectId());
-		pushMessage.setMessage(user.getString("fullName") + " posted: \"" + message.getString("text") + "\" on " +
-				"the event \"" + event.getString("title") + "\"");
-		// expire after 5 days
-		pushMessage.setExpirationTimeInterval(432000);
-		pushMessage.sendInBackground();
-	}
-
-	/**
-	 * Creates a push notification for Resolving event
-	 * @param eventId Event ID for event that is Resolved
-	 * @param event Event that is resolved
-	 */
-	public void createEventUpdatePush(String eventId, ParseObject event) {
-		ParsePush pushMessage = new ParsePush();
-		ParseUser user = ParseUser.getCurrentUser();
-		pushMessage.setChannel("push_" + eventId);
-		pushMessage.setMessage(user.getString("fullName") + " marked \"" + event.getString("title") + "\" as Resolved.");
-		// expire after 5 days
-		pushMessage.setExpirationTimeInterval(432000);
-		pushMessage.sendInBackground();
 	}
 }

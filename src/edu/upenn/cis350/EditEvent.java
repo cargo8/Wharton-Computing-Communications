@@ -1,5 +1,6 @@
 package edu.upenn.cis350;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -22,7 +23,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -50,26 +53,28 @@ public class EditEvent extends Activity {
 	private int mHour;
 	private int mMinute;
 	// fields for dateDisplay popup (END DATE FIELDS)
-	private TextView mDateDisplay2;
-	private Button mPickDate2;
-	private int mYear2;
-	private int mMonth2;
-	private int mDay2;
-	private int mHour2;
-	private int mMinute2;
-	private CharSequence[] affils;
-	private boolean[] affilsChecked;
-	private CharSequence[] systems;
-	private boolean[] systemsChecked;
-	private Map<String, String> userIdMap = new HashMap<String, String>();
-	private Map<String, String> fullNameMap = new HashMap<String, String>();
+    private TextView mDateDisplay2;
+    private Button mPickDate2;
+    private int mYear2;
+    private int mMonth2;
+    private int mDay2;
+    private int mHour2;
+    private int mMinute2;
+    private CharSequence[] affils;
+    private boolean[] affilsChecked;
+    private CharSequence[] systems;
+    private boolean[] systemsChecked;
+    private Map<String, String> userIdMap = new HashMap<String, String>();
+    private Map<String, String> fullNameMap = new HashMap<String, String>();
 
-	private Date date1;
-	private Date date2;
-
-	//dialog constants
-	static final int START_DATE_DIALOG_ID = 0;
-	static final int END_DATE_DIALOG_ID = 1;
+    private Date date1;
+    private Date date2;
+    
+    private ProgressDialog dialog;
+    
+    //dialog constants
+    static final int START_DATE_DIALOG_ID = 0;
+    static final int END_DATE_DIALOG_ID = 1;
 	static final int PICK_AFFILS_DIALOG_ID = 2;
 	private static final int PICK_SYS_DIALOG_ID = 3;
 	static final int START_TIME_DIALOG_ID = 4;
@@ -132,14 +137,16 @@ public class EditEvent extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Parse.initialize(this, "FWyFNrvpkliSb7nBNugCNttN5HWpcbfaOWEutejH", "SZoWtHw28U44nJy8uKtV2oAQ8suuCZnFLklFSk46");
-		setContentView(R.layout.event_form);
-		Bundle extras = this.getIntent().getExtras();
-		if(extras != null){
-			//event = (EventPOJO)extras.get("eventPOJO");
-			//uname = extras.getString("user");
-			ParseQuery query = new ParseQuery("Event");
-
-			final Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
+        setContentView(R.layout.event_form);
+        Bundle extras = this.getIntent().getExtras();
+        if(extras != null){
+        	//event = (EventPOJO)extras.get("eventPOJO");
+           	//uname = extras.getString("user");
+        	ParseQuery query = new ParseQuery("Event");
+        	
+        	final Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
+			dialog = ProgressDialog.show(this, "", 
+                    "Loading. Please wait...", true);
 			query.getInBackground(extras.getString("eventKey"), new GetCallback() {
 
 				@Override
@@ -150,6 +157,21 @@ public class EditEvent extends Activity {
 					} else {
 						event = event1;
 						EditText temp = (EditText)findViewById(R.id.eventTitle);
+			        	temp.setText(event.getString("title"));
+			        	temp = (EditText)findViewById(R.id.eventDesc);
+			        	temp.setText(event.getString("description"));
+			        	//temp = (TextView)findViewById(R.id.eventActionsText);
+			        	//temp.setText(event.getString("actionItems" + "\n"));
+			        	SimpleDateFormat formatter = new SimpleDateFormat();
+			        	TextView temp2 = (TextView)findViewById(R.id.startDateDisplay);
+			        	date1 = new Date(event.getLong("startDate"));
+			        	temp2.setText(formatter.format(date1));
+			        	temp2 = (TextView)findViewById(R.id.endDateDisplay);
+			        	date2 = new Date(event.getLong("endDate"));
+			        	temp2.setText(formatter.format(date2));
+			        	populateSpinners();
+			        	/*
+=======
 						temp.setText(event.getString("title"));
 						temp = (EditText)findViewById(R.id.eventDesc);
 						temp.setText(event.getString("description"));
@@ -163,6 +185,7 @@ public class EditEvent extends Activity {
 						temp2.setText(date2.toString());
 						populateSpinners();
 						/*
+>>>>>>> 8c77665cd1807a15a8d0a0454be5c9913bc5f175
 			        	temp = (TextView)findViewById(R.id.affilsText);
 
 			        	List<String> affilList = event.getList("affils");
@@ -288,12 +311,11 @@ public class EditEvent extends Activity {
 						if(!found2)
 							pos2++;
 					}
-					spinner.setAdapter(adapter);
-					spinner2.setAdapter(adapter2);
-					spinner.setSelection(pos1);
-					spinner2.setSelection(pos2);
-
-
+			        spinner.setAdapter(adapter);
+			        spinner2.setAdapter(adapter2);
+			        spinner.setSelection(pos1);
+			        spinner2.setSelection(pos2);
+			        dialog.cancel();
 				} else {
 					toast.setText("Error: " + e.getMessage());
 					toast.show();
@@ -383,39 +405,28 @@ public class EditEvent extends Activity {
 			public void done(ParseException e) {
 				if (e == null) {
 					success.show();
-					subscribeOrCreatePush(event.getObjectId(), event);
+					PushUtils.createEventChangedPush(getApplicationContext(), event.getObjectId(), event);
+					
+					ParseUser user = ParseUser.getCurrentUser();
+					String currentId = user.getObjectId();
+					
+					String userId1 = event.getString("contact1ID");
+					String userId2 = event.getString("contact2ID");
+
+					Context context = getApplicationContext();
+					if (!currentId.equals(userId1))
+						PushUtils.lazySubscribeContact(context, event, userId1);
+					if (!currentId.equals(userId2) && !userId1.equals(userId2))
+						PushUtils.lazySubscribeContact(context, event, userId2);
+					finish();
 					i.putExtra("eventKey", event.getObjectId());
-					startActivity(i);	
+					startActivity(i);
 				} else {
 					failure.setText(e.getMessage());
 					failure.show();
 				}
 			}
 		});
-	}
-
-	/**
-	 * Creates a push notification for this update
-	 * 
-	 * @param eventId The eventId that has been updated
-	 */
-	public void subscribeOrCreatePush(String eventId, ParseObject event) {
-		if (PushService.getSubscriptions(this).contains(eventId)) {
-			push(eventId, event);
-		} else {
-			PushService.subscribe(this, "push_" + eventId, Login.class);
-			push(eventId, event);
-		}
-	}
-
-	public void push(String eventId, ParseObject event) {
-		ParsePush pushMessage = new ParsePush();
-		ParseUser user = ParseUser.getCurrentUser();
-		pushMessage.setChannel("push_" + eventId);
-		pushMessage.setMessage(user.getString("fullName") + " updated the event \"" + event.getString("title") + "\"");
-		// expire after 5 days
-		pushMessage.setExpirationTimeInterval(432000);
-		pushMessage.sendInBackground();
 	}
 
 	// onClick function of pickStartDateButton
@@ -447,10 +458,11 @@ public class EditEvent extends Activity {
 
 	// updates the date in the TextView
 	private void updateDisplay() {
+    	SimpleDateFormat formatter = new SimpleDateFormat();
 		if(date1 != null)
-			mDateDisplay.setText(date1.toString());
+			mDateDisplay.setText(formatter.format(date1));
 		if(date2 != null)
-			mDateDisplay2.setText(date2.toString());
+			mDateDisplay2.setText(formatter.format(date2));
 		/*
         mDateDisplay.setText(
             new StringBuilder()
@@ -538,6 +550,14 @@ public class EditEvent extends Activity {
 			return alert2;
 		}
 		return null;
+	}
+	
+	@Override
+	public void onBackPressed() {
+		Intent i = new Intent(this, ShowEvent.class);
+		i.putExtra("eventKey", event.getObjectId());
+		finish();
+		startActivity(i);
 	}
 
 }

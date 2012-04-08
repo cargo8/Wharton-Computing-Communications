@@ -23,18 +23,29 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CreateNewEvent" />
-        <activity android:name=".ShowEvent" />
-        <activity android:name=".Agenda" />
-        <activity android:name=".ShowMessage" />
-        <activity android:name=".Home" />
-        <activity android:name=".Register" />
-        <activity android:name=".PostMessage" />
-        <activity android:name=".ContactList" />
-        <activity android:name=".ShowContact" />
-        <activity android:name=".EditProfile" />
-        <activity android:name=".EditEvent" />
-        
+        <activity android:name=".CreateNewEvent" 
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".ShowEvent" 
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".Agenda" 
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".ShowMessage" 
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".Home" 
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".Register" 
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".PostMessage" 
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".ContactList" 
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".ShowContact" 
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".EditProfile" 
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".EditEvent" 
+            android:windowSoftInputMode="stateHidden"/>
+                
 
         <service android:name="com.parse.PushService" />
 

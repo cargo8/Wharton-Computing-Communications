@@ -1,6 +1,7 @@
 package edu.upenn.cis350;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.Toast;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseUser;
+import com.parse.PushService;
 import com.parse.SignUpCallback;
 
 /* This activity displays a form for the user to register a user name for the app.
@@ -46,7 +48,7 @@ public class Register extends Activity {
 			return;
 		}
 		
-		ParseUser user = new ParseUser();
+		final ParseUser user = new ParseUser();
     	user.setUsername(uname);
     	user.setPassword(pw);
     	user.put("fname", fname);
@@ -60,16 +62,18 @@ public class Register extends Activity {
     	
 
     	final Toast successToast = Toast.makeText(this, "User " + uname + " created.", Toast.LENGTH_SHORT);
-		final Intent i = new Intent(this, Login.class);
 		
 		final Toast failToast = Toast.makeText(this, "Could not create user. Try again.", Toast.LENGTH_SHORT);
 		
     	user.signUpInBackground(new SignUpCallback() {
     	    public void done(ParseException e) {
     	        if (e == null) {
+    	        	Context context = getApplicationContext();
+    	    		PushService.subscribe(context, "", Login.class);
+    				PushService.subscribe(context, "user_" + user.getObjectId(), Login.class);
 					successToast.show();
-		    		startActivity(i);
-    	    	} else {
+					finish();
+    	        } else {
     	            // Sign up didn't succeed. Look at the ParseException
     	            // to figure out what went wrong
 					failToast.show();
