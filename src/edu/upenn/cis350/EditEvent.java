@@ -147,6 +147,7 @@ public class EditEvent extends Activity {
         	final Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
 			dialog = ProgressDialog.show(this, "", 
                     "Loading. Please wait...", true);
+			dialog.setCancelable(true);
 			query.getInBackground(extras.getString("eventKey"), new GetCallback() {
 
 				@Override

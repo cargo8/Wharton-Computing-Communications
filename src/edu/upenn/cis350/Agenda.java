@@ -63,6 +63,7 @@ public class Agenda extends Activity {
 
 		final ProgressDialog dialog = ProgressDialog.show(this, "", 
 				"Loading. Please wait...", true);
+		dialog.setCancelable(true);
 		query.findInBackground(new FindCallback() {
 
 			@Override

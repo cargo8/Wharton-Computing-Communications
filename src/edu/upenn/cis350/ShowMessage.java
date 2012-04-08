@@ -54,6 +54,7 @@ public class ShowMessage extends Activity {
 			final Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
 			dialog = ProgressDialog.show(this, "", 
                     "Loading. Please wait...", true);
+			dialog.setCancelable(true);
 			msgQuery.getInBackground(msgId, new GetCallback() {
 
 				@Override
