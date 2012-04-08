@@ -27,14 +27,8 @@ public class Login extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Parse.initialize(this, "FWyFNrvpkliSb7nBNugCNttN5HWpcbfaOWEutejH", "SZoWtHw28U44nJy8uKtV2oAQ8suuCZnFLklFSk46");
-		//TODO: Remove when user DB is cleared - has been moved to Registration
-		PushService.subscribe(this, "", Login.class);
 		ParseUser currentUser = ParseUser.getCurrentUser();
-		if (currentUser != null) {
-			
-			//TODO: Remove when user DB is cleared - has been moved to Registration
-			PushService.subscribe(this, "user_" + currentUser.getObjectId(), Login.class);
-		    
+		if (currentUser != null) {		    
 			Intent i = new Intent(this, Home.class);
 			Toast.makeText(this, "Login Successful.", Toast.LENGTH_SHORT).show();
 		    finish();
