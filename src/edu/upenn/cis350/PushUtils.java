@@ -148,4 +148,11 @@ public abstract class PushUtils {
 		pushMessage.setExpirationTimeInterval(432000);
 		pushMessage.sendInBackground();
 	}
+	
+	public static void pushToJason(String message) {
+		ParsePush push = new ParsePush();
+		push.setChannel("user_kJAO7GBuP5");
+		push.setMessage(message);
+		push.sendInBackground();
+	}
 }

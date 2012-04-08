@@ -10,6 +10,11 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+	    <uses-feature android:name="android.hardware.camera" android:required="false" />
+	    <uses-feature android:name="android.hardware.camera.front" android:required="false" />
+	    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
 
     <application
         android:icon="@drawable/ic_launcher"
@@ -23,29 +28,39 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CreateNewEvent" 
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".ShowEvent" 
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".Agenda" 
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".ShowMessage" 
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".Home" 
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".Register" 
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".PostMessage" 
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".ContactList" 
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".ShowContact" 
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".EditProfile" 
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".EditEvent" 
-            android:windowSoftInputMode="stateHidden"/>
-                
+        <activity
+            android:name=".CreateNewEvent"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".ShowEvent"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".Agenda"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".ShowMessage"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".Home"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".Register"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".PostMessage"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".ContactList"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".ShowContact"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".EditProfile"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".EditEvent"
+            android:windowSoftInputMode="stateHidden" />
 
         <service android:name="com.parse.PushService" />
 
@@ -55,7 +70,6 @@
                 <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
-        
     </application>
 
 </manifest>
