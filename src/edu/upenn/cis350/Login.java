@@ -30,7 +30,7 @@ public class Login extends Activity {
 		ParseUser currentUser = ParseUser.getCurrentUser();
 		if (currentUser != null) {		    
 			Intent i = new Intent(this, Home.class);
-			Toast.makeText(this, "Login Successful.", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
 		    finish();
 		    startActivity(i);
 		} else {
@@ -46,10 +46,10 @@ public class Login extends Activity {
 		String uname = ((EditText)findViewById(R.id.loginUsername)).getText().toString().toLowerCase();
 		String pw = ((EditText)findViewById(R.id.loginPassword)).getText().toString();
 
-		final Toast successToast = Toast.makeText(this, "Login Successful.", Toast.LENGTH_SHORT);
+		final Toast successToast = Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT);
 		final Intent i = new Intent(this, Home.class);
 		
-		final Toast failureToast = Toast.makeText(this, "Login failed.", Toast.LENGTH_SHORT);
+		final Toast failureToast = Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT);
 		
 		ParseUser.logInInBackground(uname, pw, new LogInCallback() {
 		    public void done(ParseUser user, ParseException e) {
