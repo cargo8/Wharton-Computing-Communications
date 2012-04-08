@@ -1,5 +1,7 @@
 package edu.upenn.cis350;
 
+import java.util.Set;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -69,8 +71,13 @@ public class Register extends Activity {
     	    public void done(ParseException e) {
     	        if (e == null) {
     	        	Context context = getApplicationContext();
-    	    		PushService.subscribe(context, "", Login.class);
-    				PushService.subscribe(context, "user_" + user.getObjectId(), Login.class);
+    	        	Set<String> mySub = PushService.getSubscriptions(context);
+					if (!mySub.contains("push_" + user.getObjectId())) {
+	    				PushService.subscribe(context, "user_" + user.getObjectId(), Login.class);
+					}
+					if (!mySub.contains("")) {
+	    	    		PushService.subscribe(context, "", Login.class);
+					}
 					successToast.show();
 					finish();
     	        } else {

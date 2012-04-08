@@ -63,6 +63,7 @@ public class Agenda extends Activity {
 
 		final ProgressDialog dialog = ProgressDialog.show(this, "", 
 				"Loading. Please wait...", true);
+		dialog.setCancelable(true);
 		query.findInBackground(new FindCallback() {
 
 			@Override
@@ -118,7 +119,18 @@ public class Agenda extends Activity {
 		}
 		return false;
 	}
+	
+	@Override
+	public void onResume() {
+		onCreate(new Bundle());
+	}
 
+	/**
+	 * Adapter for formatting the Events into ListView items
+	 * 
+	 * @author JMow
+	 * 
+	 */
 	private class EventListAdapter extends ArrayAdapter<ListItem> {
 
 		private List<ListItem> events;

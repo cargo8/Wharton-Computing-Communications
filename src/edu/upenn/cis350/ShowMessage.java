@@ -6,10 +6,14 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -53,7 +57,8 @@ public class ShowMessage extends Activity {
 			ParseQuery msgQuery = new ParseQuery("Message");
 			final Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
 			dialog = ProgressDialog.show(this, "", 
-                    "Loading. Please wait...", true);
+					"Loading. Please wait...", true);
+			dialog.setCancelable(true);
 			msgQuery.getInBackground(msgId, new GetCallback() {
 
 				@Override
@@ -134,7 +139,11 @@ public class ShowMessage extends Activity {
 					toast.show();
 					PushUtils.createCommentPush(message, comment);
 					commentText.setText("");
-					PushService.subscribe(getApplicationContext(), "push_" + message.getObjectId(), Login.class);
+					
+					Context context = getApplicationContext();
+					if (!PushService.getSubscriptions(context).contains("push_" + message.getObjectId())) {
+						PushService.subscribe(context, "push_" + message.getObjectId(), Login.class);
+					}
 					getComments(message);
 				}
 			}
@@ -217,5 +226,36 @@ public class ShowMessage extends Activity {
 			}
 
 		});
+	}
+
+	/**
+	 * Method that gets called when Menu is created
+	 */
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.show_message_menu, menu);
+		return true;
+	}
+
+	/**
+	 * Method that gets called when the menuitem is clicked
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		int id = item.getItemId();
+		if(id == R.id.refresh){
+			getComments(message);
+			return true;
+		} else if (id == R.id.messageSubscribe) {
+			if (!PushService.getSubscriptions(this).contains("push_" + message.getObjectId())) {
+				PushService.subscribe(this, "push_" + message.getObjectId(), Login.class);
+				return true;
+			}
+			return false;
+		} else if (id == R.id.messageUnsubscribe) {
+			PushService.unsubscribe(this, "push_" + message.getObjectId());
+			return true;
+		}
+		return false;
 	}
 }
