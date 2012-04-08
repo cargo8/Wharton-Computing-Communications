@@ -1,9 +1,11 @@
 package edu.upenn.cis350;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -21,9 +23,11 @@ import android.widget.Toast;
 
 import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParsePush;
 import com.parse.ParseUser;
 import com.parse.PushService;
+import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
 /* This activity displays a form for the user to register a user name for the app.
@@ -32,6 +36,9 @@ import com.parse.SignUpCallback;
 public class Register extends Activity {
 
 	private String path;
+	private Bitmap bitmap;
+	private ParseFile photo;
+	
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -58,10 +65,19 @@ public class Register extends Activity {
 		} else if (resultCode == -1) {
 			/* Photo Taken */
 			BitmapFactory.Options options = new BitmapFactory.Options();
-			options.inSampleSize = 4;
+			options.inSampleSize = 1;
 			ImageView image = (ImageView) findViewById(R.id.registerImage);
-			Bitmap bitmap = BitmapFactory.decodeFile(path, options);
-			image.setImageBitmap(bitmap);
+			bitmap = BitmapFactory.decodeFile(path, options);
+			
+			if (bitmap != null) {
+				image.setImageBitmap(bitmap);
+
+				ByteArrayOutputStream stream = new ByteArrayOutputStream();
+				bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+				byte[] arr = stream.toByteArray();
+				photo = new ParseFile("photo.jpg", arr);
+				photo.saveInBackground();
+			}
 		}
 	}
 
@@ -112,7 +128,10 @@ public class Register extends Activity {
 		user.put("email2", email2);
 		user.put("phone1", phone1);
 		user.put("phone2", phone2);
-
+		if (photo != null) {
+			user.put("photo", photo);
+		}
+		
 		final Toast successToast = Toast.makeText(this, "User " + uname + " created.", Toast.LENGTH_SHORT);
 		final Toast failToast = Toast.makeText(this, "Could not create user. Try again.", Toast.LENGTH_SHORT);
 		user.signUpInBackground(new SignUpCallback() {
