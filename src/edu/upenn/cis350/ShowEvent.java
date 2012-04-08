@@ -59,6 +59,7 @@ public class ShowEvent extends Activity {
 				@Override
 				public void done(ParseObject event1, ParseException e) {
 					if (event1 == null) {
+						dialog.cancel();
 						toast.setText(e.getMessage());
 						toast.show();
 					} else {
