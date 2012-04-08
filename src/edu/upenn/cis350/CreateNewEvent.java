@@ -333,6 +333,7 @@ public class CreateNewEvent extends Activity {
 
 					//TODO: Subscribe affiliated groups
 					i.putExtra("eventKey", id);
+					finish();
 					startActivity(i);	
 				} else {
 					failure.setText(e.getMessage());

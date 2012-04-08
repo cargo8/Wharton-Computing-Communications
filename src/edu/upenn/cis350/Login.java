@@ -22,16 +22,6 @@ import com.parse.PushService;
  */
 public class Login extends Activity {
 
-	// fields for changing activities
-	public static final int ACTIVITY_Home = 0;
-	public static final int ACTIVITY_CreateNewEvent = 1;
-	private static final int ACTIVITY_ShowEvent = 2;
-	private static final int ACTIVITY_Agenda = 3;
-	public static final int ACTIVITY_ShowComments = 4;
-	public static final int ACTIVITY_Register = 5;
-	public static final int ACTIVITY_PostMessage = 6;
-
-
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -52,9 +42,7 @@ public class Login extends Activity {
 	 * Logs in the User
 	 */
 	public void login(View view) {
-		
-		//TODO(jmow): Normalize login and registration!
-		
+				
 		String uname = ((EditText)findViewById(R.id.loginUsername)).getText().toString().toLowerCase();
 		String pw = ((EditText)findViewById(R.id.loginPassword)).getText().toString();
 
@@ -69,6 +57,7 @@ public class Login extends Activity {
 		            // Hooray! The user is logged in.
 		        	successToast.show();
 		    		i.putExtra("userKey", user.getObjectId());
+		    		finish();
 		    		startActivity(i);
 		        } else {
 		            // Signup failed. Look at the ParseException to see what happened.
@@ -82,7 +71,7 @@ public class Login extends Activity {
 	// onClick function of register button
 	public void clickRegister(View view) {
 		Intent i = new Intent(this, Register.class);
-		startActivityForResult(i, ACTIVITY_Register);
+		startActivity(i);
 	}
 
 	@Override
@@ -91,10 +80,10 @@ public class Login extends Activity {
 	        .setTitle("Exit Application")
 	        .setMessage("Are you sure you want to exit?")
 	        .setNegativeButton(android.R.string.no, null)
-	        .setPositiveButton("Logout", new OnClickListener() {
+	        .setPositiveButton(android.R.string.yes, new OnClickListener() {
 
 	            public void onClick(DialogInterface arg0, int arg1) {
-	                Login.super.onBackPressed();
+	                Login.super.finish();
 	            }
 	        }).create().show();
 	}

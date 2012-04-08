@@ -60,7 +60,6 @@ public class Register extends Activity {
     	
 
     	final Toast successToast = Toast.makeText(this, "User " + uname + " created.", Toast.LENGTH_SHORT);
-		final Intent i = new Intent(this, Login.class);
 		
 		final Toast failToast = Toast.makeText(this, "Could not create user. Try again.", Toast.LENGTH_SHORT);
 		
@@ -68,8 +67,8 @@ public class Register extends Activity {
     	    public void done(ParseException e) {
     	        if (e == null) {
 					successToast.show();
-		    		startActivity(i);
-    	    	} else {
+					finish();
+    	        } else {
     	            // Sign up didn't succeed. Look at the ParseException
     	            // to figure out what went wrong
 					failToast.show();

@@ -99,8 +99,7 @@ public class Agenda extends Activity {
 	 * Returns to Home screen on back press no matter what
 	 */
 	public void onBackPressed() {
-		Intent i = new Intent(this, Home.class);
-		startActivity(i);
+		finish();
 	}
 
 	private class EventListAdapter extends ArrayAdapter<ListItem> {

@@ -149,21 +149,9 @@ public class ShowEvent extends Activity {
 
 	@Override
 	public void onBackPressed() {
-		Intent i = new Intent(this, Agenda.class);
-		/*
-       if(event != null)
-    	   i.putExtra("eventPOJO", event);
-       i.putExtra("user", uname);
-		 */
-		startActivity(i);
+		finish();
 	}
-
-	// onClick function of backToAgenda button (deprected)
-	public void onBackToAgendaClick(View view){
-		Intent i = new Intent(this, Agenda.class);
-		startActivity(i);
-	}
-
+	
 	// populates the messages in the bottom half of the view from the DB
 	public void populateMessages() {
 
@@ -295,6 +283,7 @@ public class ShowEvent extends Activity {
 		if(item.getItemId() == R.id.editEvent){
 			Intent i = new Intent(this, EditEvent.class);
 			i.putExtra("eventKey", event.getObjectId());
+			finish();
 			startActivity(i);
 			return true;
 		}
@@ -352,6 +341,8 @@ public class ShowEvent extends Activity {
 					PushService.subscribe(getApplicationContext(), "push_" + msg.getObjectId(), Login.class);
 					PushUtils.createMessagePush(event, msg);
 					i.putExtra("eventKey", event.getObjectId());
+					//TODO(kuyumcu): Replace starting the activity over with just refetching the messages.
+					finish();
 					startActivity(i);
 				}
 				else{

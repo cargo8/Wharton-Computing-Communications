@@ -418,9 +418,9 @@ public class EditEvent extends Activity {
 						PushUtils.lazySubscribeContact(context, event, userId1);
 					if (!currentId.equals(userId2) && !userId1.equals(userId2))
 						PushUtils.lazySubscribeContact(context, event, userId2);
-					
+					finish();
 					i.putExtra("eventKey", event.getObjectId());
-					startActivity(i);	
+					startActivity(i);
 				} else {
 					failure.setText(e.getMessage());
 					failure.show();
@@ -549,6 +549,14 @@ public class EditEvent extends Activity {
 			return alert2;
 		}
 		return null;
+	}
+	
+	@Override
+	public void onBackPressed() {
+		Intent i = new Intent(this, ShowEvent.class);
+		i.putExtra("eventKey", event.getObjectId());
+		finish();
+		startActivity(i);
 	}
 
 }

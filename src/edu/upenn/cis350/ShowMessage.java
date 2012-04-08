@@ -218,12 +218,4 @@ public class ShowMessage extends Activity {
 
 		});
 	}
-
-	@Override
-	public void onBackPressed() {
-		Intent i = new Intent(this, ShowEvent.class);
-		i.putExtra("eventKey", message.getString("event"));
-		startActivity(i);
-	}
-
 }
