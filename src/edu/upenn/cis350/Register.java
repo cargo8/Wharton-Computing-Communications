@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Set;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -25,10 +24,8 @@ import android.widget.Toast;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParsePush;
 import com.parse.ParseUser;
 import com.parse.PushService;
-import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
 /* This activity displays a form for the user to register a user name for the app.
@@ -88,6 +85,7 @@ public class Register extends Activity {
 	 * @param action The action for a new intent
 	 * @return true if Intent can handle it, false otherwise
 	 */
+	//TODO: move to a utils location? or just remove...
 	private static boolean isIntentAvailable(Context context, String action) {
 		final PackageManager packageManager = context.getPackageManager();
 		final Intent intent = new Intent(action);

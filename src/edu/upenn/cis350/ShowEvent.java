@@ -24,7 +24,6 @@ import com.parse.GetCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
-import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.PushService;
@@ -36,7 +35,6 @@ import com.parse.SaveCallback;
  */
 public class ShowEvent extends Activity {
 
-	private String uname;
 	private ParseObject event;
 	private ProgressDialog dialog;
 
