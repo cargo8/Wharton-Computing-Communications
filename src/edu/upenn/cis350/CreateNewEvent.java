@@ -312,7 +312,9 @@ public class CreateNewEvent extends Activity {
 					String id = event.getObjectId();
 					/* Subscribe to push notifications for this event */
 					Context context = getApplicationContext();
-					PushService.subscribe(context, "push_" + id, Login.class);
+					if (!PushService.getSubscriptions(context).contains("push_" + id)) {
+						PushService.subscribe(context, "push_" + id, Login.class);
+					}
 
 					/* Lazy subscription for the two contacts set in the events.
 					 * 

@@ -3,6 +3,7 @@ package edu.upenn.cis350;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.List;
+import java.util.Set;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -134,12 +135,18 @@ public class Register extends Activity {
 		
 		final Toast successToast = Toast.makeText(this, "User " + uname + " created.", Toast.LENGTH_SHORT);
 		final Toast failToast = Toast.makeText(this, "Could not create user. Try again.", Toast.LENGTH_SHORT);
-		user.signUpInBackground(new SignUpCallback() {
-			public void done(ParseException e) {
-				if (e == null) {
-					Context context = getApplicationContext();
-					PushService.subscribe(context, "", Login.class);
-					PushService.subscribe(context, "user_" + user.getObjectId(), Login.class);
+		
+    	user.signUpInBackground(new SignUpCallback() {
+    	    public void done(ParseException e) {
+    	        if (e == null) {
+    	        	Context context = getApplicationContext();
+    	        	Set<String> mySub = PushService.getSubscriptions(context);
+					if (!mySub.contains("push_" + user.getObjectId())) {
+	    				PushService.subscribe(context, "user_" + user.getObjectId(), Login.class);
+					}
+					if (!mySub.contains("")) {
+	    	    		PushService.subscribe(context, "", Login.class);
+					}
 					successToast.show();
 					finish();
 				} else {

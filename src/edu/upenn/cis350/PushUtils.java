@@ -1,6 +1,7 @@
 package edu.upenn.cis350;
 
 import java.util.List;
+import java.util.Set;
 
 import android.content.Context;
 
@@ -13,9 +14,9 @@ import com.parse.ParseUser;
 import com.parse.PushService;
 
 public abstract class PushUtils {
-	
+
 	private PushUtils() {}
-	
+
 	/**
 	 * Adds an entry to the LazySubscription data store that this userId should be
 	 * subscribed to this event the next time the user opens the app. Also pushes
@@ -39,7 +40,7 @@ public abstract class PushUtils {
 		userPush.sendInBackground();
 		return true;
 	}
-	
+
 	/**
 	 * Called when user logs in to check if any lazy subscriptions exist
 	 * If so, the user is then subscribed to the subscriptions, and deletes
@@ -55,16 +56,19 @@ public abstract class PushUtils {
 			@Override
 			public void done(List<ParseObject> subscriptions, ParseException e) {
 				if (e == null) {
+					Set<String> mySub = PushService.getSubscriptions(context);
 					for (ParseObject sub : subscriptions) {
-						PushService.subscribe(context, "push_" + sub.getString("eventID"), Login.class);
+						if (!mySub.contains("push_" + sub.getString("eventID"))) {
+							PushService.subscribe(context, "push_" + sub.getString("eventID"), Login.class);
+						}
 						sub.deleteEventually();
 					}
 				}
 			}
-			
+
 		});
 	}
-	
+
 	/**
 	 * Generic utility method to send push notifications
 	 * 
@@ -114,7 +118,7 @@ public abstract class PushUtils {
 		pushMessage.setExpirationTimeInterval(432000);
 		pushMessage.sendInBackground();
 	}	
-	
+
 	/**
 	 * Creates a push notification for Editing an Event
 	 * 
@@ -123,7 +127,9 @@ public abstract class PushUtils {
 	 * @param event Event ParseObject that is changed
 	 */
 	public static void createEventChangedPush(Context context, String eventId, ParseObject event) {
-		PushService.subscribe(context, "push_" + eventId, Login.class);
+		if (!PushService.getSubscriptions(context).contains("push_" + event.getObjectId())) {
+			PushService.subscribe(context, "push_" + eventId, Login.class);
+		}
 		ParsePush pushMessage = new ParsePush();
 		ParseUser user = ParseUser.getCurrentUser();
 		pushMessage.setChannel("push_" + eventId);

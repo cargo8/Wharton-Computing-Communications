@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -54,6 +55,7 @@ public class ShowEvent extends Activity {
 			final Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
 			dialog = ProgressDialog.show(this, "", 
                     "Loading. Please wait...", true);
+			dialog.setCancelable(true);
 			query.getInBackground(extras.getString("eventKey"), new GetCallback() {
 
 				@Override
@@ -302,7 +304,9 @@ public class ShowEvent extends Activity {
 			});
 			return true;
 		} else if (item.getItemId() == R.id.eventSubscribe) {
-			PushService.subscribe(getApplicationContext(), "push_" + event.getObjectId(), Login.class);
+			if (!PushService.getSubscriptions(this).contains("push_" + event.getObjectId())) {
+				PushService.subscribe(this, "push_" + event.getObjectId(), Login.class);
+			}
 			Toast.makeText(this, "Subscribed to event", Toast.LENGTH_SHORT).show();
 			return true;
 		} else if (item.getItemId() == R.id.eventUnsubscribe) {
@@ -339,7 +343,10 @@ public class ShowEvent extends Activity {
 			public void done(ParseException e) {
 				if(e == null){
 					success.show();
-					PushService.subscribe(getApplicationContext(), "push_" + msg.getObjectId(), Login.class);
+					Context context = getApplicationContext();
+					if (!PushService.getSubscriptions(context).contains("push_" + msg.getObjectId())) {
+						PushService.subscribe(context, "push_" + msg.getObjectId(), Login.class);
+					}
 					PushUtils.createMessagePush(event, msg);
 					i.putExtra("eventKey", event.getObjectId());
 					//TODO(kuyumcu): Replace starting the activity over with just refetching the messages.
