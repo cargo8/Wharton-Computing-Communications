@@ -17,7 +17,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.parse.ParseUser;
-import com.parse.PushService;
 
 /* This activity is what the app will start with after logging in.
  * For now, it just shows a few buttons to create a new event
