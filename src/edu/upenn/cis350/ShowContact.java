@@ -126,6 +126,7 @@ public class ShowContact extends Activity {
 					TextView temp = (TextView) v;
 					temp.setText(contactData);
 					Linkify.addLinks(temp, Linkify.ALL);
+					temp.setLinkTextColor(temp.getTextColors().getDefaultColor());
 				}
 			}
 			return v;

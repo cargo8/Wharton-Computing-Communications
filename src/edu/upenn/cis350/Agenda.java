@@ -142,7 +142,7 @@ public class Agenda extends Activity {
 				if (item.isSection()) {
 					/* This is a section header */
 					String title = (String) item.getData();
-					v = vi.inflate(R.layout.event_list_divider, null);
+					v = vi.inflate(R.layout.list_divider, null);
 
 					v.setOnClickListener(null);
 					v.setOnLongClickListener(null);
