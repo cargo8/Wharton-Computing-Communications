@@ -1,5 +1,7 @@
 package edu.upenn.cis350;
 
+import java.util.ArrayList;
+
 import com.parse.GetCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -9,6 +11,7 @@ import com.parse.ParseQuery;
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.util.Linkify;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,41 +38,46 @@ public class ShowContact extends Activity {
 	        	
 	        	query.getInBackground(contactId, new GetCallback() {
 
+					@SuppressWarnings({ "rawtypes", "unchecked" })
+					/* Unchecked types required for dynamic list dividers */
 					@Override
 					public void done(ParseObject contact, ParseException e) {
-			        	TextView temp = (TextView) findViewById(R.id.contactHeader);
-						String tempString = contact.getString("fullName");
+						if (e == null) {
+							TextView temp = (TextView) findViewById(R.id.contactHeader);
+							String tempString = contact.getString("fullName");
+							temp.setText(tempString);
 
-						temp.setText(tempString);
-						
-						temp = (TextView) findViewById(R.id.contactPhone1);
-						tempString = contact.getString("phone1");
-						if ("".equals(tempString)) tempString = "None";
-						temp.setText(tempString);
-						Linkify.addLinks(temp, Linkify.PHONE_NUMBERS);
-						temp.setLinkTextColor(temp.getTextColors().getDefaultColor());
-						
-						temp = (TextView) findViewById(R.id.contactPhone2);
-						tempString = contact.getString("phone2");
-						if ("".equals(tempString)) tempString = "None";
-						temp.setText(tempString);
-						Linkify.addLinks(temp, Linkify.PHONE_NUMBERS);
-						temp.setLinkTextColor(temp.getTextColors().getDefaultColor());
+							ListView listView = (ListView) findViewById(R.id.phoneList);
+							ArrayList items = new ArrayList();
+							items.add(new ListItem("Phone", true));
+							
+							//TODO reverse the if statement
+							String info = contact.getString("phone1");
+							String toSave = "".equals(info) ? "None" : info;
+							items.add(new ListItem("Primary: " + toSave, false));
+							info = contact.getString("phone2");
+							toSave = "".equals(info) ? "None" : info;
+							items.add(new ListItem("Secondary: " + toSave, false));
+							
+							items.add(new ListItem("Email", true));
+							info = contact.getString("email1");
+							toSave = "".equals(info) ? "None" : info;
+							items.add(new ListItem("Primary: " + toSave, false));
+							info = contact.getString("email2");
+							toSave = "".equals(info) ? "None" : info;
+							items.add(new ListItem("Secondary: " + toSave, false));
+							listView.setAdapter(new ContactAdapter(getApplicationContext(), items));
 
-						temp = (TextView) findViewById(R.id.contactEmail1);
-						tempString = contact.getString("email1");
-						if ("".equals(tempString)) tempString = "None";
-						temp.setText(tempString);
-						Linkify.addLinks(temp, Linkify.EMAIL_ADDRESSES);
-						temp.setLinkTextColor(temp.getTextColors().getDefaultColor());
+//							temp = (TextView) findViewById(R.id.contactPhone1);
+//							tempString = contact.getString("phone1");
+//							if ("".equals(tempString)) tempString = "None";
+//							temp.setText(tempString);
+//							Linkify.addLinks(temp, Linkify.PHONE_NUMBERS);
+//							temp.setLinkTextColor(temp.getTextColors().getDefaultColor());
 
-						temp = (TextView) findViewById(R.id.contactEmail2);
-						tempString = contact.getString("email2");
-						if ("".equals(tempString)) tempString = "None";
-						temp.setText(tempString);
-						Linkify.addLinks(temp, Linkify.EMAIL_ADDRESSES);
-						temp.setLinkTextColor(temp.getTextColors().getDefaultColor());
-
+						} else {
+							Toast.makeText(getApplicationContext(), "Could not load contact.", Toast.LENGTH_LONG);
+						}
 					}
 	        		
 	        	});
