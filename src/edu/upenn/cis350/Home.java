@@ -6,6 +6,9 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -73,20 +76,37 @@ public class Home extends ListActivity {
 		startActivity(i);
 	}
 
-	@Override
-	public void onBackPressed() {
-		new AlertDialog.Builder(this)
-		.setTitle("Logout")
-		.setMessage("Are you sure you want to logout?")
-		.setNegativeButton(android.R.string.no, null)
-		.setPositiveButton(android.R.string.yes, new OnClickListener() {
+	/**
+	 * Method that gets called when Menu is created
+	 */
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.home_menu, menu);
+		return true;
+	}
 
-			public void onClick(DialogInterface arg0, int arg1) {
-				ParseUser.logOut();
-				Intent i = new Intent(getApplicationContext(), Login.class);
-				finish();
-				startActivity(i);
-			}
-		}).create().show();
+	/**
+	 * Method that gets called when the menuitem is clicked
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		int id = item.getItemId();
+		if(id == R.id.logout){
+			new AlertDialog.Builder(this)
+			.setTitle("Logout")
+			.setMessage("Are you sure you want to logout?")
+			.setNegativeButton(android.R.string.no, null)
+			.setPositiveButton(android.R.string.yes, new OnClickListener() {
+
+				public void onClick(DialogInterface arg0, int arg1) {
+					ParseUser.logOut();
+					Intent i = new Intent(getApplicationContext(), Login.class);
+					finish();
+					startActivity(i);
+				}
+			}).create().show();
+			return true;
+		}
+		return false;
 	}
 }

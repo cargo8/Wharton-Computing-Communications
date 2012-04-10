@@ -14,7 +14,6 @@ import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseUser;
-import com.parse.PushService;
 
 /* This activity shows a login screen to the user.
  * If the user does not have an account, they can create an account
