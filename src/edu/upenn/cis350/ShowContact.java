@@ -10,6 +10,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.util.Linkify;
@@ -38,6 +39,9 @@ public class ShowContact extends Activity {
 			Toast.makeText(this, "Could not load contact.", Toast.LENGTH_LONG);
 			return;
 		} else {
+			final ProgressDialog dialog = ProgressDialog.show(this, "", 
+					"Loading. Please wait...", true);
+			dialog.setCancelable(true);
 			contactId = extras.getString("contactID");
 			ParseQuery query = new ParseQuery("_User");
 			query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
@@ -57,7 +61,6 @@ public class ShowContact extends Activity {
 						ArrayList items = new ArrayList();
 						items.add(new ListItem("Phone", true));
 
-						//TODO reverse the if statement
 						String info = contact.getString("phone1");
 						String toSave = "".equals(info) ? "None" : info;
 						items.add(new ListItem("Primary: " + toSave, false));
@@ -74,16 +77,10 @@ public class ShowContact extends Activity {
 						items.add(new ListItem("Secondary: " + toSave, false));
 						listView.setAdapter(new ContactAdapter(getApplicationContext(), items));
 
-						//							temp = (TextView) findViewById(R.id.contactPhone1);
-						//							tempString = contact.getString("phone1");
-						//							if ("".equals(tempString)) tempString = "None";
-						//							temp.setText(tempString);
-						//							Linkify.addLinks(temp, Linkify.PHONE_NUMBERS);
-						//							temp.setLinkTextColor(temp.getTextColors().getDefaultColor());
-
 					} else {
 						Toast.makeText(getApplicationContext(), "Could not load contact.", Toast.LENGTH_LONG);
 					}
+					dialog.cancel();
 				}
 
 			});
