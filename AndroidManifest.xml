@@ -20,7 +20,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" android:debuggable="true">
         <activity
-            android:name=".Login"
+            android:name=".Home"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,40 +28,32 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".CreateNewEvent"
-            android:windowSoftInputMode="stateHidden" />
-        <activity
-            android:name=".ShowEvent"
-            android:windowSoftInputMode="stateHidden" />
-        <activity
-            android:name=".Agenda"
-            android:windowSoftInputMode="stateHidden" />
-        <activity
-            android:name=".ShowMessage"
-            android:windowSoftInputMode="stateHidden" />
-        <activity
-            android:name=".Home"
-            android:windowSoftInputMode="stateHidden" />
-        <activity
-            android:name=".Register"
-            android:windowSoftInputMode="stateHidden" />
-        <activity
-            android:name=".PostMessage"
-            android:windowSoftInputMode="stateHidden" />
-        <activity
-            android:name=".ContactList"
-            android:windowSoftInputMode="stateHidden" />
-        <activity
-            android:name=".ShowContact"
-            android:windowSoftInputMode="stateHidden" />
-        <activity
-            android:name=".EditProfile"
-            android:windowSoftInputMode="stateHidden" />
-        <activity
-            android:name=".EditEvent"
-            android:windowSoftInputMode="stateHidden" />
 
+        <activity android:name=".CreateNewEvent" 
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".ShowEvent" 
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".Agenda" 
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".ShowMessage" 
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".Login" 
+            android:windowSoftInputMode="stateHidden"
+            android:noHistory="true"
+            android:excludeFromRecents="true" />
+        <activity android:name=".Register" 
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".PostMessage" 
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".ContactList" 
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".ShowContact" 
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".EditProfile" 
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".EditEvent" 
+            android:windowSoftInputMode="stateHidden"/>
+        
         <service android:name="com.parse.PushService" />
 
         <receiver android:name="com.parse.ParseBroadcastReceiver" >

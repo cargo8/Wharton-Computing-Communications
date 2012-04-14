@@ -15,7 +15,9 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.parse.Parse;
 import com.parse.ParseUser;
 
 /* This activity is what the app will start with after logging in.
@@ -28,6 +30,15 @@ public class Home extends ListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		Parse.initialize(this, "FWyFNrvpkliSb7nBNugCNttN5HWpcbfaOWEutejH", "SZoWtHw28U44nJy8uKtV2oAQ8suuCZnFLklFSk46");
+		ParseUser currentUser = ParseUser.getCurrentUser();
+		if (currentUser == null) {		    
+			Intent i = new Intent(this, Login.class);
+		    finish();
+		    startActivity(i);
+		    return;
+		}
+		
 		String[] options = getResources().getStringArray(R.array.home_options_array);
 		setListAdapter(new ArrayAdapter<String>(this, R.layout.home_list_item, options));
 
