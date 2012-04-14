@@ -15,7 +15,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" android:debuggable="true">
         <activity
-            android:name=".Login"
+            android:name=".Home"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,8 +31,10 @@
             android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".ShowMessage" 
             android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".Home" 
-            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".Login" 
+            android:windowSoftInputMode="stateHidden"
+            android:noHistory="true"
+            android:excludeFromRecents="true" />
         <activity android:name=".Register" 
             android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".PostMessage" 
