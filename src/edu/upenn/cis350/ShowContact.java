@@ -119,7 +119,7 @@ public class ShowContact extends Activity {
 				} else {
 					/* This is a real list item */
 					final String contactData = (String) item.getData();
-					v = vi.inflate(R.layout.contact_list_item, null);
+					v = vi.inflate(R.layout.list_item, null);
 					TextView temp = (TextView) v;
 					temp.setText(contactData);
 					Linkify.addLinks(temp, Linkify.ALL);

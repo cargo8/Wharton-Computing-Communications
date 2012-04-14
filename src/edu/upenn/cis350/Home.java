@@ -40,7 +40,7 @@ public class Home extends ListActivity {
 		}
 		
 		String[] options = getResources().getStringArray(R.array.home_options_array);
-		setListAdapter(new ArrayAdapter<String>(this, R.layout.home_list_item, options));
+		setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item, options));
 
 		ListView lv = getListView();
 		lv.setTextFilterEnabled(true);

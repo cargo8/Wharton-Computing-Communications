@@ -51,7 +51,7 @@ public class ContactList extends ListActivity {
 						names.add(formattedName);
 						identifiers.put(formattedName, c.getObjectId());
 					}
-			        setListAdapter(new ArrayAdapter<String>(getApplicationContext(), R.layout.contact_list_item, names));
+			        setListAdapter(new ArrayAdapter<String>(getApplicationContext(), R.layout.list_item, names));
 
 			        ListView lv = getListView();
 			        lv.setTextFilterEnabled(true);
