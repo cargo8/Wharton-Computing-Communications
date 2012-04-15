@@ -57,6 +57,8 @@ public class Home extends ListActivity {
 					onShowContacts();
 				} else if ("Edit Profile".equals(label)) {
 					onEditProfile();
+				} else if ("View Notifications".equals(label)) {
+					onViewNotifications();
 				}
 			}
 		}
@@ -84,6 +86,11 @@ public class Home extends ListActivity {
 
 	public void onEditProfile() {
 		Intent i = new Intent(this, EditProfile.class);
+		startActivity(i);
+	}
+	
+	public void onViewNotifications() {
+		Intent i = new Intent(this, ShowNotifications.class);
 		startActivity(i);
 	}
 

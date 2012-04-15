@@ -47,6 +47,8 @@
             android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".EditEvent" 
             android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".ShowNotifications"
+            android:windowSoftInputMode="stateHidden" />
                 
 
         <service android:name="com.parse.PushService" />
