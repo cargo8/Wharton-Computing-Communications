@@ -61,8 +61,8 @@ public class CreateNewEvent extends Activity {
 	private int mDay2;
 	private int mHour2;
 	private int mMinute2;
-	private CharSequence[] affils;
-	private boolean[] affilsChecked;
+	private CharSequence[] groups;
+	private boolean[] groupsChecked;
 	private CharSequence[] systems;
 	private boolean[] systemsChecked;
 	private Map<String, String> contactMap = new HashMap<String, String>();
@@ -248,12 +248,12 @@ public class CreateNewEvent extends Activity {
 
 		//TODO: Affils + Systems
 		List<String> affiliations = new ArrayList<String>();
-		if(affils != null){
-			for(int x = 0; x < affils.length; x++){				// EVENT
-				if(affilsChecked[x])
-					affiliations.add(affils[x].toString());
+		if(groups != null){
+			for(int x = 0; x < groups.length; x++){				// EVENT
+				if(groupsChecked[x])
+					affiliations.add(groups[x].toString());
 			}
-			event.put("affils", affiliations);
+			event.put("groups", affiliations);
 		}
 		List<String> sys = new ArrayList<String>();
 		if(systems != null){
@@ -357,11 +357,43 @@ public class CreateNewEvent extends Activity {
 
 	// onClick function of pickAffils button
 	public void showPickAffilsDialog(View view){
-		showDialog(PICK_AFFILS_DIALOG_ID);
+		ParseQuery query = new ParseQuery("Group");
+		query.orderByAscending("name");
+		query.findInBackground(new FindCallback(){
+
+			@Override
+			public void done(List<ParseObject> groupList, ParseException arg1) {
+				// TODO Auto-generated method stub
+				groups = new CharSequence[groupList.size()];
+				groupsChecked = new boolean[groupList.size()];
+				for(int i = 0; i < groupList.size(); i++){
+					groups[i] = groupList.get(i).getString("name");
+				}
+				showDialog(PICK_AFFILS_DIALOG_ID);
+
+			}
+			
+		});
 	}
 	// onClick function of pickSys button
 	public void showPickSysDialog(View view){
-		showDialog(PICK_SYS_DIALOG_ID);
+		ParseQuery query = new ParseQuery("System");
+		query.orderByAscending("name");
+		query.findInBackground(new FindCallback(){
+
+			@Override
+			public void done(List<ParseObject> systemList, ParseException arg1) {
+				// TODO Auto-generated method stub
+				systems = new CharSequence[systemList.size()];
+				systemsChecked = new boolean[systemList.size()];
+				for(int i = 0; i < systemList.size(); i++){
+					systems[i] = systemList.get(i).getString("name");
+				}
+				showDialog(PICK_SYS_DIALOG_ID);
+
+			}
+			
+		});
 	}
 
 	public void showStartTimeDialog(View view){
@@ -425,16 +457,11 @@ public class CreateNewEvent extends Activity {
 			return new TimePickerDialog(this,
 					mTimeSetListener2, mHour2, mMinute2, false);
 		case PICK_AFFILS_DIALOG_ID:
-			final CharSequence[] items = {"Group 1", "Group 2", "Group 3"};
-			affils = items;
-			affilsChecked = new boolean[items.length];
-
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle("Pick Affiliations");
-			builder.setMultiChoiceItems(items, null, new DialogInterface.OnMultiChoiceClickListener() {
+			builder.setMultiChoiceItems(groups, null, new DialogInterface.OnMultiChoiceClickListener() {
 				public void onClick(DialogInterface dialog, int item, boolean isChecked) {
-					Toast.makeText(getApplicationContext(), items[item], Toast.LENGTH_SHORT).show();
-					affilsChecked[item] = isChecked;
+					groupsChecked[item] = isChecked;
 				}
 			});
 			builder.setPositiveButton("Finished", new DialogInterface.OnClickListener() {
@@ -445,15 +472,10 @@ public class CreateNewEvent extends Activity {
 			AlertDialog alert = builder.create();
 			return alert;
 		case PICK_SYS_DIALOG_ID:
-			final CharSequence[] items2 = {"System 1", "System 2", "System 3"};
-			systems = items2;
-			systemsChecked = new boolean[items2.length];
-
 			AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
 			builder2.setTitle("Pick Affected Systems");
-			builder2.setMultiChoiceItems(items2, null, new DialogInterface.OnMultiChoiceClickListener() {
+			builder2.setMultiChoiceItems(systems, null, new DialogInterface.OnMultiChoiceClickListener() {
 				public void onClick(DialogInterface dialog, int item, boolean isChecked) {
-					Toast.makeText(getApplicationContext(), items2[item], Toast.LENGTH_SHORT).show();
 					systemsChecked[item] = isChecked;
 				}
 			});
