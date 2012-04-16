@@ -79,7 +79,7 @@ public class ShowEvent extends Activity {
 						temp.setText(formatter.format(date2));
 						temp = (TextView)findViewById(R.id.affilsText);
 
-						List<String> affilList = event.getList("affils");
+						List<String> affilList = event.getList("groups");
 						StringBuilder affilText = new StringBuilder();
 						if(affilList != null){
 							for(String s : affilList){
