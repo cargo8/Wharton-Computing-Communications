@@ -334,10 +334,10 @@ public class CreateNewEvent extends Activity {
 						PushUtils.lazySubscribeContact(context, event, userId2);
 
 					//TODO: Subscribe affiliated groups
-					for (String group : ((List<String>) event.get("systems"))) {
-						ParseQuery q = new ParseQuery("_User");
-						q.whereContains("systems", group);
-					}
+//					for (String group : ((List<String>) event.get("systems"))) {
+//						ParseQuery q = new ParseQuery("_User");
+//						q.whereContains("systems", group);
+//					}
 					i.putExtra("eventKey", id);
 					finish();
 					startActivity(i);	
