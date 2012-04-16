@@ -1,5 +1,6 @@
 package edu.upenn.cis350;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -95,6 +96,22 @@ public class EditProfile extends Activity {
     	user.put("email2", email2);
     	user.put("phone1", phone1);
     	user.put("phone2", phone2);
+    	if(groups != null){
+    		List<String> gl = new ArrayList<String>();
+    		for(int i = 0; i < groups.length; i++){
+    			if(groupsChecked[i])
+    				gl.add(groups[i].toString());
+    		}
+    		user.put("groups", gl);
+    	}
+    	if(systems != null){
+    		List<String> sl = new ArrayList<String>();
+    		for(int i = 0; i < systems.length; i++){
+    			if(systemsChecked[i])
+    				sl.add(systems[i].toString());
+    		}
+    		user.put("systems", sl);
+    	}
 
 		user.saveEventually();
 		finish();

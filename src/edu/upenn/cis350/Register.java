@@ -77,18 +77,22 @@ public class Register extends Activity {
     	user.put("email2", email2);
     	user.put("phone1", phone1);
     	user.put("phone2", phone2);
-    	List<String> gl = new ArrayList<String>();
-    	for(int i = 0; i < groups.length; i++){
-    		if(groupsChecked[i])
-    			gl.add(groups[i].toString());
+    	if(groups != null){
+    		List<String> gl = new ArrayList<String>();
+    		for(int i = 0; i < groups.length; i++){
+    			if(groupsChecked[i])
+    				gl.add(groups[i].toString());
+    		}
+    		user.put("groups", gl);
     	}
-    	user.put("groups", gl);
-    	List<String> sl = new ArrayList<String>();
-    	for(int i = 0; i < systems.length; i++){
-    		if(systemsChecked[i])
-    			sl.add(systems[i].toString());
+    	if(systems != null){
+    		List<String> sl = new ArrayList<String>();
+    		for(int i = 0; i < systems.length; i++){
+    			if(systemsChecked[i])
+    				sl.add(systems[i].toString());
+    		}
+    		user.put("systems", sl);
     	}
-    	user.put("systems", sl);
 
     	
 
