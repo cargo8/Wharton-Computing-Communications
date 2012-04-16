@@ -203,4 +203,10 @@ public class Register extends Activity {
 		});
 	}
 	
+	@Override
+	public void onBackPressed() {
+		Intent i = new Intent(this, Login.class);
+		finish();
+		startActivity(i);
+	}
 }
