@@ -160,7 +160,7 @@ public class ShowEvent extends Activity {
 		messagesPane.removeAllViews();
 		final Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
 		ParseQuery query = new ParseQuery("Message");
-		query.orderByAscending("timestamp");
+		query.orderByDescending("timestamp");
 		query.whereEqualTo("event", event.getObjectId());
 		query.findInBackground(new FindCallback() {
 
@@ -197,8 +197,8 @@ public class ShowEvent extends Activity {
 		LinearLayout header = new LinearLayout(this);
 		header.setOrientation(0);
 
-		TextView posted = new TextView(this);
-		posted.setText("Posted by ");
+//		TextView posted = new TextView(this);
+//		posted.setText("Posted by ");
 
 		final TextView author = new TextView(this);
 		obj.getParseUser("author").fetchIfNeededInBackground(new GetCallback(){
@@ -207,7 +207,7 @@ public class ShowEvent extends Activity {
 			public void done(ParseObject arg0, ParseException arg1) {
 				// TODO Auto-generated method stub
 				ParseUser user = (ParseUser)arg0;
-				author.setText(user.getString("fullName"));
+				author.setText(user.getString("fullName") + " ");
 				author.setTypeface(Typeface.DEFAULT_BOLD);
 			}
 
@@ -217,27 +217,33 @@ public class ShowEvent extends Activity {
 
 		TextView timestamp = new TextView(this);
 		Long time = obj.getLong("timestamp");
-		SimpleDateFormat formatter = new SimpleDateFormat();
-		timestamp.setText(" at " + formatter.format(new Date(time)));
-
+		SimpleDateFormat formatter = new SimpleDateFormat("MMMM d 'at' h:mm a ");
+		timestamp.setText(formatter.format(new Date(time)));
+		
 		TextView comments = new TextView(this);
 		int noOfComments = obj.getInt("count");
 		if(noOfComments > 0)
-			comments.setText(noOfComments + " comment" + (noOfComments == 1 ? "" : "s") + '\n');
+			comments.setText("- " + noOfComments + " comment" + (noOfComments == 1 ? "" : "s") + '\n');
 		else
-			comments.setText("No comments" + '\n');
+			comments.setText("" + '\n');
+//			comments.setText("No comments" + '\n');
 
-		header.addView(posted);
+//		header.addView(posted);
 		header.addView(author);
-		header.addView(timestamp);
+//		header.addView(timestamp);
 
 		TextView messageText = new TextView(this);
 		messageText.setText(obj.getString("text"));
-		messageText.setTypeface(Typeface.DEFAULT_BOLD);
+//		messageText.setTypeface(Typeface.DEFAULT_BOLD);
+		header.addView(messageText);
+		
+		LinearLayout timeAndComments = new LinearLayout(this);
+		timeAndComments.addView(timestamp);
+		timeAndComments.addView(comments);
 
-		messageFrame.addView(messageText);
+//		messageFrame.addView(messageText);
 		messageFrame.addView(header);
-		messageFrame.addView(comments);
+		messageFrame.addView(timeAndComments);
 
 		final Intent i = new Intent(this, ShowMessage.class);
 
