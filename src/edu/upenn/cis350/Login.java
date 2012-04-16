@@ -69,6 +69,7 @@ public class Login extends Activity {
 	// onClick function of register button
 	public void clickRegister(View view) {
 		Intent i = new Intent(this, Register.class);
+		finish();
 		startActivity(i);
 	}
 
