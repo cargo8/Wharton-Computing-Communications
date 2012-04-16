@@ -148,11 +148,6 @@ public class ShowEvent extends Activity {
 		}
 	}
 
-	@Override
-	public void onBackPressed() {
-		finish();
-	}
-	
 	// populates the messages in the bottom half of the view from the DB
 	public void populateMessages() {
 
