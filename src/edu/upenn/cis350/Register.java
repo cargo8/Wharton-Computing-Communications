@@ -11,6 +11,7 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -76,13 +77,26 @@ public class Register extends Activity {
     	user.put("email2", email2);
     	user.put("phone1", phone1);
     	user.put("phone2", phone2);
+    	List<String> gl = new ArrayList<String>();
+    	for(int i = 0; i < groups.length; i++){
+    		if(groupsChecked[i])
+    			gl.add(groups[i].toString());
+    	}
+    	user.put("groups", gl);
+    	List<String> sl = new ArrayList<String>();
+    	for(int i = 0; i < systems.length; i++){
+    		if(systemsChecked[i])
+    			sl.add(systems[i].toString());
+    	}
+    	user.put("systems", sl);
 
     	
 
     	final Toast successToast = Toast.makeText(this, "User " + uname + " created.", Toast.LENGTH_SHORT);
 		
 		final Toast failToast = Toast.makeText(this, "Could not create user. Try again.", Toast.LENGTH_SHORT);
-		
+		final Intent i = new Intent(this, Agenda.class);
+
     	user.signUpInBackground(new SignUpCallback() {
     	    public void done(ParseException e) {
     	        if (e == null) {
@@ -96,6 +110,7 @@ public class Register extends Activity {
 					}
 					successToast.show();
 					finish();
+					startActivity(i);
     	        } else {
     	            // Sign up didn't succeed. Look at the ParseException
     	            // to figure out what went wrong
@@ -114,7 +129,7 @@ public class Register extends Activity {
 
 
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setTitle("Pick Affiliations");
+			builder.setTitle("Pick Groups");
 			builder.setMultiChoiceItems(groups, null, new DialogInterface.OnMultiChoiceClickListener() {
 				public void onClick(DialogInterface dialog, int item, boolean isChecked) {
 					groupsChecked[item] = isChecked;
