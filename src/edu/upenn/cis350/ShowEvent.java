@@ -1,6 +1,7 @@
 package edu.upenn.cis350;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -11,11 +12,16 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,13 +52,11 @@ public class ShowEvent extends Activity {
 		Parse.initialize(this, "FWyFNrvpkliSb7nBNugCNttN5HWpcbfaOWEutejH", "SZoWtHw28U44nJy8uKtV2oAQ8suuCZnFLklFSk46");
 		Bundle extras = this.getIntent().getExtras();
 		if(extras != null){
-			//event = (EventPOJO)extras.get("eventPOJO");
-			//uname = extras.getString("user");
 			ParseQuery query = new ParseQuery("Event");
 
 			final Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
 			dialog = ProgressDialog.show(this, "", 
-                    "Loading. Please wait...", true);
+					"Loading. Please wait...", true);
 			dialog.setCancelable(true);
 			query.getInBackground(extras.getString("eventKey"), new GetCallback() {
 
@@ -68,8 +72,6 @@ public class ShowEvent extends Activity {
 						temp.setText(event.getString("title"));
 						temp = (TextView)findViewById(R.id.eventDescText);
 						temp.setText("\n" + event.getString("description") + "\n");
-						//temp = (TextView)findViewById(R.id.eventActionsText);
-						//temp.setText(event.getString("actionItems" + "\n"));
 						temp = (TextView)findViewById(R.id.startDateDisplay2);
 						SimpleDateFormat formatter = new SimpleDateFormat();
 						Date date1 = new Date(event.getLong("startDate"));
@@ -140,40 +142,33 @@ public class ShowEvent extends Activity {
         	}
 			 */
 
-
-
-
-
-
 		}
 	}
 
-	// populates the messages in the bottom half of the view from the DB
+	/**
+	 * Populate Messages List in Bottom Half of Activity from ParseDB
+	 */
 	public void populateMessages() {
-
-		final LinearLayout messagesPane = (LinearLayout) findViewById(R.id.messagesPane);
-		messagesPane.removeAllViews();
-		final Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
+		final ListView msgList = (ListView) findViewById(R.id.messagesList);
 		ParseQuery query = new ParseQuery("Message");
-		query.orderByDescending("timestamp");
+		query.orderByAscending("timestamp");
 		query.whereEqualTo("event", event.getObjectId());
 		query.findInBackground(new FindCallback() {
 
 			@Override
-			public void done(List<ParseObject> arg0, ParseException arg1) {
-				if(arg1 == null){
-					for(ParseObject obj : arg0){
-						LinearLayout messageFrame = getMessageFrame(obj);
+			public void done(List<ParseObject> messages, ParseException e) {
+				if(e == null){
+					List<ListItem> items = new ArrayList<ListItem>();
 
-						messagesPane.addView(messageFrame);
-						toast.setText("Retrieved " + arg0.size() + " messages");
-						toast.show();
+					for(ParseObject obj : messages){
+						items.add(new ListItem(obj, false));
 					}
+					msgList.setAdapter(new MessageListAdapter(getApplicationContext(), 
+							items));
 					dialog.cancel();
-				}
-				else {
-					toast.setText("Error: " + arg1.getMessage());
-					toast.show();
+				} else {
+					Toast.makeText(getApplicationContext(), 
+							"Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
 				}
 
 			}
@@ -182,74 +177,6 @@ public class ShowEvent extends Activity {
 		//LinearLayout messagesPane = (LinearLayout) findViewById(R.id.messagesPane);
 		//messagesPane.removeAllViews();
 		//messagesPane.addView(messageFrame);
-	}
-
-	public LinearLayout getMessageFrame(final ParseObject obj){
-		LinearLayout messageFrame = new LinearLayout(this);
-		messageFrame.setOrientation(1);
-		messageFrame.setPadding(1, 1, 1, 1);
-
-		LinearLayout header = new LinearLayout(this);
-		header.setOrientation(0);
-
-//		TextView posted = new TextView(this);
-//		posted.setText("Posted by ");
-
-		final TextView author = new TextView(this);
-		obj.getParseUser("author").fetchIfNeededInBackground(new GetCallback(){
-
-			@Override
-			public void done(ParseObject arg0, ParseException arg1) {
-				// TODO Auto-generated method stub
-				ParseUser user = (ParseUser)arg0;
-				author.setText(user.getString("fullName") + " ");
-				author.setTypeface(Typeface.DEFAULT_BOLD);
-			}
-
-		});
-		//author.setText(user.getUsername());
-		//author.setTypeface(Typeface.DEFAULT_BOLD);
-
-		TextView timestamp = new TextView(this);
-		Long time = obj.getLong("timestamp");
-		SimpleDateFormat formatter = new SimpleDateFormat("MMMM d 'at' h:mm a ");
-		timestamp.setText(formatter.format(new Date(time)));
-		
-		TextView comments = new TextView(this);
-		int noOfComments = obj.getInt("count");
-		if(noOfComments > 0)
-			comments.setText("- " + noOfComments + " comment" + (noOfComments == 1 ? "" : "s") + '\n');
-		else
-			comments.setText("" + '\n');
-//			comments.setText("No comments" + '\n');
-
-//		header.addView(posted);
-		header.addView(author);
-//		header.addView(timestamp);
-
-		TextView messageText = new TextView(this);
-		messageText.setText(obj.getString("text"));
-//		messageText.setTypeface(Typeface.DEFAULT_BOLD);
-		header.addView(messageText);
-		
-		LinearLayout timeAndComments = new LinearLayout(this);
-		timeAndComments.addView(timestamp);
-		timeAndComments.addView(comments);
-
-//		messageFrame.addView(messageText);
-		messageFrame.addView(header);
-		messageFrame.addView(timeAndComments);
-
-		final Intent i = new Intent(this, ShowMessage.class);
-
-		messageFrame.setOnClickListener(new LinearLayout.OnClickListener() {  
-			public void onClick(View v){
-				i.putExtra("messageID", obj.getObjectId());
-				startActivity(i);
-			}
-		});
-
-		return messageFrame;
 	}
 
 	/**
@@ -358,5 +285,91 @@ public class ShowEvent extends Activity {
 				}
 			}
 		});
+	}
+
+	/**
+	 * Adapter for formatting the Events into ListView items
+	 * 
+	 * @author JMow
+	 * 
+	 */
+	private class MessageListAdapter extends ArrayAdapter<ListItem> {
+
+		private List<ListItem> events;
+
+		public MessageListAdapter(Context context, List<ListItem> events) {
+			super(context, 0, events);
+			this.events = events;
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			View v = convertView;
+			LayoutInflater vi = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+			final ListItem item = events.get(position);
+
+			if (item != null) {
+				// Not used right now
+				if (item.isSection()) {
+					/* This is a section header */
+					String title = (String) item.getData();
+					v = vi.inflate(R.layout.list_divider, null);
+
+					v.setOnClickListener(null);
+					v.setOnLongClickListener(null);
+					v.setLongClickable(false);
+
+					final TextView sectionView = (TextView) v.findViewById(R.id.list_item_section_text);
+					sectionView.setText(title);
+
+				} else {
+					/* This is a real list item */
+					final ParseObject message = (ParseObject) item.getData();
+					v = vi.inflate(R.layout.message_list_item, null);
+
+					TextView temp = (TextView) v.findViewById(R.id.listMessageText);
+					if (temp != null) {
+						temp.setText(message.getString("text"));
+					}
+
+					temp = (TextView) v.findViewById(R.id.listMessageAuthor);
+					if (temp != null) {
+						ParseUser author;
+						try {
+							author = (ParseUser) message.getParseUser("author").fetch();
+							temp.setText(author.getString("fullName"));
+							temp.setTypeface(Typeface.DEFAULT_BOLD);
+						} catch (ParseException e) {
+							e.printStackTrace();
+						}
+					}
+					temp = (TextView) v.findViewById(R.id.listMessageTimestamp);
+					if (temp != null) {
+						Long time = message.getLong("timestamp");
+						final SimpleDateFormat formatter = new SimpleDateFormat("MMMM d 'at' h:mm a ");
+						temp.setText(formatter.format(new Date(time)));
+					}
+					temp = (TextView) v.findViewById(R.id.listMessageCommentCounter);
+					if (temp != null) {
+						int noOfComments = message.getInt("count");
+						if(noOfComments > 0)
+							temp.setText(noOfComments + " comment" + (noOfComments == 1 ? "" : "s") + '\n');
+						else
+							temp.setText("" + '\n');
+					}
+
+					v.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							Intent i = new Intent(getApplicationContext(), ShowMessage.class);
+							i.putExtra("messageID", message.getObjectId());
+							startActivity(i);
+						}
+					});
+				}
+			}
+			return v;
+		}
 	}
 }

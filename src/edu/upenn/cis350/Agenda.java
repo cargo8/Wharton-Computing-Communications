@@ -58,11 +58,10 @@ public class Agenda extends Activity {
 		query.findInBackground(new FindCallback() {
 
 			@Override
-			@SuppressWarnings({ "unchecked", "rawtypes" })
 			/* Needs to be type-unsafe to dynamically create section dividers */
 			public void done(final List<ParseObject> events, ParseException e) {
 				if (e == null) {
-					List items = new ArrayList();					
+					List<ListItem> items = new ArrayList<ListItem>();					
 
 					// The following is not ideal, but I guess only O(3n) = O(n)
 					items.add(new ListItem("Emergency Events", true));
