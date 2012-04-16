@@ -1,16 +1,26 @@
 package edu.upenn.cis350;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.PushService;
 import com.parse.SignUpCallback;
@@ -19,6 +29,13 @@ import com.parse.SignUpCallback;
  * In the future, this will contain more fields to create a more robust "contact"
  */
 public class Register extends Activity {
+
+	private static final int PICK_AFFILS_DIALOG_ID = 0;
+	private static final int PICK_SYS_DIALOG_ID = 1;
+	private CharSequence[] groups;
+	private boolean[] groupsChecked;
+	private CharSequence[] systems;
+	private boolean[] systemsChecked;
 
 	/** Called when the activity is first created. */
     @Override
@@ -88,4 +105,87 @@ public class Register extends Activity {
     	    }
     	});	
     }
+    
+	// creates dialogs
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		switch (id) {
+		case PICK_AFFILS_DIALOG_ID:
+
+
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle("Pick Affiliations");
+			builder.setMultiChoiceItems(groups, null, new DialogInterface.OnMultiChoiceClickListener() {
+				public void onClick(DialogInterface dialog, int item, boolean isChecked) {
+					groupsChecked[item] = isChecked;
+				}
+			});
+			builder.setPositiveButton("Finished", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					dialog.dismiss();
+				}
+			});
+			AlertDialog alert = builder.create();
+			return alert;
+		case PICK_SYS_DIALOG_ID:
+
+			AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
+			builder2.setTitle("Pick Affected Systems");
+			builder2.setMultiChoiceItems(systems, null, new DialogInterface.OnMultiChoiceClickListener() {
+				public void onClick(DialogInterface dialog, int item, boolean isChecked) {
+					systemsChecked[item] = isChecked;
+				}
+			});
+			builder2.setPositiveButton("Finished", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					dialog.dismiss();
+				}
+			});
+			AlertDialog alert2 = builder2.create();
+			return alert2;
+		}
+		return null;
+	}
+	
+	// onClick function of pickAffils button
+	public void showPickGroupsDialog(View view){
+		ParseQuery query = new ParseQuery("Group");
+		query.orderByAscending("name");
+		query.findInBackground(new FindCallback(){
+
+			@Override
+			public void done(List<ParseObject> groupList, ParseException arg1) {
+				// TODO Auto-generated method stub
+				groups = new CharSequence[groupList.size()];
+				groupsChecked = new boolean[groupList.size()];
+				for(int i = 0; i < groupList.size(); i++){
+					groups[i] = groupList.get(i).getString("name");
+				}
+				showDialog(PICK_AFFILS_DIALOG_ID);
+
+			}
+			
+		});
+	}
+	// onClick function of pickSys button
+	public void showPickSysDialog(View view){
+		ParseQuery query = new ParseQuery("System");
+		query.orderByAscending("name");
+		query.findInBackground(new FindCallback(){
+
+			@Override
+			public void done(List<ParseObject> systemList, ParseException arg1) {
+				// TODO Auto-generated method stub
+				systems = new CharSequence[systemList.size()];
+				systemsChecked = new boolean[systemList.size()];
+				for(int i = 0; i < systemList.size(); i++){
+					systems[i] = systemList.get(i).getString("name");
+				}
+				showDialog(PICK_SYS_DIALOG_ID);
+
+			}
+			
+		});
+	}
+	
 }
