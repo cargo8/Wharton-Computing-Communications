@@ -82,14 +82,14 @@ public class ShowMessage extends Activity {
 							public void done(ParseObject arg0, ParseException arg1) {
 								ParseUser user = (ParseUser)arg0;
 								String author = user.getString("fullName");
-								authorView.setText("Posted by " + author + " at ");
+								authorView.setText(author + " - ");
 							}
 
 						});
 
 						temp = (TextView) findViewById(R.id.messageTimestamp);
 						temp.setTextColor(Color.WHITE);
-						SimpleDateFormat formatter = new SimpleDateFormat();
+						SimpleDateFormat formatter = new SimpleDateFormat("MMMM d 'at' h:mm a ");
 						temp.setText(formatter.format(new Date(msg.getLong("timestamp"))));
 
 						getComments(msg);
