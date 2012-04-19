@@ -26,15 +26,6 @@ public class Login extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Parse.initialize(this, "FWyFNrvpkliSb7nBNugCNttN5HWpcbfaOWEutejH", "SZoWtHw28U44nJy8uKtV2oAQ8suuCZnFLklFSk46");
-		ParseUser currentUser = ParseUser.getCurrentUser();
-		if (currentUser != null) {		    
-			Intent i = new Intent(this, Home.class);
-			Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
-		    finish();
-		    startActivity(i);
-		} else {
-			setContentView(R.layout.login);
-		}
 	}
 
 	/**
