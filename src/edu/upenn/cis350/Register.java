@@ -6,9 +6,7 @@ import java.util.Set;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -47,20 +45,32 @@ public class Register extends Activity {
         
     }
     
+    private String checkBlank(String input) {
+    	if ("".equals(input))
+    		return "None";
+    	else
+    		return input;
+    }
+    
     /**
      * Registers a new user in the application
      * @param view
      */
     public void newUser(View view) {
     	String uname = ((EditText)findViewById(R.id.loginUsername)).getText().toString().toLowerCase();
+    	uname = checkBlank(uname);
 		String pw = ((EditText)findViewById(R.id.loginPassword)).getText().toString();
 		String pw2 = ((EditText)findViewById(R.id.loginPassword2)).getText().toString();
 		String fname = ((EditText)findViewById(R.id.registerFname)).getText().toString();
 		String lname = ((EditText)findViewById(R.id.registerLname)).getText().toString();
-		String email1 = ((EditText)findViewById(R.id.registerEmail1)).getText().toString();
-		String email2 = ((EditText)findViewById(R.id.registerEmail2)).getText().toString();
+		String email1 = ((EditText)findViewById(R.id.registerEmail1)).getText().toString().toLowerCase();
+		email1 = checkBlank(email1);
+		String email2 = ((EditText)findViewById(R.id.registerEmail2)).getText().toString().toLowerCase();
+		email2 = checkBlank(email2);
 		String phone1 = ((EditText)findViewById(R.id.registerPhone1)).getText().toString();
+		phone1 = checkBlank(phone1);
 		String phone2 = ((EditText)findViewById(R.id.registerPhone2)).getText().toString();
+		phone2 = checkBlank(phone2);
     	
 		if ("".equals(uname)) {
 			Toast.makeText(this, "Please enter a username.", Toast.LENGTH_SHORT).show();
