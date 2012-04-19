@@ -110,7 +110,7 @@ public class Agenda extends Activity {
 	private ParseQuery getQuery(Filter filter) {
 		ParseQuery query = new ParseQuery("Event");
 		query.orderByAscending("startDate");
-		query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
+		query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
 
 		Long now = System.currentTimeMillis();
 		if (Filter.NEW.equals(filter)) {

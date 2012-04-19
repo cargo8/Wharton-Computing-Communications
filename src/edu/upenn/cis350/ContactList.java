@@ -38,7 +38,7 @@ public class ContactList extends ListActivity {
         
     	final Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT); 
     	
-    	query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
+    	query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
     	query.findInBackground(new FindCallback() {
 
 			@Override
