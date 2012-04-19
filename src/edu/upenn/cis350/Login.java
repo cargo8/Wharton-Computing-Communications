@@ -26,35 +26,37 @@ public class Login extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Parse.initialize(this, "FWyFNrvpkliSb7nBNugCNttN5HWpcbfaOWEutejH", "SZoWtHw28U44nJy8uKtV2oAQ8suuCZnFLklFSk46");
+		ParseUser currentUser = ParseUser.getCurrentUser();
+		setContentView(R.layout.login);
 	}
 
 	/**
 	 * Logs in the User
 	 */
 	public void login(View view) {
-				
+
 		String uname = ((EditText)findViewById(R.id.loginUsername)).getText().toString().toLowerCase();
 		String pw = ((EditText)findViewById(R.id.loginPassword)).getText().toString();
 
 		final Toast successToast = Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT);
 		final Intent i = new Intent(this, Home.class);
-		
+
 		final Toast failureToast = Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT);
-		
+
 		ParseUser.logInInBackground(uname, pw, new LogInCallback() {
-		    public void done(ParseUser user, ParseException e) {
-		        if (user != null) {
-		            // Hooray! The user is logged in.
-		        	successToast.show();
-		    		finish();
-		    		startActivity(i);
-		        } else {
-		            // Signup failed. Look at the ParseException to see what happened.
-		        	failureToast.show();
-		        }
-		    }
+			public void done(ParseUser user, ParseException e) {
+				if (user != null) {
+					// Hooray! The user is logged in.
+					successToast.show();
+					finish();
+					startActivity(i);
+				} else {
+					// Signup failed. Look at the ParseException to see what happened.
+					failureToast.show();
+				}
+			}
 		});
-		
+
 	}
 
 	// onClick function of register button
