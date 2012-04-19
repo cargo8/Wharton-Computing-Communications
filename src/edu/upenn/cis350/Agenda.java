@@ -34,8 +34,10 @@ import com.parse.ParseQuery;
 public class Agenda extends Activity {
 
 	private enum Filter {
-		NEW, THREE_WEEKS_OLD;
+		NEW, ALL, THREE_WEEKS_OLD;
 	}
+	
+	private Filter filter;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -48,7 +50,6 @@ public class Agenda extends Activity {
 
 		Bundle extras = getIntent().getExtras();
 		ParseQuery query;
-		Filter filter = null;
 		
 		if (extras != null) {
 			filter = (Filter) extras.get("filter");
@@ -56,11 +57,15 @@ public class Agenda extends Activity {
 		if (filter == null) {
 			query = getQuery(Filter.NEW);
 		} else {
-			if (filter.equals(Filter.THREE_WEEKS_OLD)) { 
+			if (filter.equals(Filter.NEW)) { 
+				query = getQuery(Filter.NEW);
+			} else if (filter.equals(Filter.ALL)) {
+				query = getQuery(Filter.ALL);
+			} else if (filter.equals(Filter.THREE_WEEKS_OLD)) {
 				query = getQuery(Filter.THREE_WEEKS_OLD);
 			} else {
 				// TODO: Other filters
-				query = getQuery(Filter.THREE_WEEKS_OLD);
+				query = getQuery(Filter.NEW);
 			}
 		}
 
@@ -116,6 +121,8 @@ public class Agenda extends Activity {
 			// Only show events with start date greater than THREE WEEKS AGO
 			query.whereGreaterThanOrEqualTo("endDate", now-1814400000);
 
+		} else if (Filter.ALL.equals(filter)) {
+			
 		}
 		return query;
 	}
@@ -134,6 +141,7 @@ public class Agenda extends Activity {
 		int id = item.getItemId();
 		if(id == R.id.refreshAgenda){
 			Intent i = new Intent(this, Agenda.class);
+			i.putExtra("filter", filter);
 			finish();
 			startActivity(i);
 			return true;
@@ -145,9 +153,15 @@ public class Agenda extends Activity {
 			return true;
 		} else if (id == R.id.showUpcomingEvents) {
 			Intent i = new Intent(this, Agenda.class);
+			i.putExtra("filter", Filter.NEW);
 			finish();
 			startActivity(i);
 			return true;
+		} else if (id == R.id.showAllEvents) {
+			Intent i = new Intent(this, Agenda.class);
+			i.putExtra("filter", Filter.THREE_WEEKS_OLD);
+			finish();
+			startActivity(i);
 		}
 		return false;
 	}
