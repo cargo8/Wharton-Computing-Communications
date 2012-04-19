@@ -27,12 +27,15 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
-
 /* This activity shows the events in a list form.
  * Events are separated by type - Emergency and Scheduled.
  * Clicking on an event goes to the ShowEvent view for that Event.
  */
 public class Agenda extends Activity {
+
+	private enum Filter {
+		NEW, THREE_WEEKS_OLD;
+	}
 
 	/** Called when the activity is first created. */
 	@Override
@@ -43,14 +46,23 @@ public class Agenda extends Activity {
 
 		final ListView eventList = (ListView) findViewById(R.id.eventList);
 
-		ParseQuery query = new ParseQuery("Event");
-		query.orderByAscending("startDate");
-
-		// Only show events with end date greater than now
-		Long now = System.currentTimeMillis();
-		query.whereGreaterThanOrEqualTo("endDate", now);
-
-		query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
+		Bundle extras = getIntent().getExtras();
+		ParseQuery query;
+		Filter filter = null;
+		
+		if (extras != null) {
+			filter = (Filter) extras.get("filter");
+		}
+		if (filter == null) {
+			query = getQuery(Filter.NEW);
+		} else {
+			if (filter.equals(Filter.THREE_WEEKS_OLD)) { 
+				query = getQuery(Filter.THREE_WEEKS_OLD);
+			} else {
+				// TODO: Other filters
+				query = getQuery(Filter.THREE_WEEKS_OLD);
+			}
+		}
 
 		final ProgressDialog dialog = ProgressDialog.show(this, "", 
 				"Loading. Please wait...", true);
@@ -76,7 +88,7 @@ public class Agenda extends Activity {
 							items.add(new ListItem(event, false));
 						}
 					}
-					items.add(new ListItem("Recently Resolved Events", true));
+					items.add(new ListItem("Resolved Events", true));
 					for (ParseObject event : events) {
 						if ("Resolved".equals(event.getString("type"))) {
 							items.add(new ListItem(event, false));
@@ -90,18 +102,48 @@ public class Agenda extends Activity {
 		});
 	}
 
+	private ParseQuery getQuery(Filter filter) {
+		ParseQuery query = new ParseQuery("Event");
+		query.orderByAscending("startDate");
+		query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
+
+		Long now = System.currentTimeMillis();
+		if (Filter.NEW.equals(filter)) {
+			// Only show events with end date greater than now
+			query.whereGreaterThanOrEqualTo("endDate", now);
+
+		} else if (Filter.THREE_WEEKS_OLD.equals(filter)) {
+			// Only show events with start date greater than THREE WEEKS AGO
+			query.whereGreaterThanOrEqualTo("endDate", now-1814400000);
+
+		}
+		return query;
+	}
+
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.agenda_menu, menu);
 		return true;
 	}
-	
+
 	/**
 	 * Method that gets called when the menuitem is clicked
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if(item.getItemId() == R.id.refreshAgenda){
+		int id = item.getItemId();
+		if(id == R.id.refreshAgenda){
+			Intent i = new Intent(this, Agenda.class);
+			finish();
+			startActivity(i);
+			return true;
+		} else if (id == R.id.showThreeWeekOldEvents) {
+			Intent i = new Intent(this, Agenda.class);
+			i.putExtra("filter", Filter.THREE_WEEKS_OLD);
+			finish();
+			startActivity(i);
+			return true;
+		} else if (id == R.id.showUpcomingEvents) {
 			Intent i = new Intent(this, Agenda.class);
 			finish();
 			startActivity(i);
@@ -109,7 +151,7 @@ public class Agenda extends Activity {
 		}
 		return false;
 	}
-	
+
 	@Override
 	public void onResume() {
 		onCreate(new Bundle());
@@ -182,7 +224,7 @@ public class Agenda extends Activity {
 						temp.setBackgroundColor(event.getInt("severity"));
 					}
 					v.setOnClickListener(new OnClickListener() {
-						
+
 						@Override
 						public void onClick(View v) {
 							Intent i = new Intent(getApplicationContext(), ShowEvent.class);
