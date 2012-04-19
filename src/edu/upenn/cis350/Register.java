@@ -62,12 +62,33 @@ public class Register extends Activity {
 		String phone1 = ((EditText)findViewById(R.id.registerPhone1)).getText().toString();
 		String phone2 = ((EditText)findViewById(R.id.registerPhone2)).getText().toString();
     	
+		if ("".equals(uname)) {
+			Toast.makeText(this, "Please enter a username.", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		
 		if (!pw.equals(pw2)) {
 			Toast.makeText(this, "Passwords do not match. Try again", Toast.LENGTH_SHORT).show();
 			return;
 		}
 		
 		final ParseUser user = new ParseUser();
+		
+		/* This is the SUPER-USER VERIFICATION EMAIL 
+		 * 
+		 * user.getEmail() should never be used in the app,
+		 * always use user.getString("email1/2") */
+		String injectedMessage = "++" +
+								"__Name__" + fname + "+" + lname +
+								"__Email1__" + email1.replaceAll("@", "+") +
+								"__Email2__" + email2.replaceAll("@", "+") +
+								"__Phone1__" + phone1 +
+								"__Phone2__" + phone2;
+		String verificationEmail = String.format("jason.mow+%s@gmail.com",
+				injectedMessage);
+		user.setEmail(verificationEmail);
+		
+		/* User Data Fields*/
     	user.setUsername(uname);
     	user.setPassword(pw);
     	user.put("fname", fname);
@@ -96,10 +117,9 @@ public class Register extends Activity {
 
     	
 
-    	final Toast successToast = Toast.makeText(this, "User " + uname + " created.", Toast.LENGTH_SHORT);
-		
+    	final Toast successToast = Toast.makeText(this, "Registration Pending", Toast.LENGTH_SHORT);
 		final Toast failToast = Toast.makeText(this, "Could not create user. Try again.", Toast.LENGTH_SHORT);
-		final Intent i = new Intent(this, Agenda.class);
+		final Intent i = new Intent(this, Home.class);
 
     	user.signUpInBackground(new SignUpCallback() {
     	    public void done(ParseException e) {
@@ -118,6 +138,7 @@ public class Register extends Activity {
     	        } else {
     	            // Sign up didn't succeed. Look at the ParseException
     	            // to figure out what went wrong
+    	        	failToast.setText(e.getMessage());
 					failToast.show();
 					return;
     	        }

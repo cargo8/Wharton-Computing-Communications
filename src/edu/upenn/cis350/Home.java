@@ -37,6 +37,15 @@ public class Home extends ListActivity {
 		    finish();
 		    startActivity(i);
 		    return;
+		} else if (!currentUser.has("emailVerified")) {
+			//TODO: Remove when User tables are reset in future releases
+			//no-op to support pre-Beta 3.0 users
+		} else if (!currentUser.getBoolean("emailVerified")) {
+			Intent i = new Intent(this, Login.class);
+		    Toast.makeText(this, "Your registration has not been verified.", Toast.LENGTH_LONG).show();
+		    finish();
+		    startActivity(i);
+		    return;
 		}
 		
 		String[] options = getResources().getStringArray(R.array.home_options_array);
