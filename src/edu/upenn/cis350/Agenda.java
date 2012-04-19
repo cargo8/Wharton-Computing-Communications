@@ -55,17 +55,17 @@ public class Agenda extends Activity {
 			filter = (Filter) extras.get("filter");
 		}
 		if (filter == null) {
-			query = getQuery(Filter.NEW);
+			query = getQuery(Filter.NEW, false);
 		} else {
 			if (filter.equals(Filter.NEW)) { 
-				query = getQuery(Filter.NEW);
+				query = getQuery(Filter.NEW, true);
 			} else if (filter.equals(Filter.ALL)) {
-				query = getQuery(Filter.ALL);
+				query = getQuery(Filter.ALL, true);
 			} else if (filter.equals(Filter.THREE_WEEKS_OLD)) {
-				query = getQuery(Filter.THREE_WEEKS_OLD);
+				query = getQuery(Filter.THREE_WEEKS_OLD, true);
 			} else {
 				// TODO: Other filters
-				query = getQuery(Filter.NEW);
+				query = getQuery(Filter.NEW, false);
 			}
 		}
 
@@ -107,12 +107,17 @@ public class Agenda extends Activity {
 		});
 	}
 
-	private ParseQuery getQuery(Filter filter) {
+	private ParseQuery getQuery(Filter filter, boolean refresh) {
 		ParseQuery query = new ParseQuery("Event");
 		query.orderByAscending("startDate");
-		query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
-
 		Long now = System.currentTimeMillis();
+		
+		if (refresh) {
+			query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ELSE_CACHE);
+		} else {
+			query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
+		}
+		
 		if (Filter.NEW.equals(filter)) {
 			// Only show events with end date greater than now
 			query.whereGreaterThanOrEqualTo("endDate", now);
@@ -122,7 +127,7 @@ public class Agenda extends Activity {
 			query.whereGreaterThanOrEqualTo("endDate", now-1814400000);
 
 		} else if (Filter.ALL.equals(filter)) {
-			
+			// no-op
 		}
 		return query;
 	}
@@ -141,6 +146,9 @@ public class Agenda extends Activity {
 		int id = item.getItemId();
 		if(id == R.id.refreshAgenda){
 			Intent i = new Intent(this, Agenda.class);
+			if (filter == null) {
+				filter = Filter.NEW;
+			}
 			i.putExtra("filter", filter);
 			finish();
 			startActivity(i);
