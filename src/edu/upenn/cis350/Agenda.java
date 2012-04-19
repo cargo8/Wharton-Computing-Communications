@@ -34,7 +34,7 @@ import com.parse.ParseQuery;
 public class Agenda extends Activity {
 
 	private enum Filter {
-		NEW, ALL, THREE_WEEKS_OLD;
+		NEW, ALL, ONE_WEEK_OLD;
 	}
 	
 	private Filter filter;
@@ -55,17 +55,17 @@ public class Agenda extends Activity {
 			filter = (Filter) extras.get("filter");
 		}
 		if (filter == null) {
-			query = getQuery(Filter.NEW, false);
+			query = getQuery(Filter.NEW);
 		} else {
 			if (filter.equals(Filter.NEW)) { 
-				query = getQuery(Filter.NEW, true);
+				query = getQuery(Filter.NEW);
 			} else if (filter.equals(Filter.ALL)) {
-				query = getQuery(Filter.ALL, true);
-			} else if (filter.equals(Filter.THREE_WEEKS_OLD)) {
-				query = getQuery(Filter.THREE_WEEKS_OLD, true);
+				query = getQuery(Filter.ALL);
+			} else if (filter.equals(Filter.ONE_WEEK_OLD)) {
+				query = getQuery(Filter.ONE_WEEK_OLD);
 			} else {
 				// TODO: Other filters
-				query = getQuery(Filter.NEW, false);
+				query = getQuery(Filter.NEW);
 			}
 		}
 
@@ -107,24 +107,20 @@ public class Agenda extends Activity {
 		});
 	}
 
-	private ParseQuery getQuery(Filter filter, boolean refresh) {
+	private ParseQuery getQuery(Filter filter) {
 		ParseQuery query = new ParseQuery("Event");
 		query.orderByAscending("startDate");
 		Long now = System.currentTimeMillis();
 		
-		if (refresh) {
-			query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ELSE_CACHE);
-		} else {
-			query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
-		}
+		query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
 		
 		if (Filter.NEW.equals(filter)) {
 			// Only show events with end date greater than now
 			query.whereGreaterThanOrEqualTo("endDate", now);
 
-		} else if (Filter.THREE_WEEKS_OLD.equals(filter)) {
-			// Only show events with start date greater than THREE WEEKS AGO
-			query.whereGreaterThanOrEqualTo("endDate", now-1814400000);
+		} else if (Filter.ONE_WEEK_OLD.equals(filter)) {
+			// Only show events with start date greater than ONE WEEK AGO
+			query.whereGreaterThanOrEqualTo("startDate", now-604800000);
 
 		} else if (Filter.ALL.equals(filter)) {
 			// no-op
@@ -153,9 +149,9 @@ public class Agenda extends Activity {
 			finish();
 			startActivity(i);
 			return true;
-		} else if (id == R.id.showThreeWeekOldEvents) {
+		} else if (id == R.id.showOneWeekOldEvents) {
 			Intent i = new Intent(this, Agenda.class);
-			i.putExtra("filter", Filter.THREE_WEEKS_OLD);
+			i.putExtra("filter", Filter.ONE_WEEK_OLD);
 			finish();
 			startActivity(i);
 			return true;
@@ -167,7 +163,7 @@ public class Agenda extends Activity {
 			return true;
 		} else if (id == R.id.showAllEvents) {
 			Intent i = new Intent(this, Agenda.class);
-			i.putExtra("filter", Filter.THREE_WEEKS_OLD);
+			i.putExtra("filter", Filter.ALL);
 			finish();
 			startActivity(i);
 		}
