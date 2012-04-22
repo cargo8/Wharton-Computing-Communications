@@ -115,36 +115,6 @@ public class ShowEvent extends Activity {
 				}
 
 			});
-
-			/*
-        	CharSequence[] temp2 = extras.getCharSequenceArray("affils");
-        	boolean[] temp3 = extras.getBooleanArray("affilsChecked");
-        	StringBuilder affilText = new StringBuilder();
-        	if(temp2 != null && temp3 != null){
-        		for(int i = 0; i < temp2.length; i++){
-        			if(temp3[i])
-        				affilText.append(temp2[i] + "\t");
-        		}
-        	}
-			 */
-
-			/*
-        	temp2 = extras.getCharSequenceArray("systems");
-        	temp3 = extras.getBooleanArray("systemsChecked");
-        	StringBuilder systemText = new StringBuilder();
-        	if(temp2 != null && temp3 != null){
-        		for(int i = 0; i < temp2.length; i++){
-        			if(temp3[i])
-        				systemText.append(temp2[i] + "\t");
-        		}
-        	}
-			 */
-
-
-
-
-
-
 		}
 	}
 

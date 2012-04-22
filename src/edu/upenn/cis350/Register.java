@@ -39,20 +39,20 @@ public class Register extends Activity {
 	private boolean[] systemsChecked;
 
 	/** Called when the activity is first created. */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Parse.initialize(this, "FWyFNrvpkliSb7nBNugCNttN5HWpcbfaOWEutejH", "SZoWtHw28U44nJy8uKtV2oAQ8suuCZnFLklFSk46");
-        setContentView(R.layout.register);
-        
-    }
-    
-    /**
-     * Registers a new user in the application
-     * @param view
-     */
-    public void newUser(View view) {
-    	String uname = ((EditText)findViewById(R.id.loginUsername)).getText().toString().toLowerCase();
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		Parse.initialize(this, "FWyFNrvpkliSb7nBNugCNttN5HWpcbfaOWEutejH", "SZoWtHw28U44nJy8uKtV2oAQ8suuCZnFLklFSk46");
+		setContentView(R.layout.register);
+
+	}
+
+	/**
+	 * Registers a new user in the application
+	 * @param view
+	 */
+	public void newUser(View view) {
+		String uname = ((EditText)findViewById(R.id.loginUsername)).getText().toString().toLowerCase();
 		String pw = ((EditText)findViewById(R.id.loginPassword)).getText().toString();
 		String pw2 = ((EditText)findViewById(R.id.loginPassword2)).getText().toString();
 		String fname = ((EditText)findViewById(R.id.registerFname)).getText().toString();
@@ -61,70 +61,70 @@ public class Register extends Activity {
 		String email2 = ((EditText)findViewById(R.id.registerEmail2)).getText().toString();
 		String phone1 = ((EditText)findViewById(R.id.registerPhone1)).getText().toString();
 		String phone2 = ((EditText)findViewById(R.id.registerPhone2)).getText().toString();
-    	
+
 		if (!pw.equals(pw2)) {
 			Toast.makeText(this, "Passwords do not match. Try again", Toast.LENGTH_SHORT).show();
 			return;
 		}
-		
+
 		final ParseUser user = new ParseUser();
-    	user.setUsername(uname);
-    	user.setPassword(pw);
-    	user.put("fname", fname);
-    	user.put("lname", lname);
-    	user.put("fullName", fname + " " + lname);
-    	user.put("email1", email1);
-    	user.put("email2", email2);
-    	user.put("phone1", phone1);
-    	user.put("phone2", phone2);
-    	if(groups != null){
-    		List<String> gl = new ArrayList<String>();
-    		for(int i = 0; i < groups.length; i++){
-    			if(groupsChecked[i])
-    				gl.add(groups[i].toString());
-    		}
-    		user.put("groups", gl);
-    	}
-    	if(systems != null){
-    		List<String> sl = new ArrayList<String>();
-    		for(int i = 0; i < systems.length; i++){
-    			if(systemsChecked[i])
-    				sl.add(systems[i].toString());
-    		}
-    		user.put("systems", sl);
-    	}
+		user.setUsername(uname);
+		user.setPassword(pw);
+		user.put("fname", fname);
+		user.put("lname", lname);
+		user.put("fullName", fname + " " + lname);
+		user.put("email1", email1);
+		user.put("email2", email2);
+		user.put("phone1", phone1);
+		user.put("phone2", phone2);
+		if(groups != null){
+			List<String> gl = new ArrayList<String>();
+			for(int i = 0; i < groups.length; i++){
+				if(groupsChecked[i])
+					gl.add(groups[i].toString());
+			}
+			user.put("groups", gl);
+		}
+		if(systems != null){
+			List<String> sl = new ArrayList<String>();
+			for(int i = 0; i < systems.length; i++){
+				if(systemsChecked[i])
+					sl.add(systems[i].toString());
+			}
+			user.put("systems", sl);
+		}
 
-    	
 
-    	final Toast successToast = Toast.makeText(this, "User " + uname + " created.", Toast.LENGTH_SHORT);
-		
+
+		final Toast successToast = Toast.makeText(this, "User " + uname + " created.", Toast.LENGTH_SHORT);
+
 		final Toast failToast = Toast.makeText(this, "Could not create user. Try again.", Toast.LENGTH_SHORT);
 		final Intent i = new Intent(this, Agenda.class);
 
-    	user.signUpInBackground(new SignUpCallback() {
-    	    public void done(ParseException e) {
-    	        if (e == null) {
-    	        	Context context = getApplicationContext();
-    	        	Set<String> mySub = PushService.getSubscriptions(context);
+		user.signUpInBackground(new SignUpCallback() {
+			public void done(ParseException e) {
+				if (e == null) {
+					Context context = getApplicationContext();
+					Set<String> mySub = PushService.getSubscriptions(context);
 					if (!mySub.contains("push_" + user.getObjectId())) {
-	    				PushService.subscribe(context, "user_" + user.getObjectId(), Login.class);
+						PushService.subscribe(context, "user_" + user.getObjectId(), Login.class);
 					}
 					if (!mySub.contains("")) {
-	    	    		PushService.subscribe(context, "", Login.class);
+						PushService.subscribe(context, "", Login.class);
 					}
 					successToast.show();
 					finish();
 					startActivity(i);
-    	        } else {
-    	            // Sign up didn't succeed. Look at the ParseException
-    	            // to figure out what went wrong
+				} else {
+					// Sign up didn't succeed. Look at the ParseException
+					// to figure out what went wrong
 					failToast.show();
 					return;
-    	        }
-    	    }
-    	});	
-    }
-    
+				}
+			}
+		});	
+	}
+
 	// creates dialogs
 	@Override
 	protected Dialog onCreateDialog(int id) {
@@ -165,7 +165,7 @@ public class Register extends Activity {
 		}
 		return null;
 	}
-	
+
 	// onClick function of pickAffils button
 	public void showPickGroupsDialog(View view){
 		ParseQuery query = new ParseQuery("Group");
@@ -183,7 +183,7 @@ public class Register extends Activity {
 				showDialog(PICK_AFFILS_DIALOG_ID);
 
 			}
-			
+
 		});
 	}
 	// onClick function of pickSys button
@@ -203,10 +203,10 @@ public class Register extends Activity {
 				showDialog(PICK_SYS_DIALOG_ID);
 
 			}
-			
+
 		});
 	}
-	
+
 	@Override
 	public void onBackPressed() {
 		Intent i = new Intent(this, Login.class);
