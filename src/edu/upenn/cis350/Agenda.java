@@ -27,12 +27,17 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
-
 /* This activity shows the events in a list form.
  * Events are separated by type - Emergency and Scheduled.
  * Clicking on an event goes to the ShowEvent view for that Event.
  */
 public class Agenda extends Activity {
+
+	private enum Filter {
+		NEW, ALL, ONE_WEEK_OLD;
+	}
+	
+	private Filter filter;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -43,14 +48,26 @@ public class Agenda extends Activity {
 
 		final ListView eventList = (ListView) findViewById(R.id.eventList);
 
-		ParseQuery query = new ParseQuery("Event");
-		query.orderByAscending("startDate");
-
-		// Only show events with end date greater than now
-		Long now = System.currentTimeMillis();
-		query.whereGreaterThanOrEqualTo("endDate", now);
-
-		query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
+		Bundle extras = getIntent().getExtras();
+		ParseQuery query;
+		
+		if (extras != null) {
+			filter = (Filter) extras.get("filter");
+		}
+		if (filter == null) {
+			query = getQuery(Filter.NEW);
+		} else {
+			if (filter.equals(Filter.NEW)) { 
+				query = getQuery(Filter.NEW);
+			} else if (filter.equals(Filter.ALL)) {
+				query = getQuery(Filter.ALL);
+			} else if (filter.equals(Filter.ONE_WEEK_OLD)) {
+				query = getQuery(Filter.ONE_WEEK_OLD);
+			} else {
+				// TODO: Other filters
+				query = getQuery(Filter.NEW);
+			}
+		}
 
 		final ProgressDialog dialog = ProgressDialog.show(this, "", 
 				"Loading. Please wait...", true);
@@ -58,11 +75,10 @@ public class Agenda extends Activity {
 		query.findInBackground(new FindCallback() {
 
 			@Override
-			@SuppressWarnings({ "unchecked", "rawtypes" })
 			/* Needs to be type-unsafe to dynamically create section dividers */
 			public void done(final List<ParseObject> events, ParseException e) {
 				if (e == null) {
-					List items = new ArrayList();					
+					List<ListItem> items = new ArrayList<ListItem>();					
 
 					// The following is not ideal, but I guess only O(3n) = O(n)
 					items.add(new ListItem("Emergency Events", true));
@@ -77,7 +93,7 @@ public class Agenda extends Activity {
 							items.add(new ListItem(event, false));
 						}
 					}
-					items.add(new ListItem("Recently Resolved Events", true));
+					items.add(new ListItem("Resolved Events", true));
 					for (ParseObject event : events) {
 						if ("Resolved".equals(event.getString("type"))) {
 							items.add(new ListItem(event, false));
@@ -91,26 +107,69 @@ public class Agenda extends Activity {
 		});
 	}
 
+	private ParseQuery getQuery(Filter filter) {
+		ParseQuery query = new ParseQuery("Event");
+		query.orderByAscending("startDate");
+		Long now = System.currentTimeMillis();
+		
+		query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
+		
+		if (Filter.NEW.equals(filter)) {
+			// Only show events with end date greater than now
+			query.whereGreaterThanOrEqualTo("endDate", now);
+
+		} else if (Filter.ONE_WEEK_OLD.equals(filter)) {
+			// Only show events with start date greater than ONE WEEK AGO
+			query.whereGreaterThanOrEqualTo("startDate", now-604800000);
+
+		} else if (Filter.ALL.equals(filter)) {
+			// no-op
+		}
+		return query;
+	}
+
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.agenda_menu, menu);
 		return true;
 	}
-	
+
 	/**
 	 * Method that gets called when the menuitem is clicked
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if(item.getItemId() == R.id.refreshAgenda){
+		int id = item.getItemId();
+		if(id == R.id.refreshAgenda){
 			Intent i = new Intent(this, Agenda.class);
+			if (filter == null) {
+				filter = Filter.NEW;
+			}
+			i.putExtra("filter", filter);
 			finish();
 			startActivity(i);
 			return true;
+		} else if (id == R.id.showOneWeekOldEvents) {
+			Intent i = new Intent(this, Agenda.class);
+			i.putExtra("filter", Filter.ONE_WEEK_OLD);
+			finish();
+			startActivity(i);
+			return true;
+		} else if (id == R.id.showUpcomingEvents) {
+			Intent i = new Intent(this, Agenda.class);
+			i.putExtra("filter", Filter.NEW);
+			finish();
+			startActivity(i);
+			return true;
+		} else if (id == R.id.showAllEvents) {
+			Intent i = new Intent(this, Agenda.class);
+			i.putExtra("filter", Filter.ALL);
+			finish();
+			startActivity(i);
 		}
 		return false;
 	}
-	
+
 	@Override
 	public void onResume() {
 		onCreate(new Bundle());
@@ -183,7 +242,7 @@ public class Agenda extends Activity {
 						temp.setBackgroundColor(event.getInt("severity"));
 					}
 					v.setOnClickListener(new OnClickListener() {
-						
+
 						@Override
 						public void onClick(View v) {
 							Intent i = new Intent(getApplicationContext(), ShowEvent.class);

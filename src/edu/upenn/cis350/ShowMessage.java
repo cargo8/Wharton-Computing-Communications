@@ -82,14 +82,14 @@ public class ShowMessage extends Activity {
 							public void done(ParseObject arg0, ParseException arg1) {
 								ParseUser user = (ParseUser)arg0;
 								String author = user.getString("fullName");
-								authorView.setText("Posted by " + author + " at ");
+								authorView.setText(author + " - ");
 							}
 
 						});
 
 						temp = (TextView) findViewById(R.id.messageTimestamp);
 						temp.setTextColor(Color.WHITE);
-						SimpleDateFormat formatter = new SimpleDateFormat();
+						SimpleDateFormat formatter = new SimpleDateFormat("MMMM d 'at' h:mm a ");
 						temp.setText(formatter.format(new Date(msg.getLong("timestamp"))));
 
 						getComments(msg);
@@ -169,7 +169,7 @@ public class ShowMessage extends Activity {
 			public void done(ParseObject arg0, ParseException arg1) {
 				// TODO Auto-generated method stub
 				ParseUser user = (ParseUser)arg0;
-				author.setText(user.getString("fullName"));
+				author.setText(user.getString("fullName") + " ");
 				author.setTypeface(Typeface.DEFAULT_BOLD);
 			}
 
@@ -177,17 +177,18 @@ public class ShowMessage extends Activity {
 
 		TextView timestamp = new TextView(this);
 		long time = comment.getLong("timestamp");
-		SimpleDateFormat formatter = new SimpleDateFormat();
-		timestamp.setText(" at " + formatter.format(new Date(time)));
-
-		header.addView(author);
-		header.addView(timestamp);
+		SimpleDateFormat formatter = new SimpleDateFormat("MMMM d 'at' h:mm a ");
+		timestamp.setText(formatter.format(new Date(time)));
 
 		TextView commentText = new TextView(this);
 		commentText.setText(comment.getString("text"));
+		
+		header.addView(author);
+		header.addView(commentText);
+//		header.addView(timestamp);
 
 		commentFrame.addView(header);
-		commentFrame.addView(commentText);
+		commentFrame.addView(timestamp);
 
 		return commentFrame;
 	}

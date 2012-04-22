@@ -193,7 +193,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Secondary Phone NUmber: "
+            android:text="Secondary Phone Number: "
             android:textSize="12.0sp" />
 
         <EditText
@@ -228,7 +228,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:onClick="newUser"
-        android:text="Register" />
+        android:text="Request Access to WComm" />
 
 </LinearLayout>
 </ScrollView>

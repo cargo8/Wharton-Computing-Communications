@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import android.app.ListActivity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -33,12 +34,16 @@ public class ContactList extends ListActivity {
         super.onCreate(savedInstanceState);
         Parse.initialize(this, "FWyFNrvpkliSb7nBNugCNttN5HWpcbfaOWEutejH", "SZoWtHw28U44nJy8uKtV2oAQ8suuCZnFLklFSk46");
                 
+        final ProgressDialog dialog = ProgressDialog.show(this, "", 
+				"Loading. Please wait...", true);
+		dialog.setCancelable(true);
+		
         ParseQuery query = new ParseQuery("_User");
         query.orderByAscending("lname");
         
     	final Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT); 
     	
-    	query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
+    	query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
     	query.findInBackground(new FindCallback() {
 
 			@Override
@@ -70,7 +75,7 @@ public class ContactList extends ListActivity {
 					toast.show();
 					return;
 				}
-				
+				dialog.cancel();
 			}
     		
     	});
