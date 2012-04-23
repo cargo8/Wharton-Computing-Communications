@@ -43,6 +43,8 @@ public class ShowEvent extends Activity {
 
 	private ParseObject event;
 	private ProgressDialog dialog;
+	private List<ListItem> items = new ArrayList<ListItem>();
+
 
 	/** Called when the activity is first created. */
 	@Override
@@ -58,6 +60,7 @@ public class ShowEvent extends Activity {
 			dialog = ProgressDialog.show(this, "", 
 					"Loading. Please wait...", true);
 			dialog.setCancelable(true);
+			final ListView list = (ListView) findViewById(R.id.messagesList);
 			query.getInBackground(extras.getString("eventKey"), new GetCallback() {
 
 				@Override
@@ -68,6 +71,11 @@ public class ShowEvent extends Activity {
 						toast.show();
 					} else {
 						event = event1;
+
+						items.add(new ListItem(event, false, ItemType.EVENT));
+						//list.setAdapter(new MessageListAdapter(getApplicationContext(), 
+						//		items));
+						/*
 						TextView temp = (TextView)findViewById(R.id.eventTitleText);
 						temp.setText(event.getString("title"));
 						temp = (TextView)findViewById(R.id.eventDescText);
@@ -112,6 +120,7 @@ public class ShowEvent extends Activity {
 						temp.setBackgroundColor(event.getInt("severity"));
 						temp = (TextView)findViewById(R.id.typeText);
 						temp.setText(event.getString("type"));
+						*/
 						populateMessages();
 					}
 				}
@@ -133,10 +142,9 @@ public class ShowEvent extends Activity {
 			@Override
 			public void done(List<ParseObject> messages, ParseException e) {
 				if(e == null){
-					List<ListItem> items = new ArrayList<ListItem>();
 
 					for(ParseObject obj : messages){
-						items.add(new ListItem(obj, false));
+						items.add(new ListItem(obj, false, ItemType.MESSAGE));
 					}
 					msgList.setAdapter(new MessageListAdapter(getApplicationContext(), 
 							items));
@@ -298,7 +306,7 @@ public class ShowEvent extends Activity {
 					final TextView sectionView = (TextView) v.findViewById(R.id.list_item_section_text);
 					sectionView.setText(title);
 
-				} else {
+				} else if (item.getType().equals(ItemType.MESSAGE)){
 					/* This is a real list item */
 					final ParseObject message = (ParseObject) item.getData();
 					v = vi.inflate(R.layout.message_list_item, null);
@@ -342,6 +350,79 @@ public class ShowEvent extends Activity {
 							startActivity(i);
 						}
 					});
+				} else if (item.getType().equals(ItemType.EVENT)){
+					/* This is a real list item */
+					final ParseObject event = (ParseObject) item.getData();
+					v = vi.inflate(R.layout.event_description_item, null);
+
+					TextView temp = (TextView) v.findViewById(R.id.eventTitleText);
+					if (temp != null) {
+						temp.setText(event.getString("title"));
+					}
+
+					temp = (TextView) v.findViewById(R.id.eventDescText);
+					if (temp != null) {
+						temp.setText("\n" + event.getString("description") + "\n");
+					}
+
+					temp = (TextView)findViewById(R.id.startDateDisplay2);
+					SimpleDateFormat formatter = new SimpleDateFormat();
+					if(temp != null){
+						Date date1 = new Date(event.getLong("startDate"));
+						temp.setText(formatter.format(date1));
+					}
+					
+					temp = (TextView)findViewById(R.id.endDateDisplay2);
+					if(temp != null){
+						Date date2 = new Date(event.getLong("endDate"));
+						temp.setText(formatter.format(date2));
+					}
+					
+					temp = (TextView)findViewById(R.id.affilsText);
+					if(temp != null){
+						List<String> affilList = event.getList("groups");
+						StringBuilder affilText = new StringBuilder();
+						if(affilList != null){
+							for(String s : affilList){
+								affilText.append(s + "\t");
+							}
+							temp.setText(affilText.toString());
+						}
+					}
+					
+					temp = (TextView)findViewById(R.id.systemsText);
+					if(temp != null){
+						List<String> systemList = event.getList("systems");
+						StringBuilder systemText = new StringBuilder();
+						if(systemList != null){
+							for(String s : systemList){
+								systemText.append(s + "\t");
+							}
+							temp.setText(systemText.toString());
+						}
+					}
+
+					temp = (TextView)findViewById(R.id.personText1);
+					if(temp != null){
+						temp.setText(event.getString("contact1"));
+						temp.setTextColor(Color.WHITE);
+					}
+
+					temp = (TextView)findViewById(R.id.personText2);
+					if(temp != null){
+						temp.setText(event.getString("contact2"));
+						temp.setTextColor(Color.WHITE);
+					}
+
+					temp = (TextView)findViewById(R.id.severityText);
+					if(temp != null){
+						temp.setBackgroundColor(event.getInt("severity"));
+					}
+					
+					temp = (TextView)findViewById(R.id.typeText);
+					if(temp != null){
+						temp.setText(event.getString("type"));
+					}
 				}
 			}
 			return v;

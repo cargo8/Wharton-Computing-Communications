@@ -1,17 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/scroller"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:fillViewport="true" > -->
-
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" 
         android:padding="12sp" >
-        <!--  
 
         <TextView
             android:id="@+id/eventTitleText"
@@ -22,32 +15,10 @@
             android:textSize="23.0sp"
             android:textStyle="bold" />
 
-        
-    <TextView
- 		android:layout_width="fill_parent"
-   		android:layout_height="wrap_content"
-   		android:text="@string/eventDesc"
-   		android:textSize="15.0sp" />
-        
-
         <TextView
             android:id="@+id/eventDescText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" />
-
-       
-   <TextView
- 		android:layout_width="fill_parent"
-   		android:layout_height="wrap_content"
-   		android:text="@string/eventActions"
-   		android:textSize="15.0sp" />
-   		
-   		
-   	<TextView
-   	    android:id="@+id/eventActionsText"
-   	    android:layout_width="fill_parent"
-   	    android:layout_height="wrap_content"/> 
-        
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -195,17 +166,8 @@
             android:id="@+id/severityText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" />
-
-       
-    <Button 
-        android:id="@+id/eventButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/backToHome"
-        android:onClick="onBackToAgendaClick" />
         
-
-        <LinearLayout
+                <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal" >
@@ -238,22 +200,5 @@
                 android:onClick="onPostClick"
                 android:text="@string/postMessageBut" />
         </LinearLayout>
-        -->
 
-        <ListView
-            android:id="@+id/messagesList"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"/>
-            <!-- android:padding="7sp" -->
-            
-        
-        <LinearLayout
-            android:id="@+id/messagesPane"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-        <!-- android:padding="7sp" > -->
-        </LinearLayout>
-    </LinearLayout>
-
-<!-- </ScrollView> -->
+</LinearLayout>
