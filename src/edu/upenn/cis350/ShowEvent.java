@@ -17,9 +17,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -73,7 +75,7 @@ public class ShowEvent extends Activity {
 						event = event1;
 
 						items.add(new ListItem(event, false, ItemType.EVENT));
-
+						items.add(new ListItem(event, false, ItemType.MESSAGEBOX));
 						populateMessages();
 					}
 				}
@@ -376,6 +378,14 @@ public class ShowEvent extends Activity {
 					temp = (TextView)v.findViewById(R.id.typeText);
 					if(temp != null){
 						temp.setText(event.getString("type"));
+					}
+				} else if (item.getType().equals(ItemType.MESSAGEBOX)){
+					v = vi.inflate(R.layout.post_message_item, null);
+					EditText temp = (EditText) v.findViewById(R.id.newMessageText);
+					//we need to update adapter once we finish with editing
+
+					if (temp != null) {
+						temp.setFocusable(true);
 					}
 				}
 			}

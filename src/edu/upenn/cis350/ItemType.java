@@ -1,5 +1,5 @@
 package edu.upenn.cis350;
 
 public enum ItemType {
-	HEADER, EVENT, MESSAGE
+	HEADER, EVENT, MESSAGE, MESSAGEBOX, MESSAGEHEADER
 }
