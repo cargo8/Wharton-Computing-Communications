@@ -101,7 +101,7 @@ public class ShowEvent extends Activity {
 					for(ParseObject obj : messages){
 						items.add(new ListItem(obj, false, ItemType.MESSAGE));
 					}
-					msgList.setAdapter(new MessageListAdapter(getApplicationContext(), 
+					msgList.setAdapter(new NewListAdapter(getApplicationContext(), 
 							items));
 					dialog.cancel();
 				} else {
@@ -231,11 +231,11 @@ public class ShowEvent extends Activity {
 	 * @author JMow
 	 * 
 	 */
-	private class MessageListAdapter extends ArrayAdapter<ListItem> {
+	private class NewListAdapter extends ArrayAdapter<ListItem> {
 
 		private List<ListItem> events;
 
-		public MessageListAdapter(Context context, List<ListItem> events) {
+		public NewListAdapter(Context context, List<ListItem> events) {
 			super(context, 0, events);
 			this.events = events;
 		}
@@ -309,6 +309,9 @@ public class ShowEvent extends Activity {
 					/* This is a real list item */
 					final ParseObject event = (ParseObject) item.getData();
 					v = vi.inflate(R.layout.event_description_item, null);
+					v.setOnClickListener(null);
+					v.setOnLongClickListener(null);
+					v.setLongClickable(false);
 
 					TextView temp = (TextView) v.findViewById(R.id.eventTitleText);
 					if (temp != null) {
