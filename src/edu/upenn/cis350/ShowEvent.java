@@ -73,54 +73,7 @@ public class ShowEvent extends Activity {
 						event = event1;
 
 						items.add(new ListItem(event, false, ItemType.EVENT));
-						//list.setAdapter(new MessageListAdapter(getApplicationContext(), 
-						//		items));
-						/*
-						TextView temp = (TextView)findViewById(R.id.eventTitleText);
-						temp.setText(event.getString("title"));
-						temp = (TextView)findViewById(R.id.eventDescText);
-						temp.setText("\n" + event.getString("description") + "\n");
-						temp = (TextView)findViewById(R.id.startDateDisplay2);
-						SimpleDateFormat formatter = new SimpleDateFormat();
-						Date date1 = new Date(event.getLong("startDate"));
-						temp.setText(formatter.format(date1));
-						temp = (TextView)findViewById(R.id.endDateDisplay2);
-						Date date2 = new Date(event.getLong("endDate"));
-						temp.setText(formatter.format(date2));
-						temp = (TextView)findViewById(R.id.affilsText);
 
-						List<String> affilList = event.getList("groups");
-						StringBuilder affilText = new StringBuilder();
-						if(affilList != null){
-							for(String s : affilList){
-								affilText.append(s + "\t");
-							}
-							temp.setText(affilText.toString());
-						}
-						temp = (TextView)findViewById(R.id.systemsText);
-
-						List<String> systemList = event.getList("systems");
-						StringBuilder systemText = new StringBuilder();
-						if(systemList != null){
-							for(String s : systemList){
-								systemText.append(s + "\t");
-							}
-							temp.setText(systemText.toString());
-						}
-
-						temp = (TextView)findViewById(R.id.personText1);
-						temp.setText(event.getString("contact1"));
-						temp.setTextColor(Color.WHITE);
-
-						temp = (TextView)findViewById(R.id.personText2);
-						temp.setText(event.getString("contact2"));
-						temp.setTextColor(Color.WHITE);
-
-						temp = (TextView)findViewById(R.id.severityText);
-						temp.setBackgroundColor(event.getInt("severity"));
-						temp = (TextView)findViewById(R.id.typeText);
-						temp.setText(event.getString("type"));
-						*/
 						populateMessages();
 					}
 				}
@@ -365,20 +318,21 @@ public class ShowEvent extends Activity {
 						temp.setText("\n" + event.getString("description") + "\n");
 					}
 
-					temp = (TextView)findViewById(R.id.startDateDisplay2);
+					temp = (TextView)v.findViewById(R.id.startDateDisplay2);
 					SimpleDateFormat formatter = new SimpleDateFormat();
 					if(temp != null){
 						Date date1 = new Date(event.getLong("startDate"));
 						temp.setText(formatter.format(date1));
+						
 					}
 					
-					temp = (TextView)findViewById(R.id.endDateDisplay2);
+					temp = (TextView)v.findViewById(R.id.endDateDisplay2);
 					if(temp != null){
 						Date date2 = new Date(event.getLong("endDate"));
 						temp.setText(formatter.format(date2));
 					}
 					
-					temp = (TextView)findViewById(R.id.affilsText);
+					temp = (TextView)v.findViewById(R.id.affilsText);
 					if(temp != null){
 						List<String> affilList = event.getList("groups");
 						StringBuilder affilText = new StringBuilder();
@@ -390,7 +344,7 @@ public class ShowEvent extends Activity {
 						}
 					}
 					
-					temp = (TextView)findViewById(R.id.systemsText);
+					temp = (TextView)v.findViewById(R.id.systemsText);
 					if(temp != null){
 						List<String> systemList = event.getList("systems");
 						StringBuilder systemText = new StringBuilder();
@@ -402,24 +356,24 @@ public class ShowEvent extends Activity {
 						}
 					}
 
-					temp = (TextView)findViewById(R.id.personText1);
+					temp = (TextView)v.findViewById(R.id.personText1);
 					if(temp != null){
 						temp.setText(event.getString("contact1"));
 						temp.setTextColor(Color.WHITE);
 					}
 
-					temp = (TextView)findViewById(R.id.personText2);
+					temp = (TextView)v.findViewById(R.id.personText2);
 					if(temp != null){
 						temp.setText(event.getString("contact2"));
 						temp.setTextColor(Color.WHITE);
 					}
 
-					temp = (TextView)findViewById(R.id.severityText);
+					temp = (TextView)v.findViewById(R.id.severityText);
 					if(temp != null){
 						temp.setBackgroundColor(event.getInt("severity"));
 					}
 					
-					temp = (TextView)findViewById(R.id.typeText);
+					temp = (TextView)v.findViewById(R.id.typeText);
 					if(temp != null){
 						temp.setText(event.getString("type"));
 					}
