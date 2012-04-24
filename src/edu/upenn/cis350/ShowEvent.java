@@ -192,6 +192,7 @@ public class ShowEvent extends Activity {
 		}
 		final ParseObject msg = new ParseObject("Message");
 		msg.put("author", ParseUser.getCurrentUser());
+		msg.put("authorName", ParseUser.getCurrentUser().get("fullName"));
 		msg.put("text", tv.getText().toString());
 		msg.put("timestamp", System.currentTimeMillis());
 		msg.put("event", event.getObjectId());
@@ -244,8 +245,8 @@ public class ShowEvent extends Activity {
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View v = convertView;
 			// if not null, it has already been populated - helps it from being slow
-			if(convertView != null)
-				return convertView;
+			//if(convertView != null)
+				//return convertView;
 			LayoutInflater vi = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 			final ListItem item = events.get(position);
@@ -275,16 +276,13 @@ public class ShowEvent extends Activity {
 					}
 
 					temp = (TextView) v.findViewById(R.id.listMessageAuthor);
+					
 					if (temp != null) {
-						ParseUser author;
-						try {
-							author = (ParseUser) message.getParseUser("author").fetch();
-							temp.setText(author.getString("fullName"));
-							temp.setTypeface(Typeface.DEFAULT_BOLD);
-						} catch (ParseException e) {
-							e.printStackTrace();
-						}
+						temp.setText(message.getString("authorName"));
+						temp.setTypeface(Typeface.DEFAULT_BOLD);
+
 					}
+					
 					temp = (TextView) v.findViewById(R.id.listMessageTimestamp);
 					if (temp != null) {
 						Long time = message.getLong("timestamp");
