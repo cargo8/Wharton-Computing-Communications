@@ -243,6 +243,9 @@ public class ShowEvent extends Activity {
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View v = convertView;
+			// if not null, it has already been populated - helps it from being slow
+			if(convertView != null)
+				return convertView;
 			LayoutInflater vi = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 			final ListItem item = events.get(position);
