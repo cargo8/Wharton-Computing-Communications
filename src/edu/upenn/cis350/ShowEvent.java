@@ -101,7 +101,7 @@ public class ShowEvent extends Activity {
 					for(ParseObject obj : messages){
 						items.add(new ListItem(obj, false, ItemType.MESSAGE));
 					}
-					msgList.setAdapter(new NewListAdapter(getApplicationContext(), 
+					msgList.setAdapter(new ShowEventAdapter(getApplicationContext(), 
 							items));
 					dialog.cancel();
 				} else {
@@ -227,29 +227,26 @@ public class ShowEvent extends Activity {
 	}
 
 	/**
-	 * Adapter for formatting the Events into ListView items
+	 * Adapter for formatting the ShowEvent view
 	 * 
-	 * @author JMow
+	 * @author closen
 	 * 
 	 */
-	private class NewListAdapter extends ArrayAdapter<ListItem> {
+	private class ShowEventAdapter extends ArrayAdapter<ListItem> {
 
-		private List<ListItem> events;
+		private List<ListItem> listItems;
 
-		public NewListAdapter(Context context, List<ListItem> events) {
-			super(context, 0, events);
-			this.events = events;
+		public ShowEventAdapter(Context context, List<ListItem> items) {
+			super(context, 0, items);
+			this.listItems = items;
 		}
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View v = convertView;
-			// if not null, it has already been populated - helps it from being slow
-			//if(convertView != null)
-				//return convertView;
 			LayoutInflater vi = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-			final ListItem item = events.get(position);
+			final ListItem item = listItems.get(position);
 
 			if (item != null) {
 				// Not used right now

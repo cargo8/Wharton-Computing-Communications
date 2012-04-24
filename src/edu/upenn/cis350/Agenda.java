@@ -26,6 +26,7 @@ import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseQuery.CachePolicy;
 
 /* This activity shows the events in a list form.
  * Events are separated by type - Emergency and Scheduled.
@@ -111,9 +112,7 @@ public class Agenda extends Activity {
 		ParseQuery query = new ParseQuery("Event");
 		query.orderByAscending("startDate");
 		Long now = System.currentTimeMillis();
-		
-		query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
-		
+				
 		if (Filter.NEW.equals(filter)) {
 			// Only show events with end date greater than now
 			query.whereGreaterThanOrEqualTo("endDate", now);
@@ -123,7 +122,9 @@ public class Agenda extends Activity {
 			query.whereGreaterThanOrEqualTo("startDate", now-604800000);
 
 		} else if (Filter.ALL.equals(filter)) {
-			// no-op
+			// no-op AKA all events
+			query.setCachePolicy(CachePolicy.CACHE_THEN_NETWORK);
+			query.whereExists("startDate");
 		}
 		return query;
 	}
