@@ -451,7 +451,7 @@ public class EditEvent extends Activity {
 				for(int i = 0; i < groupList.size(); i++){
 					String temp = groupList.get(i).getString("name");
 					groups[i] = temp;
-					if(gl.contains(temp))
+					if(gl != null && gl.contains(temp))
 						groupsChecked[i] = true;
 				}
 				showDialog(PICK_AFFILS_DIALOG_ID);
@@ -476,7 +476,7 @@ public class EditEvent extends Activity {
 				for(int i = 0; i < systemList.size(); i++){
 					String temp = systemList.get(i).getString("name");
 					systems[i] = temp;
-					if(sl.contains(temp))
+					if(sl != null && sl.contains(temp))
 						systemsChecked[i] = true;
 				}
 				showDialog(PICK_SYS_DIALOG_ID);
