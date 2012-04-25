@@ -5,6 +5,11 @@ public class ListItem {
 	private boolean isSection;
 	private ItemType type;
 	
+	public enum ItemType {
+		HEADER, EVENT, MESSAGE, MESSAGEBOX, MESSAGEHEADER,
+		INFO, GROUP;
+	}
+	
 	public ListItem(Object data, boolean isSection) {
 		this.data = data;
 		this.isSection = isSection;

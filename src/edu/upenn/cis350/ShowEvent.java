@@ -74,8 +74,8 @@ public class ShowEvent extends Activity {
 					} else {
 						event = event1;
 
-						items.add(new ListItem(event, false, ItemType.EVENT));
-						items.add(new ListItem(event, false, ItemType.MESSAGEBOX));
+						items.add(new ListItem(event, false, ListItem.ItemType.EVENT));
+						items.add(new ListItem(event, false, ListItem.ItemType.MESSAGEBOX));
 						populateMessages();
 					}
 				}
@@ -99,7 +99,7 @@ public class ShowEvent extends Activity {
 				if(e == null){
 
 					for(ParseObject obj : messages){
-						items.add(new ListItem(obj, false, ItemType.MESSAGE));
+						items.add(new ListItem(obj, false, ListItem.ItemType.MESSAGE));
 					}
 					msgList.setAdapter(new ShowEventAdapter(getApplicationContext(), 
 							items));
@@ -262,7 +262,7 @@ public class ShowEvent extends Activity {
 					final TextView sectionView = (TextView) v.findViewById(R.id.list_item_section_text);
 					sectionView.setText(title);
 
-				} else if (item.getType().equals(ItemType.MESSAGE)){
+				} else if (item.getType().equals(ListItem.ItemType.MESSAGE)){
 					/* This is a real list item */
 					final ParseObject message = (ParseObject) item.getData();
 					v = vi.inflate(R.layout.message_list_item, null);
@@ -303,7 +303,7 @@ public class ShowEvent extends Activity {
 							startActivity(i);
 						}
 					});
-				} else if (item.getType().equals(ItemType.EVENT)){
+				} else if (item.getType().equals(ListItem.ItemType.EVENT)){
 					/* This is a real list item */
 					final ParseObject event = (ParseObject) item.getData();
 					v = vi.inflate(R.layout.event_description_item, null);
@@ -380,7 +380,7 @@ public class ShowEvent extends Activity {
 					if(temp != null){
 						temp.setText(event.getString("type"));
 					}
-				} else if (item.getType().equals(ItemType.MESSAGEBOX)){
+				} else if (item.getType().equals(ListItem.ItemType.MESSAGEBOX)){
 					v = vi.inflate(R.layout.post_message_item, null);
 					EditText temp = (EditText) v.findViewById(R.id.newMessageText);
 					//we need to update adapter once we finish with editing
