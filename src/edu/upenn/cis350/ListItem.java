@@ -3,9 +3,9 @@ package edu.upenn.cis350;
 public class ListItem {
 	private Object data;
 	private boolean isSection;
-	private ItemType type;
+	private Type type;
 	
-	public enum ItemType {
+	public enum Type {
 		HEADER, EVENT, MESSAGE, MESSAGEBOX, MESSAGEHEADER,
 		INFO, GROUP;
 	}
@@ -15,7 +15,7 @@ public class ListItem {
 		this.isSection = isSection;
 	}
 	
-	public ListItem(Object data, boolean isSection, ItemType type) {
+	public ListItem(Object data, boolean isSection, Type type) {
 		this.data = data;
 		this.isSection = isSection;
 		this.type = type;
@@ -29,7 +29,7 @@ public class ListItem {
 		return this.data;
 	}
 	
-	public ItemType getType(){
+	public Type getType(){
 		return type;
 	}
 	

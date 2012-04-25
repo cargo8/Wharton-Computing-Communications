@@ -116,7 +116,7 @@ public class ShowContact extends Activity {
 					final TextView sectionView = (TextView) v.findViewById(R.id.list_item_section_text);
 					sectionView.setText(title);
 
-				} else {
+				} else if (ListItem.Type.INFO.equals(item.getType())){
 					/* This is a real list item */
 					final String contactData = (String) item.getData();
 					v = vi.inflate(R.layout.list_item, null);
@@ -124,6 +124,8 @@ public class ShowContact extends Activity {
 					temp.setText(contactData);
 					Linkify.addLinks(temp, Linkify.ALL);
 					temp.setLinkTextColor(temp.getTextColors().getDefaultColor());
+				} else if (ListItem.Type.GROUP.equals(item.getType())) {
+					//TODO: JMow
 				}
 			}
 			return v;
