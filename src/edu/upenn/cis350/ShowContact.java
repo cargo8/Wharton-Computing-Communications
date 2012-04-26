@@ -31,7 +31,7 @@ public class ShowContact extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.show_contact);
-		Parse.initialize(this, "FWyFNrvpkliSb7nBNugCNttN5HWpcbfaOWEutejH", "SZoWtHw28U44nJy8uKtV2oAQ8suuCZnFLklFSk46");
+		Parse.initialize(this, Settings.APPLICATION_ID, Settings.CLIENT_ID);
 
 		Bundle extras = this.getIntent().getExtras();
 
