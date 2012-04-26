@@ -82,22 +82,22 @@ public class Agenda extends Activity {
 					List<ListItem> items = new ArrayList<ListItem>();					
 
 					// The following is not ideal, but I guess only O(3n) = O(n)
-					items.add(new ListItem("Emergency Events", true));
+					items.add(new ListItem("Emergency Events", ListItem.Type.HEADER));
 					for (ParseObject event : events) {
 						if ("Emergency".equals(event.getString("type"))) {
-							items.add(new ListItem(event, false));
+							items.add(new ListItem(event, ListItem.Type.INFO));
 						}
 					}
-					items.add(new ListItem("Scheduled Events", true));
+					items.add(new ListItem("Scheduled Events", ListItem.Type.HEADER));
 					for (ParseObject event : events) {
 						if ("Scheduled".equals(event.getString("type"))) {
-							items.add(new ListItem(event, false));
+							items.add(new ListItem(event, ListItem.Type.INFO));
 						}
 					}
-					items.add(new ListItem("Resolved Events", true));
+					items.add(new ListItem("Resolved Events", ListItem.Type.HEADER));
 					for (ParseObject event : events) {
 						if ("Resolved".equals(event.getString("type"))) {
-							items.add(new ListItem(event, false));
+							items.add(new ListItem(event, ListItem.Type.INFO));
 						}
 					}
 
@@ -199,7 +199,7 @@ public class Agenda extends Activity {
 			final ListItem item = events.get(position);
 
 			if (item != null) {
-				if (item.isSection()) {
+				if (item.getType().equals(ListItem.Type.HEADER)) {
 					/* This is a section header */
 					String title = (String) item.getData();
 					v = vi.inflate(R.layout.list_divider, null);
@@ -211,7 +211,7 @@ public class Agenda extends Activity {
 					final TextView sectionView = (TextView) v.findViewById(R.id.list_item_section_text);
 					sectionView.setText(title);
 
-				} else {
+				} else if (item.getType().equals(ListItem.Type.INFO)){
 					/* This is a real list item */
 					final ParseObject event = (ParseObject) item.getData();
 					v = vi.inflate(R.layout.event_list_item, null);
