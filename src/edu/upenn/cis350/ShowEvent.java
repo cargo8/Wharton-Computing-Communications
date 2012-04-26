@@ -169,11 +169,19 @@ public class ShowEvent extends Activity {
 		} else if (item.getItemId() == R.id.eventSubscribe) {
 			if (!PushService.getSubscriptions(this).contains("push_" + event.getObjectId())) {
 				PushService.subscribe(this, "push_" + event.getObjectId(), Login.class);
+				ParseObject subscription = new ParseObject("Subscription");
+				subscription.put("userId", ParseUser.getCurrentUser().getObjectId());
+				subscription.put("subscriptionId", event.getObjectId());
+				subscription.saveEventually();
 			}
 			Toast.makeText(this, "Subscribed to event", Toast.LENGTH_SHORT).show();
 			return true;
 		} else if (item.getItemId() == R.id.eventUnsubscribe) {
 			PushService.unsubscribe(getApplicationContext(), "push_" + event.getObjectId());
+			ParseObject subscription = new ParseObject("Subscription");
+			subscription.put("userId", ParseUser.getCurrentUser().getObjectId());
+			subscription.put("subscriptionId", event.getObjectId());
+			subscription.deleteEventually();
 			Toast.makeText(this, "Unsubscribed from event", Toast.LENGTH_SHORT).show();
 		}
 		return false;
@@ -210,6 +218,10 @@ public class ShowEvent extends Activity {
 					Context context = getApplicationContext();
 					if (!PushService.getSubscriptions(context).contains("push_" + msg.getObjectId())) {
 						PushService.subscribe(context, "push_" + msg.getObjectId(), Login.class);
+						ParseObject subscription = new ParseObject("Subscription");
+						subscription.put("userId", ParseUser.getCurrentUser().getObjectId());
+						subscription.put("subscriptionId", msg.getObjectId());
+						subscription.saveEventually();
 					}
 					PushUtils.createMessagePush(event, msg);
 					i.putExtra("eventKey", event.getObjectId());

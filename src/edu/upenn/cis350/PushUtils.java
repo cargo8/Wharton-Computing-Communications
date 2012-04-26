@@ -94,12 +94,14 @@ public abstract class PushUtils {
 		ParsePush pushMessage = new ParsePush();
 		ParseUser user = ParseUser.getCurrentUser();
 		pushMessage.setChannel("push_" + message.getObjectId());
-		pushMessage.setMessage(user.getString("fullName") + " commented: " +
+		String msgText = user.getString("fullName") + " commented: " +
 				"\"" + comment.getString("text") + "\" on the message \"" +
-				message.getString("text") + "\"");
-		// expire after 5 days
-		pushMessage.setExpirationTimeInterval(432000);
+				message.getString("text") + "\"";
+		pushMessage.setMessage(msgText);
+		// expire after 5 minutes
+		pushMessage.setExpirationTimeInterval(300);
 		pushMessage.sendInBackground();
+		createNotification(user, "message", comment.getObjectId(), msgText);
 	}
 
 	/**
@@ -112,11 +114,13 @@ public abstract class PushUtils {
 		ParsePush pushMessage = new ParsePush();
 		ParseUser user = ParseUser.getCurrentUser();
 		pushMessage.setChannel("push_" + event.getObjectId());
-		pushMessage.setMessage(user.getString("fullName") + " posted: \"" + message.getString("text") + "\" on " +
-				"the event \"" + event.getString("title") + "\"");
+		String msgText = user.getString("fullName") + " posted: \"" + message.getString("text") + "\" on " +
+				"the event \"" + event.getString("title") + "\"";
+		pushMessage.setMessage(msgText);
 		// expire after 5 days
 		pushMessage.setExpirationTimeInterval(432000);
 		pushMessage.sendInBackground();
+		createNotification(user, "event", event.getObjectId(), msgText);
 	}	
 
 	/**
@@ -127,11 +131,16 @@ public abstract class PushUtils {
 	 * @param event Event ParseObject that is changed
 	 */
 	public static void createEventChangedPush(Context context, String eventId, ParseObject event) {
+		ParseUser user = ParseUser.getCurrentUser();
 		if (!PushService.getSubscriptions(context).contains("push_" + event.getObjectId())) {
 			PushService.subscribe(context, "push_" + eventId, Login.class);
+
+			ParseObject subscription = new ParseObject("Subscription");
+			subscription.put("userId", user.getObjectId());
+			subscription.put("subscriptionId", eventId);
+			subscription.saveEventually();
 		}
 		ParsePush pushMessage = new ParsePush();
-		ParseUser user = ParseUser.getCurrentUser();
 		pushMessage.setChannel("push_" + eventId);
 		pushMessage.setMessage(user.getString("fullName") + " updated the event \"" + event.getString("title") + "\"");
 		// expire after 5 days
@@ -154,4 +163,23 @@ public abstract class PushUtils {
 		pushMessage.setExpirationTimeInterval(432000);
 		pushMessage.sendInBackground();
 	}
+	
+	/**
+	 * Creates a notification to be displayed in the application
+	 * 
+	 * @param user 
+	 * @param type
+	 * @param id
+	 * @param message
+	 */
+	private static void createNotification(ParseObject user, String type, String id,
+			String message) {
+		ParseObject notification = new ParseObject("Notification");
+		notification.put("user", user);
+		notification.put("type", type);
+		notification.put("id", id);
+		notification.put("text", message);
+		notification.put("isRead", false);
+	}
+
 }

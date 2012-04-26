@@ -6,6 +6,7 @@ import java.util.List;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,18 +65,6 @@ public class ShowNotifications extends ListActivity {
 					list.addAll(readNotifications);
 
 					setListAdapter(new NotificationAdapter(getApplicationContext(), list));
-
-					ListView lv = getListView();
-					lv.setTextFilterEnabled(true);
-
-					lv.setOnItemClickListener(new OnItemClickListener() {
-						@Override
-						public void onItemClick(AdapterView<?> parent, View view,
-								int position, long id) {
-							Toast.makeText(getApplicationContext(), ((TextView) view.findViewById(R.id.notificationTitle)).getText(),
-									Toast.LENGTH_SHORT);
-						}
-					});
 				} else {
 					Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
 					return;
@@ -115,25 +104,25 @@ public class ShowNotifications extends ListActivity {
 					final TextView sectionView = (TextView) v.findViewById(R.id.list_item_section_text);
 					sectionView.setText(title);
 
-				} else if (ListItem.Type.INFO.equals(item.getData())){
+				} else if (ListItem.Type.EVENT.equals(item.getData())){
 					/* This is a real list item */
 					final ParseObject notification = (ParseObject) item.getData();
 					v = vi.inflate(R.layout.notification_list_item, null);
-					TextView temp = (TextView) v.findViewById(R.id.notificationTitle);
-					temp.setText(notification.getString("title"));
 					
 					TextView text = (TextView) v.findViewById(R.id.notificationText);
 					text.setText(notification.getString("text"));
 					
-//					v.setOnClickListener(new OnClickListener() {
-//
-//						@Override
-//						public void onClick(View v) {
-//							// TODO Auto-generated method stub
-//							
-//						}
-//						
-//					});
+					v.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							Intent i = new Intent(getApplicationContext(), ShowEvent.class);
+							i.putExtra("eventKey", notification.getString("id"));
+							notification.put("isRead", true);
+							startActivity(i);
+						}
+						
+					});
 				}
 			}
 			return v;

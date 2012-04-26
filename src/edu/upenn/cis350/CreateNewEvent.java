@@ -313,6 +313,11 @@ public class CreateNewEvent extends Activity {
 					Context context = getApplicationContext();
 					if (!PushService.getSubscriptions(context).contains("push_" + id)) {
 						PushService.subscribe(context, "push_" + id, Login.class);
+
+						ParseObject subscription = new ParseObject("Subscription");
+						subscription.put("userId", ParseUser.getCurrentUser().getObjectId());
+						subscription.put("subscriptionId", id);
+						subscription.saveEventually();
 					}
 
 					/* Lazy subscription for the two contacts set in the events.
@@ -328,16 +333,27 @@ public class CreateNewEvent extends Activity {
 					String userId1 = event.getString("contact1ID");
 					String userId2 = event.getString("contact2ID");
 
-					if (!currentId.equals(userId1))
+					if (!currentId.equals(userId1)) {
 						PushUtils.lazySubscribeContact(context, event, userId1);
-					if (!currentId.equals(userId2) && !userId1.equals(userId2))
+						ParseObject subscription = new ParseObject("Subscription");
+						subscription.put("userId", userId1);
+						subscription.put("subscriptionId", id);
+						subscription.saveEventually();
+					}
+
+					if (!currentId.equals(userId2) && !userId1.equals(userId2)) {
 						PushUtils.lazySubscribeContact(context, event, userId2);
+						ParseObject subscription = new ParseObject("Subscription");
+						subscription.put("userId", userId2);
+						subscription.put("subscriptionId", id);
+						subscription.saveEventually();
+					}
 
 					//TODO: Subscribe affiliated groups
-//					for (String group : ((List<String>) event.get("systems"))) {
-//						ParseQuery q = new ParseQuery("_User");
-//						q.whereContains("systems", group);
-//					}
+					//					for (String group : ((List<String>) event.get("systems"))) {
+					//						ParseQuery q = new ParseQuery("_User");
+					//						q.whereContains("systems", group);
+					//					}
 					i.putExtra("eventKey", id);
 					finish();
 					startActivity(i);	
@@ -376,7 +392,7 @@ public class CreateNewEvent extends Activity {
 				showDialog(PICK_AFFILS_DIALOG_ID);
 
 			}
-			
+
 		});
 	}
 	// onClick function of pickSys button
@@ -396,7 +412,7 @@ public class CreateNewEvent extends Activity {
 				showDialog(PICK_SYS_DIALOG_ID);
 
 			}
-			
+
 		});
 	}
 
@@ -410,7 +426,7 @@ public class CreateNewEvent extends Activity {
 
 	// updates the date in the TextView
 	private void updateDisplay() {
-    	SimpleDateFormat formatter = new SimpleDateFormat();
+		SimpleDateFormat formatter = new SimpleDateFormat();
 		if(date1 != null)
 			mDateDisplay.setText(formatter.format(date1));
 		if(date2 != null)

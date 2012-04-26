@@ -34,20 +34,20 @@ public class Home extends ListActivity {
 		ParseUser currentUser = ParseUser.getCurrentUser();
 		if (currentUser == null) {		    
 			Intent i = new Intent(this, Login.class);
-		    finish();
-		    startActivity(i);
-		    return;
+			finish();
+			startActivity(i);
+			return;
 		} else if (!currentUser.has("emailVerified")) {
 			//TODO: Remove when User tables are reset in future releases
 			//no-op to support pre-Beta 3.0 users
 		} else if (!currentUser.getBoolean("emailVerified")) {
 			Intent i = new Intent(this, Login.class);
-		    Toast.makeText(this, "Your registration has not been verified.", Toast.LENGTH_LONG).show();
-		    finish();
-		    startActivity(i);
-		    return;
+			Toast.makeText(this, "Your registration has not been verified.", Toast.LENGTH_LONG).show();
+			finish();
+			startActivity(i);
+			return;
 		}
-		
+
 		String[] options = getResources().getStringArray(R.array.home_options_array);
 		setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item, options));
 
@@ -70,8 +70,7 @@ public class Home extends ListActivity {
 					onViewNotifications();
 				}
 			}
-		}
-				);
+		});
 
 		PushUtils.lazySubscribeToEvents(this);
 	}
@@ -97,7 +96,7 @@ public class Home extends ListActivity {
 		Intent i = new Intent(this, EditProfile.class);
 		startActivity(i);
 	}
-	
+
 	public void onViewNotifications() {
 		Intent i = new Intent(this, ShowNotifications.class);
 		startActivity(i);
