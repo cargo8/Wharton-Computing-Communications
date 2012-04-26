@@ -9,6 +9,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -35,6 +36,7 @@ public class ShowNotifications extends ListActivity {
 		final ProgressDialog dialog = ProgressDialog.show(this, "", 
 				"Loading. Please wait...", true);
 		dialog.setCancelable(true);
+		
 		ParseUser user = ParseUser.getCurrentUser();
 
 		ParseQuery query = new ParseQuery("Notification");
@@ -50,15 +52,15 @@ public class ShowNotifications extends ListActivity {
 					ArrayList<ListItem> readNotifications = new ArrayList<ListItem>();
 					for (ParseObject n : notifications) {
 						if (!n.getBoolean("isRead")) {
-							newNotifications.add(new ListItem(n, false));
+							newNotifications.add(new ListItem(n, ListItem.Type.INFO));
 						} else {
-							readNotifications.add(new ListItem(n, false));
+							readNotifications.add(new ListItem(n, ListItem.Type.INFO));
 						}
 					}
 					List<ListItem> list = new ArrayList<ListItem>();
-					list.add(new ListItem("New Notifications", true));
+					list.add(new ListItem("New Notifications", ListItem.Type.HEADER));
 					list.addAll(newNotifications);
-					list.add(new ListItem("Read Notifications", true));
+					list.add(new ListItem("Read Notifications", ListItem.Type.HEADER));
 					list.addAll(readNotifications);
 
 					setListAdapter(new NotificationAdapter(getApplicationContext(), list));
@@ -101,7 +103,7 @@ public class ShowNotifications extends ListActivity {
 			final ListItem item = notifications.get(position);
 
 			if (item != null) {
-				if (item.isSection()) {
+				if (ListItem.Type.HEADER.equals(item.getType())) {
 					/* This is a section header */
 					String title = (String) item.getData();
 					v = vi.inflate(R.layout.list_divider, null);
@@ -113,14 +115,25 @@ public class ShowNotifications extends ListActivity {
 					final TextView sectionView = (TextView) v.findViewById(R.id.list_item_section_text);
 					sectionView.setText(title);
 
-				} else {
+				} else if (ListItem.Type.INFO.equals(item.getData())){
 					/* This is a real list item */
 					final ParseObject notification = (ParseObject) item.getData();
 					v = vi.inflate(R.layout.notification_list_item, null);
 					TextView temp = (TextView) v.findViewById(R.id.notificationTitle);
 					temp.setText(notification.getString("title"));
-					temp = (TextView) v.findViewById(R.id.notificationText);
-					temp.setText(notification.getString("text"));
+					
+					TextView text = (TextView) v.findViewById(R.id.notificationText);
+					text.setText(notification.getString("text"));
+					
+//					v.setOnClickListener(new OnClickListener() {
+//
+//						@Override
+//						public void onClick(View v) {
+//							// TODO Auto-generated method stub
+//							
+//						}
+//						
+//					});
 				}
 			}
 			return v;

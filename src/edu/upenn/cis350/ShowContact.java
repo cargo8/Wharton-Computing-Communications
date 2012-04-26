@@ -59,22 +59,22 @@ public class ShowContact extends Activity {
 
 						ListView listView = (ListView) findViewById(R.id.phoneList);
 						ArrayList items = new ArrayList();
-						items.add(new ListItem("Phone", true));
+						items.add(new ListItem("Phone", ListItem.Type.HEADER));
 
 						String info = contact.getString("phone1");
 						String toSave = "".equals(info) ? "None" : info;
-						items.add(new ListItem("Primary: " + toSave, false));
+						items.add(new ListItem("Primary: " + toSave, ListItem.Type.INFO));
 						info = contact.getString("phone2");
 						toSave = "".equals(info) ? "None" : info;
-						items.add(new ListItem("Secondary: " + toSave, false));
+						items.add(new ListItem("Secondary: " + toSave, ListItem.Type.INFO));
 
-						items.add(new ListItem("Email", true));
+						items.add(new ListItem("Email", ListItem.Type.HEADER));
 						info = contact.getString("email1");
 						toSave = "".equals(info) ? "None" : info;
-						items.add(new ListItem("Primary: " + toSave, false));
+						items.add(new ListItem("Primary: " + toSave, ListItem.Type.INFO));
 						info = contact.getString("email2");
 						toSave = "".equals(info) ? "None" : info;
-						items.add(new ListItem("Secondary: " + toSave, false));
+						items.add(new ListItem("Secondary: " + toSave, ListItem.Type.INFO));
 						listView.setAdapter(new ContactAdapter(getApplicationContext(), items));
 
 					} else {
@@ -104,7 +104,7 @@ public class ShowContact extends Activity {
 			final ListItem item = contacts.get(position);
 
 			if (item != null) {
-				if (item.isSection()) {
+				if (item.getType().equals(ListItem.Type.HEADER)) {
 					/* This is a section header */
 					String title = (String) item.getData();
 					v = vi.inflate(R.layout.list_divider, null);

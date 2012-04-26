@@ -62,7 +62,6 @@ public class ShowEvent extends Activity {
 			dialog = ProgressDialog.show(this, "", 
 					"Loading. Please wait...", true);
 			dialog.setCancelable(true);
-			final ListView list = (ListView) findViewById(R.id.messagesList);
 			query.getInBackground(extras.getString("eventKey"), new GetCallback() {
 
 				@Override
@@ -74,8 +73,8 @@ public class ShowEvent extends Activity {
 					} else {
 						event = event1;
 
-						items.add(new ListItem(event, false, ListItem.Type.EVENT));
-						items.add(new ListItem(event, false, ListItem.Type.MESSAGEBOX));
+						items.add(new ListItem(event, ListItem.Type.EVENT));
+						items.add(new ListItem(event, ListItem.Type.MESSAGEBOX));
 						populateMessages();
 					}
 				}
@@ -99,7 +98,7 @@ public class ShowEvent extends Activity {
 				if(e == null){
 
 					for(ParseObject obj : messages){
-						items.add(new ListItem(obj, false, ListItem.Type.MESSAGE));
+						items.add(new ListItem(obj, ListItem.Type.MESSAGE));
 					}
 					msgList.setAdapter(new ShowEventAdapter(getApplicationContext(), 
 							items));
@@ -250,7 +249,7 @@ public class ShowEvent extends Activity {
 
 			if (item != null) {
 				// Not used right now
-				if (item.isSection()) {
+				if (ListItem.Type.HEADER.equals(item.getType())) {
 					/* This is a section header */
 					String title = (String) item.getData();
 					v = vi.inflate(R.layout.list_divider, null);
