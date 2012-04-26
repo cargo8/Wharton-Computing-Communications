@@ -14,7 +14,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.Parse;
@@ -40,9 +39,7 @@ public class ContactList extends ListActivity {
 		
         ParseQuery query = new ParseQuery("_User");
         query.orderByAscending("lname");
-        
-    	final Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT); 
-    	
+            	
     	query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
     	query.findInBackground(new FindCallback() {
 
@@ -71,8 +68,6 @@ public class ContactList extends ListActivity {
 						}
 			          });
 				} else {
-					toast.setText("Error: " + e.getMessage());
-					toast.show();
 					return;
 				}
 				dialog.cancel();
