@@ -35,8 +35,8 @@ public abstract class PushUtils {
 		userPush.setChannel("user_" + userId);
 		userPush.setMessage(ParseUser.getCurrentUser().getString("fullName") + " has set you as a Primary Contact for"
 				+ " the event \"" + event.getString("title") +"\". Login to view the event details.");
-		// expire after 5 days
-		userPush.setExpirationTimeInterval(432000);
+		// expire after 5 seconds
+		userPush.setExpirationTimeInterval(5000);
 		userPush.sendInBackground();
 		return true;
 	}

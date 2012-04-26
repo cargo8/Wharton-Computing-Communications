@@ -75,7 +75,7 @@ public class ShowMessage extends Activity {
 						return;
 					} else {
 						message = msg;
-						items.add(new ListItem(message, false, ListItem.Type.MESSAGE));
+						items.add(new ListItem(message, ListItem.Type.MESSAGE));
 						getComments(msg);
 					}
 				}
@@ -104,7 +104,7 @@ public class ShowMessage extends Activity {
 		comment.put("message", message);
 		comment.put("author", ParseUser.getCurrentUser());
 		comment.put("timestamp", System.currentTimeMillis());
-		comment.put("authorName", ParseUser.getCurrentUser().get("fullName"));
+		//comment.put("authorName", ParseUser.getCurrentUser().get("fullName"));
 
 
 		final Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
@@ -138,7 +138,7 @@ public class ShowMessage extends Activity {
 	
 	public void clearItems(){
 		items = new ArrayList<ListItem>();
-		items.add(new ListItem(message, false, ListItem.Type.MESSAGE));
+		items.add(new ListItem(message, ListItem.Type.MESSAGE));
 	}
 
 	/**
@@ -166,7 +166,7 @@ public class ShowMessage extends Activity {
 					//LinearLayout commentsPane = (LinearLayout) findViewById(R.id.commentsPane);
 					//commentsPane.removeAllViews();
 					for (ParseObject c : comments) {
-						items.add(new ListItem(c, false, ListItem.Type.COMMENT));
+						items.add(new ListItem(c, ListItem.Type.COMMENT));
 					}
 					cmtList.setAdapter(new CommentAdapter(getApplicationContext(), items));
 					dialog.cancel();
@@ -272,7 +272,7 @@ public class ShowMessage extends Activity {
 					
 					temp = (TextView) v.findViewById(R.id.listCommentAuthor);
 					if (temp != null) {
-						temp.setText(message.getString("authorName"));
+						//temp.setText(message.getString("authorName"));
 						temp.setTypeface(Typeface.DEFAULT_BOLD);
 
 					}
