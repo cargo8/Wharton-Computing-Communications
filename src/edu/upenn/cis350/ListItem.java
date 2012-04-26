@@ -7,7 +7,7 @@ public class ListItem {
 	
 	public enum Type {
 		HEADER, EVENT, MESSAGE, MESSAGEBOX, MESSAGEHEADER,
-		INFO, GROUP;
+		INFO, GROUP, COMMENT, COMMENTHEADER;
 	}
 	
 	public ListItem(Object data, boolean isSection) {

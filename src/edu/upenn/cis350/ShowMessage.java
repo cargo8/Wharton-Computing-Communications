@@ -1,21 +1,28 @@
 package edu.upenn.cis350;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +44,7 @@ public class ShowMessage extends Activity {
 	private String msgId;
 	private ParseObject message;
 	private ProgressDialog dialog;
+	private List<ListItem> items = new ArrayList<ListItem>();
 
 	/** Called when the activity is first created. */
 	@Override
@@ -67,31 +75,7 @@ public class ShowMessage extends Activity {
 						return;
 					} else {
 						message = msg;
-						LinearLayout layout = (LinearLayout) findViewById(R.id.commentMessagePane);
-						layout.setBackgroundColor(Color.GRAY);
-
-						TextView temp = (TextView)findViewById(R.id.messageText);
-						temp.setTextColor(Color.WHITE);
-						temp.setText(msg.getString("text"));
-
-						final TextView authorView = (TextView) findViewById(R.id.messageAuthor);
-						authorView.setTextColor(Color.WHITE);
-						msg.getParseUser("author").fetchIfNeededInBackground(new GetCallback(){
-
-							@Override
-							public void done(ParseObject arg0, ParseException arg1) {
-								ParseUser user = (ParseUser)arg0;
-								String author = user.getString("fullName");
-								authorView.setText(author + " - ");
-							}
-
-						});
-
-						temp = (TextView) findViewById(R.id.messageTimestamp);
-						temp.setTextColor(Color.WHITE);
-						SimpleDateFormat formatter = new SimpleDateFormat("MMMM d 'at' h:mm a ");
-						temp.setText(formatter.format(new Date(msg.getLong("timestamp"))));
-
+						items.add(new ListItem(message, false, ListItem.Type.MESSAGE));
 						getComments(msg);
 					}
 				}
@@ -120,6 +104,8 @@ public class ShowMessage extends Activity {
 		comment.put("message", message);
 		comment.put("author", ParseUser.getCurrentUser());
 		comment.put("timestamp", System.currentTimeMillis());
+		comment.put("authorName", ParseUser.getCurrentUser().get("fullName"));
+
 
 		final Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
 
@@ -142,55 +128,17 @@ public class ShowMessage extends Activity {
 					if (!PushService.getSubscriptions(context).contains("push_" + message.getObjectId())) {
 						PushService.subscribe(context, "push_" + message.getObjectId(), Login.class);
 					}
+					clearItems();
 					getComments(message);
+					
 				}
 			}
 		});
 	}
-
-	/**
-	 * Creates a UI frame to display comments
-	 * 
-	 * @param comment A ParseObject representing a comment to be displayed
-	 * @return LinearLayout representing the comment
-	 */
-	public LinearLayout createCommentFrame(ParseObject comment) {
-		LinearLayout commentFrame = new LinearLayout(this);
-		commentFrame.setOrientation(1);
-		commentFrame.setPadding(15, 15, 15, 15);
-
-		LinearLayout header = new LinearLayout(this);
-		header.setOrientation(0);
-
-		final TextView author = new TextView(this);
-		comment.getParseUser("author").fetchIfNeededInBackground(new GetCallback(){
-
-			@Override
-			public void done(ParseObject arg0, ParseException arg1) {
-				// TODO Auto-generated method stub
-				ParseUser user = (ParseUser)arg0;
-				author.setText(user.getString("fullName") + " ");
-				author.setTypeface(Typeface.DEFAULT_BOLD);
-			}
-
-		});
-
-		TextView timestamp = new TextView(this);
-		long time = comment.getLong("timestamp");
-		SimpleDateFormat formatter = new SimpleDateFormat("MMMM d 'at' h:mm a ");
-		timestamp.setText(formatter.format(new Date(time)));
-
-		TextView commentText = new TextView(this);
-		commentText.setText(comment.getString("text"));
-		
-		header.addView(author);
-		header.addView(commentText);
-//		header.addView(timestamp);
-
-		commentFrame.addView(header);
-		commentFrame.addView(timestamp);
-
-		return commentFrame;
+	
+	public void clearItems(){
+		items = new ArrayList<ListItem>();
+		items.add(new ListItem(message, false, ListItem.Type.MESSAGE));
 	}
 
 	/**
@@ -200,6 +148,7 @@ public class ShowMessage extends Activity {
 	 * @return List of ParseObjects representing comments
 	 */
 	public void getComments(ParseObject message) {
+		final ListView cmtList = (ListView) findViewById(R.id.commentsList);
 		ParseQuery commentQuery = new ParseQuery("Comment");
 		commentQuery.addAscendingOrder("timestamp");
 		commentQuery.whereEqualTo("message", message);
@@ -214,12 +163,12 @@ public class ShowMessage extends Activity {
 					toast.show();
 					return;
 				} else {
-					LinearLayout commentsPane = (LinearLayout) findViewById(R.id.commentsPane);
-					commentsPane.removeAllViews();
+					//LinearLayout commentsPane = (LinearLayout) findViewById(R.id.commentsPane);
+					//commentsPane.removeAllViews();
 					for (ParseObject c : comments) {
-						LinearLayout commentFrame = createCommentFrame(c);
-						commentsPane.addView(commentFrame);
+						items.add(new ListItem(c, false, ListItem.Type.COMMENT));
 					}
+					cmtList.setAdapter(new CommentAdapter(getApplicationContext(), items));
 					dialog.cancel();
 				}
 			}
@@ -243,6 +192,7 @@ public class ShowMessage extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
 		if(id == R.id.refresh){
+			clearItems();
 			getComments(message);
 			return true;
 		} else if (id == R.id.messageSubscribe) {
@@ -256,5 +206,86 @@ public class ShowMessage extends Activity {
 			return true;
 		}
 		return false;
+	}
+	
+	
+	/**
+	 * Adapter for formatting the ShowEvent view
+	 * 
+	 * @author closen
+	 * 
+	 */
+	private class CommentAdapter extends ArrayAdapter<ListItem> {
+
+		private List<ListItem> listItems;
+
+		public CommentAdapter(Context context, List<ListItem> items) {
+			super(context, 0, items);
+			this.listItems = items;
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			View v = convertView;
+			LayoutInflater vi = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+			final ListItem item = listItems.get(position);
+
+			if (item != null) {
+				if (item.getType().equals(ListItem.Type.MESSAGE)) {
+					final ParseObject message = (ParseObject) item.getData();
+					v = vi.inflate(R.layout.comment_header_list_item, null);
+
+					LinearLayout pane = (LinearLayout) v.findViewById(R.id.commentMessagePane);
+					pane.setBackgroundColor(Color.GRAY);
+					TextView temp = (TextView) v.findViewById(R.id.messageText);
+					if (temp != null) {
+						temp.setTextColor(Color.WHITE);
+						temp.setText(message.getString("text"));
+					}
+					
+					temp = (TextView) v.findViewById(R.id.messageAuthor);
+					if (temp != null) {
+						temp.setText(message.getString("authorName"));
+						temp.setTypeface(Typeface.DEFAULT_BOLD);
+						temp.setTextColor(Color.WHITE);
+					}
+					
+					temp = (TextView) v.findViewById(R.id.messageTimestamp);
+					if (temp != null) {
+						Long time = message.getLong("timestamp");
+						final SimpleDateFormat formatter = new SimpleDateFormat("MMMM d 'at' h:mm a ");
+						temp.setText(formatter.format(new Date(time)));
+					}
+					
+					v.setOnClickListener(null);
+					v.setOnLongClickListener(null);
+					v.setLongClickable(false);
+				} else if (item.getType().equals(ListItem.Type.COMMENT)) {
+					final ParseObject message = (ParseObject) item.getData();
+					v = vi.inflate(R.layout.comment_list_item, null);
+
+					TextView temp = (TextView) v.findViewById(R.id.listCommentText);
+					if (temp != null) {
+						temp.setText(message.getString("text"));
+					}
+					
+					temp = (TextView) v.findViewById(R.id.listCommentAuthor);
+					if (temp != null) {
+						temp.setText(message.getString("authorName"));
+						temp.setTypeface(Typeface.DEFAULT_BOLD);
+
+					}
+					
+					temp = (TextView) v.findViewById(R.id.listCommentTimestamp);
+					if (temp != null) {
+						Long time = message.getLong("timestamp");
+						final SimpleDateFormat formatter = new SimpleDateFormat("MMMM d 'at' h:mm a ");
+						temp.setText(formatter.format(new Date(time)));
+					}
+				} 
+			}
+			return v;
+		}
 	}
 }
