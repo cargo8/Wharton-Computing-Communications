@@ -411,7 +411,7 @@ public class ShowEvent extends Activity {
 					}
 
 					temp = (TextView)v.findViewById(R.id.startDateDisplay2);
-					SimpleDateFormat formatter = new SimpleDateFormat();
+					SimpleDateFormat formatter = new SimpleDateFormat("h:mm a 'on' MMMM d, yyyy");
 					if(temp != null){
 						Date date1 = new Date(event.getLong("startDate"));
 						temp.setText(formatter.format(date1));
