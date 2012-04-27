@@ -68,6 +68,8 @@ public class Home extends ListActivity {
 					onEditProfile();
 				} else if ("View Notifications".equals(label)) {
 					onViewNotifications();
+				} else if ("Manage Groups and Systems".equals(label)) {
+					onViewManageGroups();
 				}
 			}
 		});
@@ -99,6 +101,11 @@ public class Home extends ListActivity {
 
 	public void onViewNotifications() {
 		Intent i = new Intent(this, ShowNotifications.class);
+		startActivity(i);
+	}
+	
+	public void onViewManageGroups() {
+		Intent i = new Intent(this, ManageGroups.class);
 		startActivity(i);
 	}
 
