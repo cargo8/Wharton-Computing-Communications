@@ -449,8 +449,10 @@ public class ShowEvent extends Activity {
 						StringBuilder affilText = new StringBuilder();
 						if(affilList != null){
 							for(String s : affilList){
-								affilText.append(s + "\t");
+								affilText.append(s + ", ");
 							}
+							int l = affilText.length();
+							affilText = affilText.replace(l - 2, l, "");
 							temp.setText(affilText.toString());
 						}
 					}
@@ -461,8 +463,10 @@ public class ShowEvent extends Activity {
 						StringBuilder systemText = new StringBuilder();
 						if(systemList != null){
 							for(String s : systemList){
-								systemText.append(s + "\t");
+								systemText.append(s + ", ");
 							}
+							int l = systemText.length();
+							systemText = systemText.replace(l - 2, l, "");
 							temp.setText(systemText.toString());
 						}
 					}

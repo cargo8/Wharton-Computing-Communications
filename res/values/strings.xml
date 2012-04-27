@@ -21,8 +21,8 @@
     <string name="eventWelcome">Event Details</string>
     <string name="submitEvent">Submit Event</string>
     <string name="eventTitle">Event Title:</string>
-    <string name="startDate">Start Date</string>
-    <string name="endDate">End Date</string>
+    <string name="startDate">Start Date: </string>
+    <string name="endDate">End Date: </string>
     
     <string name="eventDesc">Event Description</string>
     <string name="eventActions">Action Items</string>
@@ -33,16 +33,16 @@
     <string name="backToHome">Back to Home Screen</string>
     <string name="backToEvent">Back to Event</string>
     
-    <string name="contact1">Contact 1</string>
-    <string name="contact2">Contact 2</string>
+    <string name="contact1">Primary Contact: </string>
+    <string name="contact2">Secondary Contact: </string>
     
     <string name="severity">Severity</string>
     <string name="red">Red</string>
     <string name="yellow">Yellow</string>
     <string name="green">Green</string>
-    <string name="pickedAffils">Groups:</string>
+    <string name="pickedGroups">Groups:</string>
     <string name="pickedSystems">Systems:</string>
-    <string name="type">Status: </string>
+    <string name="status">Status: </string>
     <string name="emergency">Emergency</string>
     <string name="scheduled">Scheduled</string>
 
