@@ -6,14 +6,6 @@
     android:padding="10dp"
     android:textSize="18sp" >
 
-<!--     <TextView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/notificationTitle"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:textSize="18sp" >
-    </TextView> -->
-
     <TextView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/notificationText"
