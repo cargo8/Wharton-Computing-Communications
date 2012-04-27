@@ -12,11 +12,14 @@ import com.parse.SaveCallback;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -36,6 +39,7 @@ public class ManageGroups extends Activity {
         final ArrayAdapter <CharSequence> adapter =
 			new ArrayAdapter <CharSequence> (this, android.R.layout.simple_spinner_item );
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter.add("\tSelect a Group");
         ParseQuery query = new ParseQuery("Group");
 		query.orderByAscending("name");	
 		query.findInBackground(new FindCallback() {
@@ -58,9 +62,14 @@ public class ManageGroups extends Activity {
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
 					int arg2, long arg3) {
 				// TODO Auto-generated method stub
-				if(arg0 != null){
+				if(arg0 != null && arg0.getSelectedItemPosition() != 0){
 					//TODO: jump to group's page
-					
+					String name = arg0.getSelectedItem().toString();
+					Intent i = new Intent(getApplicationContext(), ContactList.class);
+					i.putExtra("groupName", name);
+					i.putExtra("filter", ListItem.Type.GROUP);
+					finish();
+					startActivity(i);
 				}
 
 			}
@@ -76,6 +85,7 @@ public class ManageGroups extends Activity {
 	       final ArrayAdapter <CharSequence> adapter2 =
 				new ArrayAdapter <CharSequence> (this, android.R.layout.simple_spinner_item );
 	        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+	        adapter2.add("\tSelect a System");
 	        ParseQuery query2 = new ParseQuery("System");
 			query2.orderByAscending("name");	
 			query2.findInBackground(new FindCallback() {
@@ -98,9 +108,14 @@ public class ManageGroups extends Activity {
 				public void onItemSelected(AdapterView<?> arg0, View arg1,
 						int arg2, long arg3) {
 					// TODO Auto-generated method stub
-					if(arg0 != null){
+					if(arg0 != null && arg0.getSelectedItemPosition() != 0){
 						//TODO: jump to system's page
-						
+						String name = arg0.getSelectedItem().toString();
+						Intent i = new Intent(getApplicationContext(), ContactList.class);
+						i.putExtra("groupName", name);
+						i.putExtra("filter", ListItem.Type.SYSTEM);
+						finish();
+						startActivity(i);
 					}
 
 				}

@@ -25,6 +25,7 @@
                 android:id="@+id/groupSpinner"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+
                 />
             
             <LinearLayout
@@ -59,7 +60,7 @@
         		android:textSize="20.0sp"
         		android:gravity="center_horizontal" />
             
-            <Spinner 
+            <Spinner
                 android:id="@+id/systemSpinner"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
