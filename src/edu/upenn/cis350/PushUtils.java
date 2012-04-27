@@ -197,7 +197,11 @@ public abstract class PushUtils {
 				if (e != null) {
 					Log.d("createNotification", e.getMessage());
 				} else {
+					String currentUser = ParseUser.getCurrentUser().getObjectId();
 					for (ParseObject subscription : subscriptions) {
+						if (currentUser.equals(subscription.getString("userId"))) {
+							continue;
+						}
 						ParseObject notification = new ParseObject("Notification");
 						notification.put("user", subscription.getString("userId"));
 						notification.put("type", type);
