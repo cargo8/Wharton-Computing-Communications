@@ -57,14 +57,14 @@ public class ShowNotifications extends ListActivity {
 		ParseQuery query = new ParseQuery("Notification");
 		
 		if (Filter.NEW.equals(filter)) {
-			query.setLimit(15);
+			query.setLimit(10);
 		} else if (Filter.ALL.equals(filter)) {
 			// no-op
-			query.addAscendingOrder("createdAt");
 		}
 		
 		query.whereEqualTo("user", user.getObjectId());
 		query.addAscendingOrder("isRead");
+		query.addDescendingOrder("createdAt");
 
 		query.findInBackground(new FindCallback() {
 
@@ -223,7 +223,7 @@ public class ShowNotifications extends ListActivity {
 						@Override
 						public void onClick(View v) {
 							Intent i = new Intent(getApplicationContext(), ShowMessage.class);
-							i.putExtra("eventKey", notification.getString("id"));
+							i.putExtra("messageID", notification.getString("id"));
 							notification.put("isRead", true);
 							notification.saveEventually();
 							startActivity(i);

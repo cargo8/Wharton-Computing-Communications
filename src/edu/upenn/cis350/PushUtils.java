@@ -112,7 +112,7 @@ public abstract class PushUtils {
 		// expire after 5 minutes
 		pushMessage.setExpirationTimeInterval(300);
 		pushMessage.sendInBackground();
-		createNotification("message", comment.getObjectId(), msgText);
+		createNotification("message", message.getObjectId(), msgText);
 	}
 
 	/**
