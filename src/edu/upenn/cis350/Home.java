@@ -57,16 +57,14 @@ public class Home extends ListActivity {
 				String label = ((TextView) view).getText().toString();
 				if ("Create New Event".equals(label)) {
 					onCreateEventClick();
-				} else if ("Show Agenda".equals(label)) {
+				} else if ("Agenda".equals(label)) {
 					onShowAgenda();
-				} else if ("Show Contacts".equals(label)) {
+				} else if ("Contacts".equals(label)) {
 					onShowContacts();
-				} else if ("Edit Profile".equals(label)) {
-					onEditProfile();
-				} else if ("View Notifications".equals(label)) {
+				} else if ("Notifications".equals(label)) {
 					onViewNotifications();
-				} else if ("Manage Groups and Systems".equals(label)) {
-					onViewManageGroups();
+				} else if ("Logout".equals(label)) {
+					onLogout();
 				}
 			}
 		});
@@ -100,10 +98,26 @@ public class Home extends ListActivity {
 		Intent i = new Intent(this, ShowNotifications.class);
 		startActivity(i);
 	}
-	
+
 	public void onViewManageGroups() {
 		Intent i = new Intent(this, ManageGroups.class);
 		startActivity(i);
+	}
+
+	public void onLogout() {
+		new AlertDialog.Builder(this)
+		.setTitle("Logout")
+		.setMessage("Are you sure you want to logout?")
+		.setNegativeButton(android.R.string.no, null)
+		.setPositiveButton(android.R.string.yes, new OnClickListener() {
+
+			public void onClick(DialogInterface arg0, int arg1) {
+				ParseUser.logOut();
+				Intent i = new Intent(getApplicationContext(), Login.class);
+				finish();
+				startActivity(i);
+			}
+		}).create().show();
 	}
 
 	/**
@@ -121,20 +135,11 @@ public class Home extends ListActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
-		if(id == R.id.logout){
-			new AlertDialog.Builder(this)
-			.setTitle("Logout")
-			.setMessage("Are you sure you want to logout?")
-			.setNegativeButton(android.R.string.no, null)
-			.setPositiveButton(android.R.string.yes, new OnClickListener() {
-
-				public void onClick(DialogInterface arg0, int arg1) {
-					ParseUser.logOut();
-					Intent i = new Intent(getApplicationContext(), Login.class);
-					finish();
-					startActivity(i);
-				}
-			}).create().show();
+		if (id == R.id.manageGroups){
+			onViewManageGroups();
+			return true;
+		} else if (id == R.id.editProfile) {
+			onEditProfile();
 			return true;
 		}
 		return false;
