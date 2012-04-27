@@ -109,20 +109,30 @@ public class EditProfile extends Activity {
     	user.put("phone1", phone1);
     	user.put("phone2", phone2);
     	if(groups != null){
+    		StringBuffer gr = new StringBuffer();
     		List<String> gl = new ArrayList<String>();
     		for(int i = 0; i < groups.length; i++){
-    			if(groupsChecked[i])
+    			if(groupsChecked[i]){
     				gl.add(groups[i].toString());
+    				gr.append(groups[i].toString() + ",");
+    			}
     		}
+    		gr.replace(gr.length()-1, gr.length(), "");
     		user.put("groups", gl);
+    		user.put("groups2", gr);
     	}
     	if(systems != null){
+    		StringBuffer sys = new StringBuffer();
     		List<String> sl = new ArrayList<String>();
     		for(int i = 0; i < systems.length; i++){
-    			if(systemsChecked[i])
+    			if(systemsChecked[i]){
     				sl.add(systems[i].toString());
+    				sys.append(systems[i].toString() + ",");
+    			}
     		}
+			sys.replace(sys.length()-1, sys.length(), "");
     		user.put("systems", sl);
+    		user.put("systems2", sys.toString());
     	}
 
 		user.saveEventually();
