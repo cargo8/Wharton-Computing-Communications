@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -193,6 +194,7 @@ public class ShowEvent extends Activity {
 	/**
 	 * Method that gets called when the menuitem is clicked
 	 */
+	@SuppressWarnings("rawtypes")
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if(item.getItemId() == R.id.editEvent){
@@ -231,13 +233,31 @@ public class ShowEvent extends Activity {
 			return true;
 		} else if (item.getItemId() == R.id.eventUnsubscribe) {
 			PushService.unsubscribe(getApplicationContext(), "push_" + event.getObjectId());
-			ParseObject subscription = new ParseObject("Subscription");
-			subscription.put("userId", ParseUser.getCurrentUser().getObjectId());
-			subscription.put("subscriptionId", event.getObjectId());
-			subscription.deleteEventually();
+			ParseQuery subscription = new ParseQuery("Subscription");
+			subscription.whereEqualTo("subscriptionId", event.getObjectId());
+			subscription.whereEqualTo("userId", ParseUser.getCurrentUser().getObjectId());
+			subscription.findInBackground(new FindCallback() {
+
+				@Override
+				public void done(List<ParseObject> subscriptions,
+						ParseException e2) {
+					if (e2 == null) {
+						for (ParseObject obj : subscriptions) {
+							obj.deleteEventually();
+						}
+					}
+				}
+
+			});
 			Intent i = new Intent(this, ShowEvent.class);
 			i.putExtra("eventKey", event.getObjectId());
 			Toast.makeText(this, "Unsubscribed from event", Toast.LENGTH_SHORT).show();
+			finish();
+			startActivity(i);
+			return true;
+		} else if (item.getItemId() == R.id.refresh) {
+			Intent i = new Intent(this, ShowEvent.class);
+			i.putExtra("eventKey", event.getObjectId());
 			finish();
 			startActivity(i);
 			return true;
