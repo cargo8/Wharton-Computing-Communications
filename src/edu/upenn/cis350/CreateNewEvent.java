@@ -378,7 +378,6 @@ public class CreateNewEvent extends Activity {
 						subscription.saveEventually();
 					}
 
-					//TODO: Subscribe affiliated groups
 					for (Object g : event.getList("groups")) {
 						String group = (String) g;
 						ParseQuery q = new ParseQuery("_User");
