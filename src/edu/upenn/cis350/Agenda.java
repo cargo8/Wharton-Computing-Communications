@@ -225,7 +225,7 @@ public class Agenda extends Activity {
 						Date date1 = new Date(event.getLong("startDate"));
 						Date date2 = new Date(event.getLong("endDate"));
 						temp.setText("Start: " + formatter.format(date1) + 
-								", Est. Finish: " + formatter.format(date2));
+								"\nEst. Finish: " + formatter.format(date2));
 					}
 					temp = (TextView) v.findViewById(R.id.listEventDescription);
 					String desc = event.getString("description");
