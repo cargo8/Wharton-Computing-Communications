@@ -48,15 +48,6 @@
 
 	
     <string name="agendaWelcome">Agenda</string>
-    <string name="agendaEventTitle1">Instructure Canvas Maintenance Outage</string>
-    <string name="agendaEventStartDate1">2/25/12</string>
-    <string name="agendaEventDivider"> - </string>
-    <string name="agendaEventEndDate1">2/27/12</string>
-    <string name="agendaEventDescription1">Calendar section needs to be reworked, so 
-        maintenance will be performed this weekend.</string>
-    <string name="agendaEventActionItem1">- Inform Canvas users of outage</string>
-    <string name="agendaEventActionItem2">- Oversee maintenance internally</string>
-    <string name="agendaEventActionItem3"> - Deadline by 12:00am 2/27/12</string>
 
     <string name="defaultTitle">This is the Default Event Title</string>
     <string name="defaultDescText">This is the Default Event Description.</string>
