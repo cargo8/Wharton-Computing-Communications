@@ -176,7 +176,7 @@ public class Home extends Activity {
 						notify.setText("You have " + count + " new notifications");
 						notify.setBackgroundColor(Color.RED);
 						notify.setTextColor(Color.WHITE);
-						notify.setVisibility(0);
+						notify.setVisibility(View.VISIBLE);
 						notify.setOnClickListener(new View.OnClickListener() {
 							
 							@Override
@@ -186,7 +186,7 @@ public class Home extends Activity {
 							
 						});
 					} else {
-						notify.setVisibility(1);
+						notify.setVisibility(View.GONE);
 					}
 				}
 			}
