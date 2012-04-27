@@ -42,7 +42,7 @@
     <string name="green">Green</string>
     <string name="pickedAffils">Groups:</string>
     <string name="pickedSystems">Systems:</string>
-    <string name="type">Maintenance Status</string>
+    <string name="type">Status: </string>
     <string name="emergency">Emergency</string>
     <string name="scheduled">Scheduled</string>
 
