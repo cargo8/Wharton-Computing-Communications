@@ -37,11 +37,11 @@ public class ShowNotifications extends ListActivity {
 		final ProgressDialog dialog = ProgressDialog.show(this, "", 
 				"Loading. Please wait...", true);
 		dialog.setCancelable(true);
-		
+
 		ParseUser user = ParseUser.getCurrentUser();
 
 		ParseQuery query = new ParseQuery("Notification");
-		query.whereEqualTo("user", user);
+		query.whereEqualTo("user", user.getObjectId());
 		query.addAscendingOrder("isRead");
 
 		query.findInBackground(new FindCallback() {
@@ -53,9 +53,17 @@ public class ShowNotifications extends ListActivity {
 					ArrayList<ListItem> readNotifications = new ArrayList<ListItem>();
 					for (ParseObject n : notifications) {
 						if (!n.getBoolean("isRead")) {
-							newNotifications.add(new ListItem(n, ListItem.Type.INFO));
+							if ("event".equals(n.getString("type"))) {
+								newNotifications.add(new ListItem(n, ListItem.Type.EVENT));								
+							} else if ("message".equals(n.getString("type"))) {
+								newNotifications.add(new ListItem(n, ListItem.Type.MESSAGE));
+							}
 						} else {
-							readNotifications.add(new ListItem(n, ListItem.Type.INFO));
+							if ("event".equals(n.getString("type"))) {
+								readNotifications.add(new ListItem(n, ListItem.Type.EVENT));								
+							} else if ("message".equals(n.getString("type"))) {
+								readNotifications.add(new ListItem(n, ListItem.Type.MESSAGE));
+							}
 						}
 					}
 					List<ListItem> list = new ArrayList<ListItem>();
@@ -104,14 +112,14 @@ public class ShowNotifications extends ListActivity {
 					final TextView sectionView = (TextView) v.findViewById(R.id.list_item_section_text);
 					sectionView.setText(title);
 
-				} else if (ListItem.Type.EVENT.equals(item.getData())){
+				} else if (ListItem.Type.EVENT.equals(item.getType())){
 					/* This is a real list item */
 					final ParseObject notification = (ParseObject) item.getData();
 					v = vi.inflate(R.layout.notification_list_item, null);
-					
+
 					TextView text = (TextView) v.findViewById(R.id.notificationText);
 					text.setText(notification.getString("text"));
-					
+
 					v.setOnClickListener(new OnClickListener() {
 
 						@Override
@@ -121,7 +129,25 @@ public class ShowNotifications extends ListActivity {
 							notification.put("isRead", true);
 							startActivity(i);
 						}
-						
+
+					});
+				} else if (ListItem.Type.MESSAGE.equals(item.getType())) {
+					final ParseObject notification = (ParseObject) item.getData();
+					v = vi.inflate(R.layout.notification_list_item, null);
+
+					TextView text = (TextView) v.findViewById(R.id.notificationText);
+					text.setText(notification.getString("text"));
+
+					v.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							Intent i = new Intent(getApplicationContext(), ShowEvent.class);
+							i.putExtra("eventKey", notification.getString("id"));
+							notification.put("isRead", true);
+							startActivity(i);
+						}
+
 					});
 				}
 			}

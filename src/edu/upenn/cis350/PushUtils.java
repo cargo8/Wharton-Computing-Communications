@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Set;
 
 import android.content.Context;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -33,11 +35,13 @@ public abstract class PushUtils {
 		lazySub.saveEventually();
 		ParsePush userPush = new ParsePush();
 		userPush.setChannel("user_" + userId);
-		userPush.setMessage(ParseUser.getCurrentUser().getString("fullName") + " has set you as a Primary Contact for"
-				+ " the event \"" + event.getString("title") +"\". Login to view the event details.");
-		// expire after 5 days
-		userPush.setExpirationTimeInterval(432000);
+		String msgText = ParseUser.getCurrentUser().getString("fullName") + " has set you as a Primary Contact for"
+				+ " the event \"" + event.getString("title") +"\". Login to view the event details.";
+		userPush.setMessage(msgText);
+		// expire after 5 minutes
+		userPush.setExpirationTimeInterval(300);
 		userPush.sendInBackground();
+		createNotification("event", event.getObjectId(), msgText);
 		return true;
 	}
 
@@ -101,7 +105,7 @@ public abstract class PushUtils {
 		// expire after 5 minutes
 		pushMessage.setExpirationTimeInterval(300);
 		pushMessage.sendInBackground();
-		createNotification(user, "message", comment.getObjectId(), msgText);
+		createNotification("message", comment.getObjectId(), msgText);
 	}
 
 	/**
@@ -120,7 +124,7 @@ public abstract class PushUtils {
 		// expire after 5 days
 		pushMessage.setExpirationTimeInterval(432000);
 		pushMessage.sendInBackground();
-		createNotification(user, "event", event.getObjectId(), msgText);
+		createNotification("event", event.getObjectId(), msgText);
 	}	
 
 	/**
@@ -142,10 +146,12 @@ public abstract class PushUtils {
 		}
 		ParsePush pushMessage = new ParsePush();
 		pushMessage.setChannel("push_" + eventId);
-		pushMessage.setMessage(user.getString("fullName") + " updated the event \"" + event.getString("title") + "\"");
+		String msgText = user.getString("fullName") + " updated the event \"" + event.getString("title") + "\"";
+		pushMessage.setMessage(msgText);
 		// expire after 5 days
 		pushMessage.setExpirationTimeInterval(432000);
 		pushMessage.sendInBackground();
+		createNotification("event", event.getObjectId(), msgText);
 	}
 
 	/**
@@ -158,10 +164,12 @@ public abstract class PushUtils {
 		ParsePush pushMessage = new ParsePush();
 		ParseUser user = ParseUser.getCurrentUser();
 		pushMessage.setChannel("push_" + eventId);
-		pushMessage.setMessage(user.getString("fullName") + " marked \"" + event.getString("title") + "\" as Resolved.");
+		String msgText = user.getString("fullName") + " marked \"" + event.getString("title") + "\" as Resolved.";
+		pushMessage.setMessage(msgText);
 		// expire after 5 days
 		pushMessage.setExpirationTimeInterval(432000);
 		pushMessage.sendInBackground();
+		createNotification("event", event.getObjectId(), msgText);
 	}
 	
 	/**
@@ -172,14 +180,31 @@ public abstract class PushUtils {
 	 * @param id
 	 * @param message
 	 */
-	private static void createNotification(ParseObject user, String type, String id,
-			String message) {
-		ParseObject notification = new ParseObject("Notification");
-		notification.put("user", user);
-		notification.put("type", type);
-		notification.put("id", id);
-		notification.put("text", message);
-		notification.put("isRead", false);
+	private static void createNotification(final String type, final String id,
+			final String message) {
+		ParseQuery query = new ParseQuery("Subscription");
+		query.whereEqualTo("subscriptionId", id);
+		query.findInBackground(new FindCallback() {
+
+			@Override
+			public void done(List<ParseObject> users, ParseException e) {
+				if (e != null) {
+					Log.d("createNotification", e.getMessage());
+				} else {
+					for (ParseObject user : users) {
+						ParseObject notification = new ParseObject("Notification");
+						notification.put("user", user);
+						notification.put("type", type);
+						notification.put("id", id);
+						notification.put("text", message);
+						notification.put("isRead", false);
+						notification.saveEventually();
+					}
+				}
+			}
+			
+		});
+
 	}
 
 }
