@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:id="@+id/refresh" android:enabled="true" android:visible="true" android:title="Refresh"></item>
+    <item android:id="@+id/editEvent" android:enabled="true" android:visible="true" android:title="Edit Event"></item>
+    <item android:id="@+id/markComplete" android:enabled="true" android:visible="true" android:title="Mark as Resolved"></item>    
+</menu>
