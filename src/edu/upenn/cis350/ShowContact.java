@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -81,6 +82,17 @@ public class ShowContact extends Activity {
 						items.add(new ListItem("Secondary: " + toSave, ListItem.Type.INFO));
 						listView.setAdapter(new ContactAdapter(getApplicationContext(), items));
 
+						items.add(new ListItem("Groups", ListItem.Type.HEADER));
+						List<String> groups = contact.getList("groups");
+						for (String group : groups) {
+							items.add(new ListItem(group, ListItem.Type.GROUP));
+						}
+
+						items.add(new ListItem("Systems", ListItem.Type.HEADER));
+						List<String> systems = contact.getList("systems");
+						for (String system : systems) {
+							items.add(new ListItem(system, ListItem.Type.SYSTEM));
+						}
 					} else {
 						Toast.makeText(getApplicationContext(), "Could not load contact", Toast.LENGTH_SHORT);
 					}
@@ -153,7 +165,43 @@ public class ShowContact extends Activity {
 					Linkify.addLinks(temp, Linkify.ALL);
 					temp.setLinkTextColor(temp.getTextColors().getDefaultColor());
 				} else if (ListItem.Type.GROUP.equals(item.getType())) {
-					//TODO: JMow
+					/* This is a real list item */
+					final String groupName = (String) item.getData();
+					v = vi.inflate(R.layout.list_item, null);
+					
+					final TextView temp = (TextView) v;
+					temp.setText(groupName);
+					
+					temp.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							Intent i = new Intent(getApplicationContext(), ContactList.class);
+							i.putExtra("filter", ListItem.Type.GROUP);
+							i.putExtra("groupName", temp.getText());
+							startActivity(i);
+						}
+						
+					});
+				} else if (ListItem.Type.SYSTEM.equals(item.getType())) {
+					/* This is a real list item */
+					final String groupName = (String) item.getData();
+					v = vi.inflate(R.layout.list_item, null);
+					
+					final TextView temp = (TextView) v;
+					temp.setText(groupName);
+					
+					temp.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							Intent i = new Intent(getApplicationContext(), ContactList.class);
+							i.putExtra("filter", ListItem.Type.SYSTEM);
+							i.putExtra("groupName", temp.getText());
+							startActivity(i);
+						}
+						
+					});
 				}
 			}
 			return v;

@@ -6,7 +6,7 @@ public class ListItem {
 	
 	public enum Type {
 		HEADER, EVENT, MESSAGE, MESSAGEBOX, MESSAGEHEADER,
-		INFO, GROUP, NONE;
+		INFO, GROUP, SYSTEM, NONE;
 	}
 	
 	public ListItem(Object data, Type type) {

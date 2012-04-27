@@ -24,8 +24,13 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import edu.upenn.cis350.ListItem.Type;
+
 public class ContactList extends ListActivity {
 
+	ListItem.Type filterType = null;
+	String filter = null;
+	
 	/**
 	 *  Called when the activity is first created.
 	 *  Makes query to fetch and populate contact list
@@ -35,12 +40,25 @@ public class ContactList extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 		Parse.initialize(this, Settings.APPLICATION_ID, Settings.CLIENT_ID);
-                
+
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+			filterType = (Type) extras.get("filter");
+			filter = extras.getString("groupName");
+		}
+		
         final ProgressDialog dialog = ProgressDialog.show(this, "", 
 				"Loading. Please wait...", true);
 		dialog.setCancelable(true);
 		
         ParseQuery query = new ParseQuery("_User");
+        if (filterType != null && filter != null) {
+        	if (ListItem.Type.GROUP.equals(filterType)) {
+            	query.whereContains("groups2", filter);
+        	} else if (ListItem.Type.SYSTEM.equals(filterType)) {
+            	query.whereContains("systems2", filter);
+        	}
+        }
         query.orderByAscending("lname");
             
     	query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
@@ -95,6 +113,8 @@ public class ContactList extends ListActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == R.id.refresh) {
 			Intent i = new Intent(this, ContactList.class);
+			i.putExtra("filter", filterType);
+			i.putExtra("groupName", filter);
 			finish();
 			startActivity(i);
 			return true;
