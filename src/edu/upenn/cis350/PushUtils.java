@@ -184,7 +184,7 @@ public abstract class PushUtils {
 	 * 
 	 * @param type The type of Activity this notification will forward to
 	 * @param id The ID of the activity to be forwarded to
-	 * @param message The messag to be displayed in the notification
+	 * @param message The message to be displayed in the notification
 	 */
 	private static void createNotification(final String type, final String id,
 			final String message) {

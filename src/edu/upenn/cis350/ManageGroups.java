@@ -61,14 +61,12 @@ public class ManageGroups extends Activity {
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
 					int arg2, long arg3) {
-				// TODO Auto-generated method stub
 				if(arg0 != null && arg0.getSelectedItemPosition() != 0){
 					//TODO: jump to group's page
 					String name = arg0.getSelectedItem().toString();
 					Intent i = new Intent(getApplicationContext(), ContactList.class);
 					i.putExtra("groupName", name);
 					i.putExtra("filter", ListItem.Type.GROUP);
-					finish();
 					startActivity(i);
 				}
 
@@ -114,7 +112,6 @@ public class ManageGroups extends Activity {
 						Intent i = new Intent(getApplicationContext(), ContactList.class);
 						i.putExtra("groupName", name);
 						i.putExtra("filter", ListItem.Type.SYSTEM);
-						finish();
 						startActivity(i);
 					}
 
