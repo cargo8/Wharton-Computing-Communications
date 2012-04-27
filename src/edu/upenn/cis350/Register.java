@@ -38,32 +38,32 @@ public class Register extends Activity {
 	private boolean[] systemsChecked;
 
 	/** Called when the activity is first created. */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 		Parse.initialize(this, Settings.APPLICATION_ID, Settings.CLIENT_ID);
-        setContentView(R.layout.register);
-        
-    }
-    
-    private String checkBlank(String input) {
-    	if ("".equals(input))
-    		return "None";
-    	else
-    		return input;
-    }
-    
-    /**
-     * Registers a new user in the application
-     * @param view
-     */
-    public void newUser(View view) {
-    	final ProgressDialog dialog = ProgressDialog.show(this, "", 
-				"Loading. Please wait...", true);
-    	dialog.setCancelable(true);
-    	
-    	String uname = ((EditText)findViewById(R.id.loginUsername)).getText().toString().toLowerCase();
-    	uname = checkBlank(uname);
+		setContentView(R.layout.register);
+
+	}
+
+	private String checkBlank(String input) {
+		if ("".equals(input))
+			return "None";
+		else
+			return input;
+	}
+
+	/**
+	 * Registers a new user in the application
+	 * @param view
+	 */
+	public void newUser(View view) {
+		final ProgressDialog dialog = ProgressDialog.show(this, "", 
+				"Signing up...", true);
+		dialog.setCancelable(true);
+
+		String uname = ((EditText)findViewById(R.id.loginUsername)).getText().toString().toLowerCase();
+		uname = checkBlank(uname);
 		String pw = ((EditText)findViewById(R.id.loginPassword)).getText().toString();
 		String pw2 = ((EditText)findViewById(R.id.loginPassword2)).getText().toString();
 		final String fname = ((EditText)findViewById(R.id.registerFname)).getText().toString();
@@ -78,12 +78,12 @@ public class Register extends Activity {
 		String phone2 = ((EditText)findViewById(R.id.registerPhone2)).getText().toString();
 		phone2 = phone2.replaceAll("\\D", "");
 		phone2 = checkBlank(phone2);
-    	
+
 		if ("".equals(uname)) {
 			Toast.makeText(this, "Please enter a username.", Toast.LENGTH_SHORT).show();
 			return;
 		}
-		
+
 		if (!pw.equals(pw2)) {
 			Toast.makeText(this, "Passwords do not match. Try again", Toast.LENGTH_SHORT).show();
 			return;
@@ -95,62 +95,64 @@ public class Register extends Activity {
 		 * user.getEmail() should never be used in the app,
 		 * always use user.getString("email1/2") */
 		String injectedMessage = "++" +
-								"__Name__" + fname + "+" + lname +
-								"__Email1__" + email1.replaceAll("@", "+") +
-								"__Email2__" + email2.replaceAll("@", "+") +
-								"__Phone1__" + phone1 +
-								"__Phone2__" + phone2;
+				"__Name__" + fname + "+" + lname +
+				"__Email1__" + email1.replaceAll("@", "+") +
+				"__Email2__" + email2.replaceAll("@", "+") +
+				"__Phone1__" + phone1 +
+				"__Phone2__" + phone2;
 		String verificationEmail = String.format("jason.mow+%s@gmail.com",
 				injectedMessage);
 		user.setEmail(verificationEmail);
-		
+
 		/* User Data Fields*/
-    	user.setUsername(uname);
-    	user.setPassword(pw);
-    	user.put("fname", fname);
-    	user.put("lname", lname);
-    	user.put("fullName", fname + " " + lname);
-    	user.put("email1", email1);
-    	user.put("email2", email2);
-    	user.put("phone1", phone1);
-    	user.put("phone2", phone2);
+		user.setUsername(uname);
+		user.setPassword(pw);
+		user.put("fname", fname);
+		user.put("lname", lname);
+		user.put("fullName", fname + " " + lname);
+		user.put("email1", email1);
+		user.put("email2", email2);
+		user.put("phone1", phone1);
+		user.put("phone2", phone2);
 		final List<String> gl = new ArrayList<String>();
-    	if(groups != null){
-    		StringBuffer gr = new StringBuffer();
-    		for(int i = 0; i < groups.length; i++){
-    			if(groupsChecked[i]){
-    				gl.add(groups[i].toString());
-    				gr.append(groups[i].toString() + ",");
-    			}
-    		}
-    		gr.replace(gr.length()-1, gr.length(), "");
-    		user.put("groups", gl);
-    		user.put("groups2", gr.toString());
-    	} else {
-    		user.put("groups", new ArrayList<String>());
-    		user.put("groups2", "");
-    	}
+		if(groups != null){
+			StringBuffer gr = new StringBuffer();
+			for(int i = 0; i < groups.length; i++){
+				if(groupsChecked[i]){
+					gl.add(groups[i].toString());
+					gr.append(groups[i].toString() + ",");
+				}
+			}
+			if (gr.length() != 0)
+				gr.replace(gr.length()-1, gr.length(), "");
+			user.put("groups", gl);
+			user.put("groups2", gr.toString());
+		} else {
+			user.put("groups", new ArrayList<String>());
+			user.put("groups2", "");
+		}
 		final List<String> sl = new ArrayList<String>();
-    	if(systems != null){
-    		StringBuffer sys = new StringBuffer();
-    		for(int i = 0; i < systems.length; i++){
-    			if(systemsChecked[i]){
-    				sl.add(systems[i].toString());
-    				sys.append(systems[i].toString() + ",");
-    			}
-    		}
-			sys.replace(sys.length()-1, sys.length(), "");
-    		user.put("systems", sl);
-    		user.put("systems2", sys.toString());
-    	} else {
-    		user.put("systems", new ArrayList<String>());
-    		user.put("systems2", "");
-    	}
-    	
+		if(systems != null){
+			StringBuffer sys = new StringBuffer();
+			for(int i = 0; i < systems.length; i++){
+				if(systemsChecked[i]){
+					sl.add(systems[i].toString());
+					sys.append(systems[i].toString() + ",");
+				}
+			}
+			if (sys.length() != 0)
+				sys.replace(sys.length()-1, sys.length(), "");
+			user.put("systems", sl);
+			user.put("systems2", sys.toString());
+		} else {
+			user.put("systems", new ArrayList<String>());
+			user.put("systems2", "");
+		}
 
-    	
 
-    	final Toast successToast = Toast.makeText(this, "Registration Pending", Toast.LENGTH_SHORT);
+
+
+		final Toast successToast = Toast.makeText(this, "Registration Pending", Toast.LENGTH_SHORT);
 		final Toast failToast = Toast.makeText(this, "Could not create user. Try again.", Toast.LENGTH_SHORT);
 		final Intent i = new Intent(this, Home.class);
 
@@ -169,11 +171,11 @@ public class Register extends Activity {
 					successToast.show();
 					finish();
 					startActivity(i);
-    	        } else {
-    	            // Sign up didn't succeed. Look at the ParseException
-    	            // to figure out what went wrong
-    	        	dialog.cancel();
-    	        	failToast.setText(e.getMessage());
+				} else {
+					// Sign up didn't succeed. Look at the ParseException
+					// to figure out what went wrong
+					dialog.cancel();
+					failToast.setText(e.getMessage());
 					failToast.show();
 					return;
 				}
