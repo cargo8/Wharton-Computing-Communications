@@ -61,8 +61,8 @@ public class Register extends Activity {
     	uname = checkBlank(uname);
 		String pw = ((EditText)findViewById(R.id.loginPassword)).getText().toString();
 		String pw2 = ((EditText)findViewById(R.id.loginPassword2)).getText().toString();
-		String fname = ((EditText)findViewById(R.id.registerFname)).getText().toString();
-		String lname = ((EditText)findViewById(R.id.registerLname)).getText().toString();
+		final String fname = ((EditText)findViewById(R.id.registerFname)).getText().toString();
+		final String lname = ((EditText)findViewById(R.id.registerLname)).getText().toString();
 		String email1 = ((EditText)findViewById(R.id.registerEmail1)).getText().toString().toLowerCase();
 		email1 = checkBlank(email1);
 		String email2 = ((EditText)findViewById(R.id.registerEmail2)).getText().toString().toLowerCase();
@@ -107,22 +107,33 @@ public class Register extends Activity {
     	user.put("email2", email2);
     	user.put("phone1", phone1);
     	user.put("phone2", phone2);
+		final List<String> gl = new ArrayList<String>();
     	if(groups != null){
-    		List<String> gl = new ArrayList<String>();
+    		StringBuffer gr = new StringBuffer();
     		for(int i = 0; i < groups.length; i++){
-    			if(groupsChecked[i])
+    			if(groupsChecked[i]){
     				gl.add(groups[i].toString());
+    				gr.append(groups[i].toString() + ",");
+    			}
     		}
+    		gr.replace(gr.length()-1, gr.length(), "");
     		user.put("groups", gl);
+    		user.put("groups2", gr.toString());
     	}
+		final List<String> sl = new ArrayList<String>();
     	if(systems != null){
-    		List<String> sl = new ArrayList<String>();
+    		StringBuffer sys = new StringBuffer();
     		for(int i = 0; i < systems.length; i++){
-    			if(systemsChecked[i])
+    			if(systemsChecked[i]){
     				sl.add(systems[i].toString());
+    				sys.append(systems[i].toString() + ",");
+    			}
     		}
+			sys.replace(sys.length()-1, sys.length(), "");
     		user.put("systems", sl);
+    		user.put("systems2", sys.toString());
     	}
+    	
 
     	
 
@@ -140,7 +151,8 @@ public class Register extends Activity {
 					}
 					if (!mySub.contains("")) {
 						PushService.subscribe(context, "", ShowNotifications.class);
-					}
+					}				
+					
 					successToast.show();
 					finish();
 					startActivity(i);
