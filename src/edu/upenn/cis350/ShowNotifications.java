@@ -9,6 +9,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -25,6 +28,12 @@ import com.parse.ParseUser;
 
 public class ShowNotifications extends ListActivity {
 
+	private Filter filter;
+	
+	private enum Filter {
+		ALL, NEW;
+	}
+	
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -36,11 +45,26 @@ public class ShowNotifications extends ListActivity {
 		dialog.setCancelable(true);
 
 		ParseUser user = ParseUser.getCurrentUser();
-
+		
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+			filter = (Filter) extras.get("filter");
+		}
+		if (filter == null) {
+			filter = Filter.NEW;
+		}
+		
 		ParseQuery query = new ParseQuery("Notification");
+		
+		if (Filter.NEW.equals(filter)) {
+			query.setLimit(15);
+		} else if (Filter.ALL.equals(filter)) {
+			// no-op
+			query.addAscendingOrder("createdAt");
+		}
+		
 		query.whereEqualTo("user", user.getObjectId());
 		query.addAscendingOrder("isRead");
-		query.setLimit(15);
 
 		query.findInBackground(new FindCallback() {
 
@@ -88,6 +112,54 @@ public class ShowNotifications extends ListActivity {
 	@Override
 	public void onResume() {
 		onCreate(new Bundle());
+	}
+	
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.notifications_menu, menu);
+		return true;
+	}
+	
+	/**
+	 * Method that gets called when the menuitem is clicked
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		int id = item.getItemId();
+		if (id == R.id.refresh){
+			Intent i = new Intent(this, ShowNotifications.class);
+			finish();
+			startActivity(i);
+			return true;
+		} else if (id == R.id.markNotificationsRead) {
+			ParseQuery query = new ParseQuery("Notification");
+			query.whereEqualTo("user", ParseUser.getCurrentUser().getObjectId());
+			query.whereEqualTo("isRead", false);
+			query.findInBackground(new FindCallback() {
+
+				@Override
+				public void done(List<ParseObject> notes, ParseException e) {
+					if (e == null) {
+						for (ParseObject obj : notes) {
+							obj.put("isRead", true);
+							obj.saveEventually();
+						}
+					}
+				}
+				
+			});
+			Intent i = new Intent(this, ShowNotifications.class);
+			finish();
+			startActivity(i);
+			return true;
+		} else if (id == R.id.showAllNotifications) {
+			Intent i = new Intent(this, ShowNotifications.class);
+			i.putExtra("filter", Filter.ALL);
+			finish();
+			startActivity(i);
+			return true;
+		}
+		return false;
 	}
 	
 	private class NotificationAdapter extends ArrayAdapter<ListItem> {
