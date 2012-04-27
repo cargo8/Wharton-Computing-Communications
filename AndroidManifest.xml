@@ -25,6 +25,8 @@
         </activity>
         <activity android:name=".CreateNewEvent" 
             android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".ManageGroups" 
+            android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".ShowEvent" 
             android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".Agenda" 

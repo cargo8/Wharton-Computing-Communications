@@ -135,8 +135,7 @@ public class EditProfile extends Activity {
     		user.put("systems2", sys.toString());
     	}
     	
-    	// save user in group/system
-    	
+   	
 
 		user.saveEventually();
 		finish();

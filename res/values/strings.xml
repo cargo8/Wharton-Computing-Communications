@@ -14,6 +14,7 @@
         <item>Show Contacts</item>
         <item>View Notifications</item>
         <item>Edit Profile</item>
+        <item>Manage Groups and Systems</item>
     </string-array>
     
     <!--  Event Strings -->
