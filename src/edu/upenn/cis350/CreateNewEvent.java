@@ -31,6 +31,7 @@ import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.Parse;
+import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -323,6 +324,14 @@ public class CreateNewEvent extends Activity {
 
 		final Toast failure = Toast.makeText(this, "Could not save event. Try again.", Toast.LENGTH_SHORT);
 
+		//TODO: enable when enabled in EditEvent
+//		ParseACL acl = new ParseACL();
+//		acl.setPublicReadAccess(true);
+//		acl.setWriteAccess(ParseUser.getCurrentUser(), true);
+//		acl.setWriteAccess(contactMap.get(contact1), true);
+//		acl.setWriteAccess(contactMap.get(contact2), true);
+//		event.setACL(acl);
+
 		event.saveInBackground(new SaveCallback() {
 			@Override
 			public void done(ParseException e) {
@@ -330,7 +339,7 @@ public class CreateNewEvent extends Activity {
 					success.show();
 					String id = event.getObjectId();
 					/* Subscribe to push notifications for this event */
-					Context context = getApplicationContext();
+					final Context context = getApplicationContext();
 					if (!PushService.getSubscriptions(context).contains("push_" + id)) {
 						PushService.subscribe(context, "push_" + id, ShowNotifications.class);
 
@@ -354,7 +363,7 @@ public class CreateNewEvent extends Activity {
 					String userId2 = event.getString("contact2ID");
 
 					if (!currentId.equals(userId1)) {
-						PushUtils.lazySubscribeContact(context, event, userId1);
+						PushUtils.lazySubscribePrimaryContact(context, event, userId1);
 						ParseObject subscription = new ParseObject("Subscription");
 						subscription.put("userId", userId1);
 						subscription.put("subscriptionId", id);
@@ -362,7 +371,7 @@ public class CreateNewEvent extends Activity {
 					}
 
 					if (!currentId.equals(userId2) && !userId1.equals(userId2)) {
-						PushUtils.lazySubscribeContact(context, event, userId2);
+						PushUtils.lazySubscribePrimaryContact(context, event, userId2);
 						ParseObject subscription = new ParseObject("Subscription");
 						subscription.put("userId", userId2);
 						subscription.put("subscriptionId", id);
@@ -370,10 +379,43 @@ public class CreateNewEvent extends Activity {
 					}
 
 					//TODO: Subscribe affiliated groups
-					//					for (String group : ((List<String>) event.get("systems"))) {
-					//						ParseQuery q = new ParseQuery("_User");
-					//						q.whereContains("systems", group);
-					//					}
+					for (Object g : event.getList("groups")) {
+						String group = (String) g;
+						ParseQuery q = new ParseQuery("_User");
+						q.whereContains("groups2", group);
+						q.findInBackground(new FindCallback() {
+
+							@Override
+							public void done(List<ParseObject> users,
+									ParseException e) {
+								if (e == null) {
+									for (ParseObject u : users) {
+										PushUtils.lazySubscribeContact(context, event, u.getObjectId());
+									}
+								}
+							}
+							
+						});
+					}
+					
+					for (Object s : event.getList("systems")) {
+						String group = (String) s;
+						ParseQuery q = new ParseQuery("_User");
+						q.whereContains("systems2", group);
+						q.findInBackground(new FindCallback() {
+
+							@Override
+							public void done(List<ParseObject> users,
+									ParseException e) {
+								if (e == null) {
+									for (ParseObject u : users) {
+										PushUtils.lazySubscribeContact(context, event, u.getObjectId());
+									}
+								}
+							}
+							
+						});
+					}
 					i.putExtra("eventKey", id);
 					finish();
 					startActivity(i);	

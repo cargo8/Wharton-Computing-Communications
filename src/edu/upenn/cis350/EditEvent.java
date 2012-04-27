@@ -434,14 +434,14 @@ public class EditEvent extends Activity {
 
 					Context context = getApplicationContext();
 					if (!currentId.equals(userId1)) {
-						PushUtils.lazySubscribeContact(context, event, userId1);
+						PushUtils.lazySubscribePrimaryContact(context, event, userId1);
 						ParseObject subscription = new ParseObject("Subscription");
 						subscription.put("userId", userId1);
 						subscription.put("subscriptionId", event.getObjectId());
 						subscription.saveEventually();
 					}
 					if (!currentId.equals(userId2) && !userId1.equals(userId2)) {
-						PushUtils.lazySubscribeContact(context, event, userId2); 
+						PushUtils.lazySubscribePrimaryContact(context, event, userId2); 
 						ParseObject subscription = new ParseObject("Subscription");
 						subscription.put("userId", userId2);
 						subscription.put("subscriptionId", event.getObjectId());

@@ -28,7 +28,7 @@ public abstract class PushUtils {
 	 * @param event The event to be subscribed to
 	 * @param userId The userId to subscribe and notify
 	 */
-	public static boolean lazySubscribeContact(Context context, ParseObject event, String userId) {
+	public static boolean lazySubscribePrimaryContact(Context context, ParseObject event, String userId) {
 		ParseObject lazySub = new ParseObject("LazySubscription");
 		lazySub.put("userID", userId);
 		lazySub.put("eventID", event.getObjectId());
@@ -37,6 +37,39 @@ public abstract class PushUtils {
 		userPush.setChannel("user_" + userId);
 		String msgText = ParseUser.getCurrentUser().getString("fullName") + " has set you as a Primary Contact for"
 				+ " the event \"" + event.getString("title") +"\"";
+		userPush.setMessage(msgText);
+		// expire after 5 minutes
+		userPush.setExpirationTimeInterval(300);
+		userPush.sendInBackground();
+
+		ParseObject notification = new ParseObject("Notification");
+		notification.put("user", userId);
+		notification.put("type", "event");
+		notification.put("id", event.getObjectId());
+		notification.put("text", msgText);
+		notification.put("isRead", false);
+		notification.saveEventually();
+		return true;
+	}
+	
+	/**
+	 * Adds an entry to the LazySubscription data store that this userId should be
+	 * subscribed to this event the next time the user opens the app. Also pushes
+	 * a notification to tell them a new Event was created
+	 * 
+	 * @param context Context of activity where subscribe is called
+	 * @param event The event to be subscribed to
+	 * @param userId The userId to subscribe and notify
+	 */
+	public static boolean lazySubscribeContact(Context context, ParseObject event, String userId) {
+		ParseObject lazySub = new ParseObject("LazySubscription");
+		lazySub.put("userID", userId);
+		lazySub.put("eventID", event.getObjectId());
+		lazySub.saveEventually();
+		ParsePush userPush = new ParsePush();
+		userPush.setChannel("user_" + userId);
+		String msgText = ParseUser.getCurrentUser().getString("fullName") + " has created the event: \""
+				+ event.getString("title") +"\"";
 		userPush.setMessage(msgText);
 		// expire after 5 minutes
 		userPush.setExpirationTimeInterval(300);
