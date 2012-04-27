@@ -1,6 +1,7 @@
 package edu.upenn.cis350;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -10,12 +11,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,24 +44,28 @@ public class ShowEvent extends Activity {
 
 	private ParseObject event;
 	private ProgressDialog dialog;
+	private List<ListItem> items = new ArrayList<ListItem>();
+	private boolean subscribed;
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.show_event);
-		Parse.initialize(this, "FWyFNrvpkliSb7nBNugCNttN5HWpcbfaOWEutejH", "SZoWtHw28U44nJy8uKtV2oAQ8suuCZnFLklFSk46");
+		Parse.initialize(this, Settings.APPLICATION_ID, Settings.CLIENT_ID);
 		Bundle extras = this.getIntent().getExtras();
 		if(extras != null){
-			//event = (EventPOJO)extras.get("eventPOJO");
-			//uname = extras.getString("user");
+			final String eventId = extras.getString("eventKey");
 			ParseQuery query = new ParseQuery("Event");
 
 			final Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
 			dialog = ProgressDialog.show(this, "", 
-                    "Loading. Please wait...", true);
-			dialog.setCancelable(true);
-			query.getInBackground(extras.getString("eventKey"), new GetCallback() {
+					"Loading. Please wait...", true);
+			dialog.setCancelable(true);			
+
+			updateSubscriptionStatus(eventId);
+
+			query.getInBackground(eventId, new GetCallback() {
 
 				@Override
 				public void done(ParseObject event1, ParseException e) {
@@ -64,121 +75,40 @@ public class ShowEvent extends Activity {
 						toast.show();
 					} else {
 						event = event1;
-						TextView temp = (TextView)findViewById(R.id.eventTitleText);
-						temp.setText(event.getString("title"));
-						temp = (TextView)findViewById(R.id.eventDescText);
-						temp.setText("\n" + event.getString("description") + "\n");
-						//temp = (TextView)findViewById(R.id.eventActionsText);
-						//temp.setText(event.getString("actionItems" + "\n"));
-						temp = (TextView)findViewById(R.id.startDateDisplay2);
-						SimpleDateFormat formatter = new SimpleDateFormat();
-						Date date1 = new Date(event.getLong("startDate"));
-						temp.setText(formatter.format(date1));
-						temp = (TextView)findViewById(R.id.endDateDisplay2);
-						Date date2 = new Date(event.getLong("endDate"));
-						temp.setText(formatter.format(date2));
-						temp = (TextView)findViewById(R.id.affilsText);
-
-						List<String> affilList = event.getList("affils");
-						StringBuilder affilText = new StringBuilder();
-						if(affilList != null){
-							for(String s : affilList){
-								affilText.append(s + "\t");
-							}
-							temp.setText(affilText.toString());
-						}
-						temp = (TextView)findViewById(R.id.systemsText);
-
-						List<String> systemList = event.getList("systems");
-						StringBuilder systemText = new StringBuilder();
-						if(systemList != null){
-							for(String s : systemList){
-								systemText.append(s + "\t");
-							}
-							temp.setText(systemText.toString());
-						}
-
-						temp = (TextView)findViewById(R.id.personText1);
-						temp.setText(event.getString("contact1"));
-						temp.setTextColor(Color.WHITE);
-
-						temp = (TextView)findViewById(R.id.personText2);
-						temp.setText(event.getString("contact2"));
-						temp.setTextColor(Color.WHITE);
-
-						temp = (TextView)findViewById(R.id.severityText);
-						temp.setBackgroundColor(event.getInt("severity"));
-						temp = (TextView)findViewById(R.id.typeText);
-						temp.setText(event.getString("type"));
+						items.add(new ListItem(event, ListItem.Type.EVENT));
+						if(checkSuperUsers())
+							items.add(new ListItem(event, ListItem.Type.MESSAGEBOX));
 						populateMessages();
 					}
 				}
 
 			});
-
-			/*
-        	CharSequence[] temp2 = extras.getCharSequenceArray("affils");
-        	boolean[] temp3 = extras.getBooleanArray("affilsChecked");
-        	StringBuilder affilText = new StringBuilder();
-        	if(temp2 != null && temp3 != null){
-        		for(int i = 0; i < temp2.length; i++){
-        			if(temp3[i])
-        				affilText.append(temp2[i] + "\t");
-        		}
-        	}
-			 */
-
-			/*
-        	temp2 = extras.getCharSequenceArray("systems");
-        	temp3 = extras.getBooleanArray("systemsChecked");
-        	StringBuilder systemText = new StringBuilder();
-        	if(temp2 != null && temp3 != null){
-        		for(int i = 0; i < temp2.length; i++){
-        			if(temp3[i])
-        				systemText.append(temp2[i] + "\t");
-        		}
-        	}
-			 */
-
-
-
-
-
-
 		}
 	}
 
-	@Override
-	public void onBackPressed() {
-		finish();
-	}
-	
-	// populates the messages in the bottom half of the view from the DB
+	/**
+	 * Populate Messages List in Bottom Half of Activity from ParseDB
+	 */
 	public void populateMessages() {
-
-		final LinearLayout messagesPane = (LinearLayout) findViewById(R.id.messagesPane);
-		messagesPane.removeAllViews();
-		final Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
+		final ListView msgList = (ListView) findViewById(R.id.messagesList);
 		ParseQuery query = new ParseQuery("Message");
 		query.orderByAscending("timestamp");
 		query.whereEqualTo("event", event.getObjectId());
 		query.findInBackground(new FindCallback() {
 
 			@Override
-			public void done(List<ParseObject> arg0, ParseException arg1) {
-				if(arg1 == null){
-					for(ParseObject obj : arg0){
-						LinearLayout messageFrame = getMessageFrame(obj);
+			public void done(List<ParseObject> messages, ParseException e) {
+				if(e == null){
 
-						messagesPane.addView(messageFrame);
-						toast.setText("Retrieved " + arg0.size() + " messages");
-						toast.show();
+					for(ParseObject obj : messages){
+						items.add(new ListItem(obj, ListItem.Type.MESSAGE));
 					}
+					msgList.setAdapter(new ShowEventAdapter(getApplicationContext(), 
+							items));
 					dialog.cancel();
-				}
-				else {
-					toast.setText("Error: " + arg1.getMessage());
-					toast.show();
+				} else {
+					Toast.makeText(getApplicationContext(), 
+							"Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
 				}
 
 			}
@@ -187,68 +117,6 @@ public class ShowEvent extends Activity {
 		//LinearLayout messagesPane = (LinearLayout) findViewById(R.id.messagesPane);
 		//messagesPane.removeAllViews();
 		//messagesPane.addView(messageFrame);
-	}
-
-	public LinearLayout getMessageFrame(final ParseObject obj){
-		LinearLayout messageFrame = new LinearLayout(this);
-		messageFrame.setOrientation(1);
-		messageFrame.setPadding(1, 1, 1, 1);
-
-		LinearLayout header = new LinearLayout(this);
-		header.setOrientation(0);
-
-		TextView posted = new TextView(this);
-		posted.setText("Posted by ");
-
-		final TextView author = new TextView(this);
-		obj.getParseUser("author").fetchIfNeededInBackground(new GetCallback(){
-
-			@Override
-			public void done(ParseObject arg0, ParseException arg1) {
-				// TODO Auto-generated method stub
-				ParseUser user = (ParseUser)arg0;
-				author.setText(user.getString("fullName"));
-				author.setTypeface(Typeface.DEFAULT_BOLD);
-			}
-
-		});
-		//author.setText(user.getUsername());
-		//author.setTypeface(Typeface.DEFAULT_BOLD);
-
-		TextView timestamp = new TextView(this);
-		Long time = obj.getLong("timestamp");
-		SimpleDateFormat formatter = new SimpleDateFormat();
-		timestamp.setText(" at " + formatter.format(new Date(time)));
-
-		TextView comments = new TextView(this);
-		int noOfComments = obj.getInt("count");
-		if(noOfComments > 0)
-			comments.setText(noOfComments + " comment" + (noOfComments == 1 ? "" : "s") + '\n');
-		else
-			comments.setText("No comments" + '\n');
-
-		header.addView(posted);
-		header.addView(author);
-		header.addView(timestamp);
-
-		TextView messageText = new TextView(this);
-		messageText.setText(obj.getString("text"));
-		messageText.setTypeface(Typeface.DEFAULT_BOLD);
-
-		messageFrame.addView(messageText);
-		messageFrame.addView(header);
-		messageFrame.addView(comments);
-
-		final Intent i = new Intent(this, ShowMessage.class);
-
-		messageFrame.setOnClickListener(new LinearLayout.OnClickListener() {  
-			public void onClick(View v){
-				i.putExtra("messageID", obj.getObjectId());
-				startActivity(i);
-			}
-		});
-
-		return messageFrame;
 	}
 
 	/**
@@ -269,11 +137,58 @@ public class ShowEvent extends Activity {
 		startActivity(i);
 	}
 
+	public boolean checkSuperUsers(){
+		String user1 = event.getString("contact1");
+		String user2 = event.getString("contact2");
+		String thisUser = ParseUser.getCurrentUser().getString("fullName");
+		if(user1.equals(thisUser) || user2.equals(thisUser))
+			return true;
+		else
+			return false;
+	}
 
+	/**
+	 * Update subscription status of this user, on this event
+	 * 
+	 * @param eventId The event ID of the event being viewed
+	 */
+	private void updateSubscriptionStatus(final String eventId) {
+		ParseQuery subscription = new ParseQuery("Subscription");
+		subscription.whereEqualTo("userId", ParseUser.getCurrentUser().getObjectId());
+		subscription.findInBackground(new FindCallback() {
+
+			@Override
+			public void done(List<ParseObject> subscriptions, ParseException e) {
+				if (e == null) {
+					for (ParseObject obj : subscriptions) {
+						if (eventId.equals(obj.getString("subscriptionId"))) {
+							subscribed = true;
+						}
+					}
+				}
+			}
+
+		});
+	}
+
+	/**
+	 * Creates menu on menu button press
+	 */
 	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.show_event_menu, menu);
-		return true;
+		if(!checkSuperUsers()){
+			MenuInflater inflater = getMenuInflater();
+			if (subscribed) {
+				inflater.inflate(R.menu.show_event_menu_default_subscribed, menu);
+			} else {
+				inflater.inflate(R.menu.show_event_menu_default_unsubscribed, menu);
+			}
+			return true;
+		}
+		else {
+			MenuInflater inflater = getMenuInflater();
+			inflater.inflate(R.menu.show_event_menu_primary, menu);
+			return true;
+		}
 	}
 
 	/**
@@ -303,13 +218,48 @@ public class ShowEvent extends Activity {
 			return true;
 		} else if (item.getItemId() == R.id.eventSubscribe) {
 			if (!PushService.getSubscriptions(this).contains("push_" + event.getObjectId())) {
-				PushService.subscribe(this, "push_" + event.getObjectId(), Login.class);
+				PushService.subscribe(this, "push_" + event.getObjectId(), ShowNotifications.class);
+				ParseObject subscription = new ParseObject("Subscription");
+				subscription.put("userId", ParseUser.getCurrentUser().getObjectId());
+				subscription.put("subscriptionId", event.getObjectId());
+				subscription.saveEventually();
 			}
+			Intent i = new Intent(this, ShowEvent.class);
+			i.putExtra("eventKey", event.getObjectId());
 			Toast.makeText(this, "Subscribed to event", Toast.LENGTH_SHORT).show();
+			finish();
+			startActivity(i);
 			return true;
 		} else if (item.getItemId() == R.id.eventUnsubscribe) {
 			PushService.unsubscribe(getApplicationContext(), "push_" + event.getObjectId());
+			ParseQuery subscription = new ParseQuery("Subscription");
+			subscription.whereEqualTo("subscriptionId", event.getObjectId());
+			subscription.whereEqualTo("userId", ParseUser.getCurrentUser().getObjectId());
+			subscription.findInBackground(new FindCallback() {
+
+				@Override
+				public void done(List<ParseObject> subscriptions,
+						ParseException e2) {
+					if (e2 == null) {
+						for (ParseObject obj : subscriptions) {
+							obj.deleteEventually();
+						}
+					}
+				}
+
+			});
+			Intent i = new Intent(this, ShowEvent.class);
+			i.putExtra("eventKey", event.getObjectId());
 			Toast.makeText(this, "Unsubscribed from event", Toast.LENGTH_SHORT).show();
+			finish();
+			startActivity(i);
+			return true;
+		} else if (item.getItemId() == R.id.refresh) {
+			Intent i = new Intent(this, ShowEvent.class);
+			i.putExtra("eventKey", event.getObjectId());
+			finish();
+			startActivity(i);
+			return true;
 		}
 		return false;
 	}
@@ -326,6 +276,7 @@ public class ShowEvent extends Activity {
 		}
 		final ParseObject msg = new ParseObject("Message");
 		msg.put("author", ParseUser.getCurrentUser());
+		msg.put("authorName", ParseUser.getCurrentUser().get("fullName"));
 		msg.put("text", tv.getText().toString());
 		msg.put("timestamp", System.currentTimeMillis());
 		msg.put("event", event.getObjectId());
@@ -343,7 +294,11 @@ public class ShowEvent extends Activity {
 					success.show();
 					Context context = getApplicationContext();
 					if (!PushService.getSubscriptions(context).contains("push_" + msg.getObjectId())) {
-						PushService.subscribe(context, "push_" + msg.getObjectId(), Login.class);
+						PushService.subscribe(context, "push_" + msg.getObjectId(), ShowNotifications.class);
+						ParseObject subscription = new ParseObject("Subscription");
+						subscription.put("userId", ParseUser.getCurrentUser().getObjectId());
+						subscription.put("subscriptionId", msg.getObjectId());
+						subscription.saveEventually();
 					}
 					PushUtils.createMessagePush(event, msg);
 					i.putExtra("eventKey", event.getObjectId());
@@ -357,5 +312,172 @@ public class ShowEvent extends Activity {
 				}
 			}
 		});
+	}
+
+	/**
+	 * Adapter for formatting the ShowEvent view
+	 * 
+	 * @author closen
+	 * 
+	 */
+	private class ShowEventAdapter extends ArrayAdapter<ListItem> {
+
+		private List<ListItem> listItems;
+
+		public ShowEventAdapter(Context context, List<ListItem> items) {
+			super(context, 0, items);
+			this.listItems = items;
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			View v = convertView;
+			LayoutInflater vi = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+			final ListItem item = listItems.get(position);
+
+			if (item != null) {
+				if (ListItem.Type.HEADER.equals(item.getType())) {
+					/* This is a section header */
+					String title = (String) item.getData();
+					v = vi.inflate(R.layout.list_divider, null);
+
+					v.setOnClickListener(null);
+					v.setOnLongClickListener(null);
+					v.setLongClickable(false);
+
+					final TextView sectionView = (TextView) v.findViewById(R.id.list_item_section_text);
+					sectionView.setText(title);
+
+				} else if (item.getType().equals(ListItem.Type.MESSAGE)){
+					/* This is a real list item */
+					final ParseObject message = (ParseObject) item.getData();
+					v = vi.inflate(R.layout.message_list_item, null);
+
+					TextView temp = (TextView) v.findViewById(R.id.listMessageText);
+					if (temp != null) {
+						temp.setText(message.getString("text"));
+					}
+
+					temp = (TextView) v.findViewById(R.id.listMessageAuthor);
+
+					if (temp != null) {
+						temp.setText(message.getString("authorName"));
+						temp.setTypeface(Typeface.DEFAULT_BOLD);
+
+					}
+
+					temp = (TextView) v.findViewById(R.id.listMessageTimestamp);
+					if (temp != null) {
+						Long time = message.getLong("timestamp");
+						final SimpleDateFormat formatter = new SimpleDateFormat("MMMM d 'at' h:mm a ");
+						temp.setText(formatter.format(new Date(time)));
+					}
+					temp = (TextView) v.findViewById(R.id.listMessageCommentCounter);
+					if (temp != null) {
+						int noOfComments = message.getInt("count");
+						if(noOfComments > 0)
+							temp.setText(noOfComments + " comment" + (noOfComments > 1 ? "s" : ""));
+						else
+							temp.setText("");
+					}
+
+					v.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							Intent i = new Intent(getApplicationContext(), ShowMessage.class);
+							i.putExtra("messageID", message.getObjectId());
+							startActivity(i);
+						}
+					});
+				} else if (item.getType().equals(ListItem.Type.EVENT)){
+					/* This is a real list item */
+					final ParseObject event = (ParseObject) item.getData();
+					v = vi.inflate(R.layout.event_description_item, null);
+					v.setOnClickListener(null);
+					v.setOnLongClickListener(null);
+					v.setLongClickable(false);
+
+					TextView temp = (TextView) v.findViewById(R.id.eventTitleText);
+					if (temp != null) {
+						temp.setText(event.getString("title"));
+					}
+
+					temp = (TextView) v.findViewById(R.id.eventDescText);
+					if (temp != null) {
+						temp.setText("\n" + event.getString("description") + "\n");
+					}
+
+					temp = (TextView)v.findViewById(R.id.startDateDisplay2);
+					SimpleDateFormat formatter = new SimpleDateFormat("h:mm a 'on' MMMM d, yyyy");
+					if(temp != null){
+						Date date1 = new Date(event.getLong("startDate"));
+						temp.setText(formatter.format(date1));
+
+					}
+
+					temp = (TextView)v.findViewById(R.id.endDateDisplay2);
+					if(temp != null){
+						Date date2 = new Date(event.getLong("endDate"));
+						temp.setText(formatter.format(date2));
+					}
+
+					temp = (TextView)v.findViewById(R.id.affilsText);
+					if(temp != null){
+						List<String> affilList = event.getList("groups");
+						StringBuilder affilText = new StringBuilder();
+						if(affilList != null){
+							for(String s : affilList){
+								affilText.append(s + "\t");
+							}
+							temp.setText(affilText.toString());
+						}
+					}
+
+					temp = (TextView)v.findViewById(R.id.systemsText);
+					if(temp != null){
+						List<String> systemList = event.getList("systems");
+						StringBuilder systemText = new StringBuilder();
+						if(systemList != null){
+							for(String s : systemList){
+								systemText.append(s + "\t");
+							}
+							temp.setText(systemText.toString());
+						}
+					}
+
+					temp = (TextView)v.findViewById(R.id.personText1);
+					if(temp != null){
+						temp.setText(event.getString("contact1"));
+						temp.setTextColor(Color.WHITE);
+					}
+
+					temp = (TextView)v.findViewById(R.id.personText2);
+					if(temp != null){
+						temp.setText(event.getString("contact2"));
+						temp.setTextColor(Color.WHITE);
+					}
+
+					temp = (TextView)v.findViewById(R.id.severityText);
+					if(temp != null){
+						temp.setBackgroundColor(event.getInt("severity"));
+					}
+
+					temp = (TextView)v.findViewById(R.id.typeText);
+					if(temp != null){
+						temp.setText(event.getString("type"));
+					}
+				} else if (item.getType().equals(ListItem.Type.MESSAGEBOX)){
+					v = vi.inflate(R.layout.post_message_item, null);
+					EditText temp = (EditText) v.findViewById(R.id.newMessageText);
+					//we need to update adapter once we finish with editing
+
+					if (temp != null) {
+						temp.setFocusable(true);
+					}
+				}
+			}
+			return v;
+		}
 	}
 }

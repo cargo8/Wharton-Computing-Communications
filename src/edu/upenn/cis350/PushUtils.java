@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Set;
 
 import android.content.Context;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -33,11 +35,20 @@ public abstract class PushUtils {
 		lazySub.saveEventually();
 		ParsePush userPush = new ParsePush();
 		userPush.setChannel("user_" + userId);
-		userPush.setMessage(ParseUser.getCurrentUser().getString("fullName") + " has set you as a Primary Contact for"
-				+ " the event \"" + event.getString("title") +"\". Login to view the event details.");
-		// expire after 5 days
-		userPush.setExpirationTimeInterval(432000);
+		String msgText = ParseUser.getCurrentUser().getString("fullName") + " has set you as a Primary Contact for"
+				+ " the event \"" + event.getString("title") +"\"";
+		userPush.setMessage(msgText);
+		// expire after 5 minutes
+		userPush.setExpirationTimeInterval(300);
 		userPush.sendInBackground();
+
+		ParseObject notification = new ParseObject("Notification");
+		notification.put("user", userId);
+		notification.put("type", "event");
+		notification.put("id", event.getObjectId());
+		notification.put("text", msgText);
+		notification.put("isRead", false);
+		notification.saveEventually();
 		return true;
 	}
 
@@ -59,7 +70,7 @@ public abstract class PushUtils {
 					Set<String> mySub = PushService.getSubscriptions(context);
 					for (ParseObject sub : subscriptions) {
 						if (!mySub.contains("push_" + sub.getString("eventID"))) {
-							PushService.subscribe(context, "push_" + sub.getString("eventID"), Login.class);
+							PushService.subscribe(context, "push_" + sub.getString("eventID"), ShowNotifications.class);
 						}
 						sub.deleteEventually();
 					}
@@ -94,12 +105,14 @@ public abstract class PushUtils {
 		ParsePush pushMessage = new ParsePush();
 		ParseUser user = ParseUser.getCurrentUser();
 		pushMessage.setChannel("push_" + message.getObjectId());
-		pushMessage.setMessage(user.getString("fullName") + " commented: " +
+		String msgText = user.getString("fullName") + " commented: " +
 				"\"" + comment.getString("text") + "\" on the message \"" +
-				message.getString("text") + "\"");
-		// expire after 5 days
-		pushMessage.setExpirationTimeInterval(432000);
+				message.getString("text") + "\"";
+		pushMessage.setMessage(msgText);
+		// expire after 5 minutes
+		pushMessage.setExpirationTimeInterval(300);
 		pushMessage.sendInBackground();
+		createNotification("message", message.getObjectId(), msgText);
 	}
 
 	/**
@@ -112,11 +125,13 @@ public abstract class PushUtils {
 		ParsePush pushMessage = new ParsePush();
 		ParseUser user = ParseUser.getCurrentUser();
 		pushMessage.setChannel("push_" + event.getObjectId());
-		pushMessage.setMessage(user.getString("fullName") + " posted: \"" + message.getString("text") + "\" on " +
-				"the event \"" + event.getString("title") + "\"");
+		String msgText = user.getString("fullName") + " posted: \"" + message.getString("text") + "\" on " +
+				"the event \"" + event.getString("title") + "\"";
+		pushMessage.setMessage(msgText);
 		// expire after 5 days
-		pushMessage.setExpirationTimeInterval(432000);
+		pushMessage.setExpirationTimeInterval(300);
 		pushMessage.sendInBackground();
+		createNotification("event", event.getObjectId(), msgText);
 	}	
 
 	/**
@@ -127,16 +142,23 @@ public abstract class PushUtils {
 	 * @param event Event ParseObject that is changed
 	 */
 	public static void createEventChangedPush(Context context, String eventId, ParseObject event) {
+		ParseUser user = ParseUser.getCurrentUser();
 		if (!PushService.getSubscriptions(context).contains("push_" + event.getObjectId())) {
-			PushService.subscribe(context, "push_" + eventId, Login.class);
+			PushService.subscribe(context, "push_" + eventId, ShowNotifications.class);
+
+			ParseObject subscription = new ParseObject("Subscription");
+			subscription.put("userId", user.getObjectId());
+			subscription.put("subscriptionId", eventId);
+			subscription.saveEventually();
 		}
 		ParsePush pushMessage = new ParsePush();
-		ParseUser user = ParseUser.getCurrentUser();
 		pushMessage.setChannel("push_" + eventId);
-		pushMessage.setMessage(user.getString("fullName") + " updated the event \"" + event.getString("title") + "\"");
+		String msgText = user.getString("fullName") + " updated the event \"" + event.getString("title") + "\"";
+		pushMessage.setMessage(msgText);
 		// expire after 5 days
-		pushMessage.setExpirationTimeInterval(432000);
+		pushMessage.setExpirationTimeInterval(300);
 		pushMessage.sendInBackground();
+		createNotification("event", event.getObjectId(), msgText);
 	}
 
 	/**
@@ -149,10 +171,12 @@ public abstract class PushUtils {
 		ParsePush pushMessage = new ParsePush();
 		ParseUser user = ParseUser.getCurrentUser();
 		pushMessage.setChannel("push_" + eventId);
-		pushMessage.setMessage(user.getString("fullName") + " marked \"" + event.getString("title") + "\" as Resolved.");
+		String msgText = user.getString("fullName") + " marked \"" + event.getString("title") + "\" as Resolved.";
+		pushMessage.setMessage(msgText);
 		// expire after 5 days
-		pushMessage.setExpirationTimeInterval(432000);
+		pushMessage.setExpirationTimeInterval(300);
 		pushMessage.sendInBackground();
+		createNotification("event", event.getObjectId(), msgText);
 	}
 	
 	public static void pushToJason(String message) {
@@ -160,5 +184,43 @@ public abstract class PushUtils {
 		push.setChannel("user_kJAO7GBuP5");
 		push.setMessage(message);
 		push.sendInBackground();
+	}
+
+	/**
+	 * Creates a notification to be displayed in the application
+	 * 
+	 * @param type The type of Activity this notification will forward to
+	 * @param id The ID of the activity to be forwarded to
+	 * @param message The message to be displayed in the notification
+	 */
+	private static void createNotification(final String type, final String id,
+			final String message) {
+		ParseQuery query = new ParseQuery("Subscription");
+		query.whereEqualTo("subscriptionId", id);
+		query.findInBackground(new FindCallback() {
+
+			@Override
+			public void done(List<ParseObject> subscriptions, ParseException e) {
+				if (e != null) {
+					Log.d("createNotification", e.getMessage());
+				} else {
+					String currentUser = ParseUser.getCurrentUser().getObjectId();
+					for (ParseObject subscription : subscriptions) {
+						if (currentUser.equals(subscription.getString("userId"))) {
+							continue;
+						}
+						ParseObject notification = new ParseObject("Notification");
+						notification.put("user", subscription.getString("userId"));
+						notification.put("type", type);
+						notification.put("id", id);
+						notification.put("text", message);
+						notification.put("isRead", false);
+						notification.saveEventually();
+					}
+				}
+			}
+			
+		});
+
 	}
 }

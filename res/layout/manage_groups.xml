@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+        <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_weight="4.0" >
+        
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    		android:layout_width="fill_parent"
+    		android:layout_height="wrap_content"
+    		android:orientation="vertical" >
+        
+            <TextView
+       		 	android:layout_width="fill_parent"
+        		android:layout_height="wrap_content"
+        		android:text="Groups"
+        		android:textSize="20.0sp"
+        		android:gravity="center_horizontal" />
+        
+            <Spinner 
+                android:id="@+id/groupSpinner"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+
+                />
+            
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                
+                <Button
+                    android:id="@+id/addGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Add Group"
+                    android:onClick="addGroup" />
+                
+                <EditText 
+                    android:id="@+id/groupText"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+                
+            <LinearLayout
+                android:id="@+id/groupPane"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+            
+            <TextView
+       		 	android:layout_width="fill_parent"
+        		android:layout_height="wrap_content"
+        		android:text="Systems"
+        		android:textSize="20.0sp"
+        		android:gravity="center_horizontal" />
+            
+            <Spinner
+                android:id="@+id/systemSpinner"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                />
+            
+                <LinearLayout
+                	android:layout_width="fill_parent"
+                	android:layout_height="wrap_content"
+                	android:orientation="horizontal">
+                
+                <Button
+                    android:id="@+id/addSystem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Add System"
+                    android:onClick="addSystem" />
+                
+                <EditText 
+                    android:id="@+id/systemText"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+            
+            <LinearLayout
+                android:id="@+id/systemPane"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+            
+            
+            </LinearLayout>
+       </ScrollView>
+</LinearLayout>

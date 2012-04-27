@@ -212,8 +212,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Secondary Phone NUmber: "
-                android:textSize="12.0sp" />
+            android:text="Secondary Phone Number: "
+            android:textSize="12.0sp" />
 
             <EditText
                 android:id="@+id/registerPhone2"
@@ -228,5 +228,33 @@
             android:onClick="updateUser"
             android:text="Save Changes" />
     </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+		   	<Button
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_weight="1"
+        	android:onClick="showPickGroupsDialog"        	
+        	android:text="Groups" />
+		   	
+		   	<Button
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_weight="1"
+        	android:onClick="showPickSysDialog"        	        	        	
+        	android:text="Systems" />
+        
+    </LinearLayout>
+    
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:onClick="updateUser"
+        android:text="Save Changes" />
+>>>>>>> 15223d84cd38380a025d8f791764f50bf142ca28
 
 </ScrollView>

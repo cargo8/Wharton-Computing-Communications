@@ -2,11 +2,16 @@ package edu.upenn.cis350;
 
 public class ListItem {
 	private Object data;
-	private boolean isSection;
+	private Type type;
 	
-	public ListItem(Object data, boolean isSection) {
+	public enum Type {
+		HEADER, EVENT, MESSAGE, MESSAGEBOX, MESSAGEHEADER,
+		INFO, GROUP, SYSTEM, NONE;
+	}
+	
+	public ListItem(Object data, Type type) {
 		this.data = data;
-		this.isSection = isSection;
+		this.type = type;
 	}
 	
 	/**
@@ -18,10 +23,12 @@ public class ListItem {
 	}
 	
 	/**
-	 * Will return true if this item is a section header
-	 * @return true if section header, false if list item
+	 * Will return the type of data stored with this item
+	 * @return the type of data stored
 	 */
-	public boolean isSection() {
-		return this.isSection;
+	public Type getType(){
+		return type;
 	}
+	
 }
+

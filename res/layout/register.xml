@@ -218,7 +218,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Secondary Phone NUmber: "
+                android:text="Secondary Phone Number: "
                 android:textSize="12.0sp" />
 
             <EditText
@@ -228,11 +228,31 @@
                 android:inputType="phone" />
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="showPickGroupsDialog"
+                android:text="Groups" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="showPickSysDialog"
+                android:text="Systems" />
+        </LinearLayout>
+
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:onClick="newUser"
-            android:text="Register" />
+            android:text="Request Access to WComm" />
     </LinearLayout>
 
 </ScrollView>

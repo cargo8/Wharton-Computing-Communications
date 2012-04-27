@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item android:id="@+id/logout" android:enabled="true" android:visible="true" android:title="Logout"></item>
+    <item android:id="@+id/manageGroups" android:enabled="true" android:visible="true" android:title="Manage Groups"></item>
+    <item android:id="@+id/editProfile" android:enabled="true" android:visible="true" android:title="Edit Profile"></item>
 </menu>

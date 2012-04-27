@@ -31,8 +31,10 @@
 
         <activity android:name=".CreateNewEvent" 
             android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".ShowEvent" 
+        <activity android:name=".ManageGroups" 
             android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".ShowEvent" 
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".Agenda" 
             android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".ShowMessage" 
@@ -53,7 +55,9 @@
             android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".EditEvent" 
             android:windowSoftInputMode="stateHidden"/>
-        
+        <activity android:name=".ShowNotifications"
+            android:windowSoftInputMode="stateHidden" />
+                
         <service android:name="com.parse.PushService" />
 
         <receiver android:name="com.parse.ParseBroadcastReceiver" >

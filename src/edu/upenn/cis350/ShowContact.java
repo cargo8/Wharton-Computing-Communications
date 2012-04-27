@@ -6,10 +6,15 @@ import java.util.List;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.util.Linkify;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -31,7 +36,7 @@ public class ShowContact extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.show_contact);
-		Parse.initialize(this, "FWyFNrvpkliSb7nBNugCNttN5HWpcbfaOWEutejH", "SZoWtHw28U44nJy8uKtV2oAQ8suuCZnFLklFSk46");
+		Parse.initialize(this, Settings.APPLICATION_ID, Settings.CLIENT_ID);
 
 		Bundle extras = this.getIntent().getExtras();
 
@@ -59,32 +64,67 @@ public class ShowContact extends Activity {
 
 						ListView listView = (ListView) findViewById(R.id.phoneList);
 						ArrayList items = new ArrayList();
-						items.add(new ListItem("Phone", true));
+						items.add(new ListItem("Phone", ListItem.Type.HEADER));
 
 						String info = contact.getString("phone1");
 						String toSave = "".equals(info) ? "None" : info;
-						items.add(new ListItem("Primary: " + toSave, false));
+						items.add(new ListItem("Primary: " + toSave, ListItem.Type.INFO));
 						info = contact.getString("phone2");
 						toSave = "".equals(info) ? "None" : info;
-						items.add(new ListItem("Secondary: " + toSave, false));
+						items.add(new ListItem("Secondary: " + toSave, ListItem.Type.INFO));
 
-						items.add(new ListItem("Email", true));
+						items.add(new ListItem("Email", ListItem.Type.HEADER));
 						info = contact.getString("email1");
 						toSave = "".equals(info) ? "None" : info;
-						items.add(new ListItem("Primary: " + toSave, false));
+						items.add(new ListItem("Primary: " + toSave, ListItem.Type.INFO));
 						info = contact.getString("email2");
 						toSave = "".equals(info) ? "None" : info;
-						items.add(new ListItem("Secondary: " + toSave, false));
+						items.add(new ListItem("Secondary: " + toSave, ListItem.Type.INFO));
 						listView.setAdapter(new ContactAdapter(getApplicationContext(), items));
 
+						items.add(new ListItem("Groups", ListItem.Type.HEADER));
+						List<String> groups = contact.getList("groups");
+						for (String group : groups) {
+							items.add(new ListItem(group, ListItem.Type.GROUP));
+						}
+
+						items.add(new ListItem("Systems", ListItem.Type.HEADER));
+						List<String> systems = contact.getList("systems");
+						for (String system : systems) {
+							items.add(new ListItem(system, ListItem.Type.SYSTEM));
+						}
 					} else {
-						Toast.makeText(getApplicationContext(), "Could not load contact.", Toast.LENGTH_LONG);
+						Toast.makeText(getApplicationContext(), "Could not load contact", Toast.LENGTH_SHORT);
 					}
 					dialog.cancel();
 				}
 
 			});
 		}
+	}
+
+	/**
+	 * Creates menu on menu button press
+	 */
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.show_contact_menu, menu);
+		return true;
+	}
+
+	/**
+	 * Method that gets called when the menuitem is clicked
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == R.id.refresh) {
+			Intent i = new Intent(this, ShowContact.class);
+			i.putExtra("contactID", contactId);
+			finish();
+			startActivity(i);
+			return true;
+		}
+		return false;
 	}
 
 	private class ContactAdapter extends ArrayAdapter<ListItem> {
@@ -104,7 +144,7 @@ public class ShowContact extends Activity {
 			final ListItem item = contacts.get(position);
 
 			if (item != null) {
-				if (item.isSection()) {
+				if (item.getType().equals(ListItem.Type.HEADER)) {
 					/* This is a section header */
 					String title = (String) item.getData();
 					v = vi.inflate(R.layout.list_divider, null);
@@ -116,14 +156,52 @@ public class ShowContact extends Activity {
 					final TextView sectionView = (TextView) v.findViewById(R.id.list_item_section_text);
 					sectionView.setText(title);
 
-				} else {
+				} else if (ListItem.Type.INFO.equals(item.getType())){
 					/* This is a real list item */
 					final String contactData = (String) item.getData();
-					v = vi.inflate(R.layout.contact_list_item, null);
+					v = vi.inflate(R.layout.list_item, null);
 					TextView temp = (TextView) v;
 					temp.setText(contactData);
 					Linkify.addLinks(temp, Linkify.ALL);
 					temp.setLinkTextColor(temp.getTextColors().getDefaultColor());
+				} else if (ListItem.Type.GROUP.equals(item.getType())) {
+					/* This is a real list item */
+					final String groupName = (String) item.getData();
+					v = vi.inflate(R.layout.list_item, null);
+					
+					final TextView temp = (TextView) v;
+					temp.setText(groupName);
+					
+					temp.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							Intent i = new Intent(getApplicationContext(), ContactList.class);
+							i.putExtra("filter", ListItem.Type.GROUP);
+							i.putExtra("groupName", temp.getText());
+							startActivity(i);
+						}
+						
+					});
+				} else if (ListItem.Type.SYSTEM.equals(item.getType())) {
+					/* This is a real list item */
+					final String groupName = (String) item.getData();
+					v = vi.inflate(R.layout.list_item, null);
+					
+					final TextView temp = (TextView) v;
+					temp.setText(groupName);
+					
+					temp.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							Intent i = new Intent(getApplicationContext(), ContactList.class);
+							i.putExtra("filter", ListItem.Type.SYSTEM);
+							i.putExtra("groupName", temp.getText());
+							startActivity(i);
+						}
+						
+					});
 				}
 			}
 			return v;

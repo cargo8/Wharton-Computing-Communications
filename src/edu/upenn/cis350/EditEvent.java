@@ -1,6 +1,7 @@
 package edu.upenn.cis350;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -57,8 +58,8 @@ public class EditEvent extends Activity {
     private int mDay2;
     private int mHour2;
     private int mMinute2;
-    private CharSequence[] affils;
-    private boolean[] affilsChecked;
+    private CharSequence[] groups;
+    private boolean[] groupsChecked;
     private CharSequence[] systems;
     private boolean[] systemsChecked;
     private Map<String, String> userIdMap = new HashMap<String, String>();
@@ -84,12 +85,18 @@ public class EditEvent extends Activity {
 
 		public void onDateSet(DatePicker view, int year, 
 				int monthOfYear, int dayOfMonth) {
-			mYear = year;
-			mMonth = monthOfYear;
-			mDay = dayOfMonth;
-			date1 = new Date(year - 1900, monthOfYear, dayOfMonth);                    
-			showDialog(START_TIME_DIALOG_ID);
-			//updateDisplay();
+			if(date2.before(new Date(year - 1900, monthOfYear, dayOfMonth))){
+				final Toast toast = Toast.makeText(getApplicationContext(), 
+						"Start Date has to be before End Date.", Toast.LENGTH_SHORT);
+				toast.show();
+			}
+			else{
+				mYear = year;
+				mMonth = monthOfYear;
+				mDay = dayOfMonth;
+				date1 = new Date(mYear - 1900, mMonth, mDay);
+				showDialog(START_TIME_DIALOG_ID);
+			}
 		}
 	};
 	// the callback received when the user "sets" the date in the dialog (END DATE)
@@ -98,12 +105,18 @@ public class EditEvent extends Activity {
 
 		public void onDateSet(DatePicker view, int year, 
 				int monthOfYear, int dayOfMonth) {
-			mYear2 = year;
-			mMonth2 = monthOfYear;
-			mDay2 = dayOfMonth;
-			date2 = new Date(year - 1900, monthOfYear, dayOfMonth);
-			showDialog(END_TIME_DIALOG_ID);
-			//updateDisplay();
+			if(new Date(year - 1900, monthOfYear, dayOfMonth).before(date1)){
+				final Toast toast = Toast.makeText(getApplicationContext(), 
+						"End Date has to be after Start Date.", Toast.LENGTH_SHORT);
+				toast.show();
+			}
+			else{
+				mYear2 = year;
+				mMonth2 = monthOfYear;
+				mDay2 = dayOfMonth;
+				date2 = new Date(mYear2 - 1900, mMonth2, mDay2);
+				showDialog(END_TIME_DIALOG_ID);
+			}
 		}
 	};
 	// the callback received when the user "sets" the time in the dialog (start time)      
@@ -133,7 +146,7 @@ public class EditEvent extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Parse.initialize(this, "FWyFNrvpkliSb7nBNugCNttN5HWpcbfaOWEutejH", "SZoWtHw28U44nJy8uKtV2oAQ8suuCZnFLklFSk46");
+		Parse.initialize(this, Settings.APPLICATION_ID, Settings.CLIENT_ID);
         setContentView(R.layout.event_form);
         Bundle extras = this.getIntent().getExtras();
         if(extras != null){
@@ -339,25 +352,33 @@ public class EditEvent extends Activity {
 		temp2 = (TextView)findViewById(R.id.endDateDisplay);
 		event.put("endDate", date2.getTime());
 
-		//TODO: Affils + Systems
-		/*
-    	List<String> affiliations = new ArrayList<String>();
-    	if(affils != null){
-    		for(int x = 0; x < affils.length; x++){				// EVENT
-    			if(affilsChecked[x])
-    				affiliations.add(affils[x].toString());
-    		}
-    		event.put("affils", affiliations);
-    	}
-    	List<String> sys = new ArrayList<String>();
-    	if(systems != null){
-    		for(int x = 0; x < systems.length; x++){
-    			if(systemsChecked[x])
-    				sys.add(systems[x].toString());
-    		}
-    		event.put("systems", sys);
-    	}
-		 */
+		List<String> affiliations = new ArrayList<String>();
+		if(groups != null){
+			StringBuffer gr = new StringBuffer();
+			for(int x = 0; x < groups.length; x++){				// EVENT
+				if(groupsChecked[x]){
+					affiliations.add(groups[x].toString());
+					gr.append(groups[x].toString() + ",");
+				}
+			}
+			gr.replace(gr.length()-1, gr.length(), "");
+			event.put("groups", affiliations);
+			event.put("groups2", gr.toString());
+		}
+		List<String> sys = new ArrayList<String>();
+		if(systems != null){
+			StringBuffer sy = new StringBuffer();
+			for(int x = 0; x < systems.length; x++){
+				if(systemsChecked[x]){
+					sys.add(systems[x].toString());
+					sy.append(systems[x].toString() + ",");
+				}
+			}
+			sy.replace(sy.length()-1, sy.length(), "");
+			event.put("systems", sys);
+			event.put("systems2", sy.toString());
+		}
+		
 
 		//TODO: User linking
 		Spinner spin1 = (Spinner)findViewById(R.id.personSpinner1);
@@ -412,10 +433,21 @@ public class EditEvent extends Activity {
 					String userId2 = event.getString("contact2ID");
 
 					Context context = getApplicationContext();
-					if (!currentId.equals(userId1))
+					if (!currentId.equals(userId1)) {
 						PushUtils.lazySubscribeContact(context, event, userId1);
-					if (!currentId.equals(userId2) && !userId1.equals(userId2))
-						PushUtils.lazySubscribeContact(context, event, userId2);
+						ParseObject subscription = new ParseObject("Subscription");
+						subscription.put("userId", userId1);
+						subscription.put("subscriptionId", event.getObjectId());
+						subscription.saveEventually();
+					}
+					if (!currentId.equals(userId2) && !userId1.equals(userId2)) {
+						PushUtils.lazySubscribeContact(context, event, userId2); 
+						ParseObject subscription = new ParseObject("Subscription");
+						subscription.put("userId", userId2);
+						subscription.put("subscriptionId", event.getObjectId());
+						subscription.saveEventually();
+					}
+					
 					finish();
 					i.putExtra("eventKey", event.getObjectId());
 					startActivity(i);
@@ -439,11 +471,52 @@ public class EditEvent extends Activity {
 
 	// onClick function of pickAffils button
 	public void showPickAffilsDialog(View view){
-		showDialog(PICK_AFFILS_DIALOG_ID);
+		ParseQuery query = new ParseQuery("Group");
+		query.orderByAscending("name");
+		query.findInBackground(new FindCallback(){
+
+			@Override
+			public void done(List<ParseObject> groupList, ParseException arg1) {
+				// TODO Auto-generated method stub
+				List<String> gl = (List<String>) event.get("groups");
+				groups = new CharSequence[groupList.size()];
+				groupsChecked = new boolean[groupList.size()];
+				for(int i = 0; i < groupList.size(); i++){
+					String temp = groupList.get(i).getString("name");
+					groups[i] = temp;
+					if(gl != null && gl.contains(temp))
+						groupsChecked[i] = true;
+				}
+				showDialog(PICK_AFFILS_DIALOG_ID);
+
+			}
+			
+		});
 	}
 	// onClick function of pickSys button
 	public void showPickSysDialog(View view){
-		showDialog(PICK_SYS_DIALOG_ID);
+		ParseQuery query = new ParseQuery("System");
+		query.orderByAscending("name");
+		query.findInBackground(new FindCallback(){
+
+			@Override
+			public void done(List<ParseObject> systemList, ParseException arg1) {
+				// TODO Auto-generated method stub
+				List<String> sl = (List<String>) event.get("systems");
+				String sl2 = event.getString("systems2");
+				systems = new CharSequence[systemList.size()];
+				systemsChecked = new boolean[systemList.size()];
+				for(int i = 0; i < systemList.size(); i++){
+					String temp = systemList.get(i).getString("name");
+					systems[i] = temp;
+					if(sl != null && sl.contains(temp))
+						systemsChecked[i] = true;
+				}
+				showDialog(PICK_SYS_DIALOG_ID);
+
+			}
+			
+		});
 	}
 
 	public void showStartTimeDialog(View view){
@@ -456,36 +529,11 @@ public class EditEvent extends Activity {
 
 	// updates the date in the TextView
 	private void updateDisplay() {
-    	SimpleDateFormat formatter = new SimpleDateFormat();
+    	SimpleDateFormat formatter = new SimpleDateFormat("h:mm a 'on' MMMM d, yyyy");
 		if(date1 != null)
 			mDateDisplay.setText(formatter.format(date1));
 		if(date2 != null)
 			mDateDisplay2.setText(formatter.format(date2));
-		/*
-        mDateDisplay.setText(
-            new StringBuilder()
-                    // Month is 0 based so add 1
-                    .append(mMonth + 1).append("-")
-                    .append(mDay).append("-")
-                    .append(mYear).append(" ")
-                    .append(pad(mHour)).append(":")
-                    .append(pad(mMinute)).append(" "));
-        mDateDisplay2.setText(
-                new StringBuilder()
-                        // Month is 0 based so add 1
-                        .append(mMonth2 + 1).append("-")
-                        .append(mDay2).append("-")
-                        .append(mYear2).append(" ")
-                        .append(pad(mHour2)).append(":")
-                        .append(pad(mMinute2)).append(" "));
-		 */
-	}
-
-	private static String pad(int c) {
-		if (c >= 10)
-			return String.valueOf(c);
-		else
-			return "0" + String.valueOf(c);
 	}
 
 	// creates dialogs
@@ -507,16 +555,11 @@ public class EditEvent extends Activity {
 			return new TimePickerDialog(this,
 					mTimeSetListener2, mHour2, mMinute2, false);
 		case PICK_AFFILS_DIALOG_ID:
-			final CharSequence[] items = {"Group 1", "Group 2", "Group 3"};
-			affils = items;
-			affilsChecked = new boolean[items.length];
-
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle("Pick Affiliations");
-			builder.setMultiChoiceItems(items, null, new DialogInterface.OnMultiChoiceClickListener() {
+			builder.setMultiChoiceItems(groups, groupsChecked, new DialogInterface.OnMultiChoiceClickListener() {
 				public void onClick(DialogInterface dialog, int item, boolean isChecked) {
-					Toast.makeText(getApplicationContext(), items[item], Toast.LENGTH_SHORT).show();
-					affilsChecked[item] = isChecked;
+					groupsChecked[item] = isChecked;
 				}
 			});
 			builder.setPositiveButton("Finished", new DialogInterface.OnClickListener() {
@@ -527,15 +570,11 @@ public class EditEvent extends Activity {
 			AlertDialog alert = builder.create();
 			return alert;
 		case PICK_SYS_DIALOG_ID:
-			final CharSequence[] items2 = {"System 1", "System 2", "System 3"};
-			systems = items2;
-			systemsChecked = new boolean[items2.length];
 
 			AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
 			builder2.setTitle("Pick Affected Systems");
-			builder2.setMultiChoiceItems(items2, null, new DialogInterface.OnMultiChoiceClickListener() {
+			builder2.setMultiChoiceItems(systems, systemsChecked, new DialogInterface.OnMultiChoiceClickListener() {
 				public void onClick(DialogInterface dialog, int item, boolean isChecked) {
-					Toast.makeText(getApplicationContext(), items2[item], Toast.LENGTH_SHORT).show();
 					systemsChecked[item] = isChecked;
 				}
 			});

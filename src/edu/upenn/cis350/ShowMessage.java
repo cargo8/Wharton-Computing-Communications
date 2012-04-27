@@ -7,6 +7,7 @@ import java.util.List;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -37,13 +38,14 @@ public class ShowMessage extends Activity {
 	private String msgId;
 	private ParseObject message;
 	private ProgressDialog dialog;
+	private boolean subscribed;
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.show_message);
-		Parse.initialize(this, "FWyFNrvpkliSb7nBNugCNttN5HWpcbfaOWEutejH", "SZoWtHw28U44nJy8uKtV2oAQ8suuCZnFLklFSk46");
+		Parse.initialize(this, Settings.APPLICATION_ID, Settings.CLIENT_ID);
 
 		Bundle extras = this.getIntent().getExtras();
 
@@ -57,6 +59,9 @@ public class ShowMessage extends Activity {
 			dialog = ProgressDialog.show(this, "", 
 					"Loading. Please wait...", true);
 			dialog.setCancelable(true);
+
+			updateSubscriptionStatus(msgId);
+
 			msgQuery.getInBackground(msgId, new GetCallback() {
 
 				@Override
@@ -82,14 +87,14 @@ public class ShowMessage extends Activity {
 							public void done(ParseObject arg0, ParseException arg1) {
 								ParseUser user = (ParseUser)arg0;
 								String author = user.getString("fullName");
-								authorView.setText("Posted by " + author + " at ");
+								authorView.setText(author + " - ");
 							}
 
 						});
 
 						temp = (TextView) findViewById(R.id.messageTimestamp);
 						temp.setTextColor(Color.WHITE);
-						SimpleDateFormat formatter = new SimpleDateFormat();
+						SimpleDateFormat formatter = new SimpleDateFormat("MMMM d 'at' h:mm a ");
 						temp.setText(formatter.format(new Date(msg.getLong("timestamp"))));
 
 						getComments(msg);
@@ -137,10 +142,14 @@ public class ShowMessage extends Activity {
 					toast.show();
 					PushUtils.createCommentPush(message, comment);
 					commentText.setText("");
-					
+
 					Context context = getApplicationContext();
 					if (!PushService.getSubscriptions(context).contains("push_" + message.getObjectId())) {
-						PushService.subscribe(context, "push_" + message.getObjectId(), Login.class);
+						PushService.subscribe(context, "push_" + message.getObjectId(), ShowNotifications.class);
+						ParseObject subscription = new ParseObject("Subscription");
+						subscription.put("userId", ParseUser.getCurrentUser().getObjectId());
+						subscription.put("subscriptionId", message.getObjectId());
+						subscription.saveEventually();
 					}
 					getComments(message);
 				}
@@ -169,7 +178,7 @@ public class ShowMessage extends Activity {
 			public void done(ParseObject arg0, ParseException arg1) {
 				// TODO Auto-generated method stub
 				ParseUser user = (ParseUser)arg0;
-				author.setText(user.getString("fullName"));
+				author.setText(user.getString("fullName") + " ");
 				author.setTypeface(Typeface.DEFAULT_BOLD);
 			}
 
@@ -177,17 +186,18 @@ public class ShowMessage extends Activity {
 
 		TextView timestamp = new TextView(this);
 		long time = comment.getLong("timestamp");
-		SimpleDateFormat formatter = new SimpleDateFormat();
-		timestamp.setText(" at " + formatter.format(new Date(time)));
-
-		header.addView(author);
-		header.addView(timestamp);
+		SimpleDateFormat formatter = new SimpleDateFormat("MMMM d 'at' h:mm a ");
+		timestamp.setText(formatter.format(new Date(time)));
 
 		TextView commentText = new TextView(this);
 		commentText.setText(comment.getString("text"));
 
+		header.addView(author);
+		header.addView(commentText);
+		//		header.addView(timestamp);
+
 		commentFrame.addView(header);
-		commentFrame.addView(commentText);
+		commentFrame.addView(timestamp);
 
 		return commentFrame;
 	}
@@ -227,11 +237,39 @@ public class ShowMessage extends Activity {
 	}
 
 	/**
+	 * Update subscription status of this user, on this message
+	 * 
+	 * @param messageId The message ID of the event being viewed
+	 */
+	private void updateSubscriptionStatus(final String msgId) {
+		ParseQuery subscription = new ParseQuery("Subscription");
+		subscription.whereEqualTo("userId", ParseUser.getCurrentUser().getObjectId());
+		subscription.findInBackground(new FindCallback() {
+
+			@Override
+			public void done(List<ParseObject> subscriptions, ParseException e) {
+				if (e == null) {
+					for (ParseObject obj : subscriptions) {
+						if (msgId.equals(obj.getString("subscriptionId"))) {
+							subscribed = true;
+						}
+					}
+				}
+			}
+
+		});
+	}
+
+	/**
 	 * Method that gets called when Menu is created
 	 */
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.show_message_menu, menu);
+		if (subscribed) {
+			inflater.inflate(R.menu.show_message_menu_subscribed, menu);
+		} else {
+			inflater.inflate(R.menu.show_message_menu_unsubscribed, menu);
+		}
 		return true;
 	}
 
@@ -246,12 +284,41 @@ public class ShowMessage extends Activity {
 			return true;
 		} else if (id == R.id.messageSubscribe) {
 			if (!PushService.getSubscriptions(this).contains("push_" + message.getObjectId())) {
-				PushService.subscribe(this, "push_" + message.getObjectId(), Login.class);
-				return true;
+				PushService.subscribe(this, "push_" + message.getObjectId(), ShowNotifications.class);
+				ParseObject subscription = new ParseObject("Subscription");
+				subscription.put("userId", ParseUser.getCurrentUser().getObjectId());
+				subscription.put("subscriptionId", message.getObjectId());
+				subscription.saveEventually();
 			}
-			return false;
+			Intent i = new Intent(this, ShowMessage.class);
+			i.putExtra("messageID", message.getObjectId());
+			Toast.makeText(this, "Subscribed to message", Toast.LENGTH_SHORT).show();
+			finish();
+			startActivity(i);
+			return true;
 		} else if (id == R.id.messageUnsubscribe) {
 			PushService.unsubscribe(this, "push_" + message.getObjectId());
+			ParseQuery subscription = new ParseQuery("Subscription");
+			subscription.whereEqualTo("subscriptionId", message.getObjectId());
+			subscription.whereEqualTo("userId", ParseUser.getCurrentUser().getObjectId());
+			subscription.findInBackground(new FindCallback() {
+
+				@Override
+				public void done(List<ParseObject> subscriptions,
+						ParseException e2) {
+					if (e2 == null) {
+						for (ParseObject obj : subscriptions) {
+							obj.deleteEventually();
+						}
+					}
+				}
+
+			});
+			Intent i = new Intent(this, ShowMessage.class);
+			i.putExtra("messageID", message.getObjectId());
+			Toast.makeText(this, "Unsubscribed from event", Toast.LENGTH_SHORT).show();
+			finish();
+			startActivity(i);
 			return true;
 		}
 		return false;
