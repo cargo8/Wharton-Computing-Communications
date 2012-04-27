@@ -8,6 +8,9 @@ import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -39,7 +42,7 @@ public class ContactList extends ListActivity {
 		
         ParseQuery query = new ParseQuery("_User");
         query.orderByAscending("lname");
-            	
+            
     	query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
     	query.findInBackground(new FindCallback() {
 
@@ -75,4 +78,27 @@ public class ContactList extends ListActivity {
     		
     	});
     }
+    
+	/**
+	 * Creates menu on menu button press
+	 */
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.show_contact_menu, menu);
+		return true;
+	}
+
+	/**
+	 * Method that gets called when the menuitem is clicked
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == R.id.refresh) {
+			Intent i = new Intent(this, ContactList.class);
+			finish();
+			startActivity(i);
+			return true;
+		}
+		return false;
+	}
 }

@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item android:id="@+id/refresh" android:enabled="true" android:visible="true" android:title="Refresh Comments"></item>
-    <item android:id="@+id/messageSubscribe" android:enabled="true" android:visible="true" android:title="Subscribe to Message"></item>
-    <item android:id="@+id/messageUnsubscribe" android:enabled="true" android:visible="true" android:title="Unsubscribe from Message"></item>
-    
-</menu>

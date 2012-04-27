@@ -12,9 +12,13 @@ import com.parse.ParseQuery;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.util.Linkify;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -44,7 +48,7 @@ public class ShowContact extends Activity {
 			dialog.setCancelable(true);
 			contactId = extras.getString("contactID");
 			ParseQuery query = new ParseQuery("_User");
-			query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
+			query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
 
 			query.getInBackground(contactId, new GetCallback() {
 
@@ -78,13 +82,37 @@ public class ShowContact extends Activity {
 						listView.setAdapter(new ContactAdapter(getApplicationContext(), items));
 
 					} else {
-						Toast.makeText(getApplicationContext(), "Could not load contact.", Toast.LENGTH_LONG);
+						Toast.makeText(getApplicationContext(), "Could not load contact", Toast.LENGTH_SHORT);
 					}
 					dialog.cancel();
 				}
 
 			});
 		}
+	}
+
+	/**
+	 * Creates menu on menu button press
+	 */
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.show_contact_menu, menu);
+		return true;
+	}
+
+	/**
+	 * Method that gets called when the menuitem is clicked
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == R.id.refresh) {
+			Intent i = new Intent(this, ShowContact.class);
+			i.putExtra("contactID", contactId);
+			finish();
+			startActivity(i);
+			return true;
+		}
+		return false;
 	}
 
 	private class ContactAdapter extends ArrayAdapter<ListItem> {

@@ -39,7 +39,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:textSize="14.0sp" />
+                android:textSize="14.0sp" 
+                android:textColor="#ffffff" />
         </LinearLayout>
     </LinearLayout>
 
