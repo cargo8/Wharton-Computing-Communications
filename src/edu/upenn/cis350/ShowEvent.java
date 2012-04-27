@@ -337,7 +337,6 @@ public class ShowEvent extends Activity {
 			final ListItem item = listItems.get(position);
 
 			if (item != null) {
-				// Not used right now
 				if (ListItem.Type.HEADER.equals(item.getType())) {
 					/* This is a section header */
 					String title = (String) item.getData();

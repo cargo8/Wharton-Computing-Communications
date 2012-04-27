@@ -1,10 +1,12 @@
 package edu.upenn.cis350;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,14 +19,17 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.CountCallback;
 import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 /* This activity is what the app will start with after logging in.
  * For now, it just shows a few buttons to create a new event
  * and to show the agenda.
  */
-public class Home extends ListActivity {
+public class Home extends Activity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -46,10 +51,11 @@ public class Home extends ListActivity {
 		}
 
 		String[] options = getResources().getStringArray(R.array.home_options_array);
-		setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item, options));
-
-		ListView lv = getListView();
+		
+		setContentView(R.layout.home);
+		ListView lv = (ListView) findViewById(R.id.homeList);
 		lv.setTextFilterEnabled(true);
+		lv.setAdapter(new ArrayAdapter<String>(this, R.layout.list_item, options));
 
 		lv.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view,
@@ -69,6 +75,7 @@ public class Home extends ListActivity {
 			}
 		});
 
+		getNewNotifications();
 		PushUtils.lazySubscribeToEvents(this);
 	}
 
@@ -143,5 +150,47 @@ public class Home extends ListActivity {
 			return true;
 		}
 		return false;
+	}
+	
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		getNewNotifications();
+	}
+	
+	/**
+	 * Update the counter for notifications on the homepage
+	 */
+	private void getNewNotifications() {
+		ParseQuery query = new ParseQuery("Notification");
+		query.whereEqualTo("user", ParseUser.getCurrentUser().getObjectId());
+		query.whereEqualTo("isRead", false);
+		query.countInBackground(new CountCallback() {
+
+			@Override
+			public void done(int count, ParseException e) {
+				if (e == null) {
+					TextView notify = (TextView) findViewById(R.id.homeNotifications);
+					if (count > 0) {
+						notify.setText("You have " + count + " new notifications");
+						notify.setBackgroundColor(Color.RED);
+						notify.setTextColor(Color.WHITE);
+						notify.setVisibility(0);
+						notify.setOnClickListener(new View.OnClickListener() {
+							
+							@Override
+							public void onClick(View v) {
+								onViewNotifications();
+							}
+							
+						});
+					} else {
+						notify.setVisibility(1);
+					}
+				}
+			}
+			
+		});
 	}
 }
