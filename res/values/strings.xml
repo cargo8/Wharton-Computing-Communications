@@ -3,7 +3,7 @@
 	
     <!-- General Strings -->
     <string name="hello">Welcome to Wharton Computing Communications. Please login:</string>
-    <string name="app_name">WComm Beta</string>
+    <string name="app_name">WComm</string>
     <string name="createEvent">Create New Event</string>
     <string name="showEvent">Show Events</string>
     <string name="showAgenda">Show Agenda</string>

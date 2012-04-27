@@ -56,19 +56,19 @@ public class Agenda extends Activity {
 			filter = (Filter) extras.get("filter");
 		}
 		if (filter == null) {
-			query = getQuery(Filter.NEW);
-		} else {
-			if (filter.equals(Filter.NEW)) { 
-				query = getQuery(Filter.NEW);
-			} else if (filter.equals(Filter.ALL)) {
-				query = getQuery(Filter.ALL);
-			} else if (filter.equals(Filter.ONE_WEEK_OLD)) {
-				query = getQuery(Filter.ONE_WEEK_OLD);
-			} else {
-				// TODO: Other filters
-				query = getQuery(Filter.NEW);
-			}
+			filter = Filter.NEW;
 		}
+		if (filter.equals(Filter.NEW)) { 
+			query = getQuery(Filter.NEW);
+		} else if (filter.equals(Filter.ALL)) {
+			query = getQuery(Filter.ALL);
+		} else if (filter.equals(Filter.ONE_WEEK_OLD)) {
+			query = getQuery(Filter.ONE_WEEK_OLD);
+		} else {
+			// TODO: Other filters
+			query = getQuery(Filter.NEW);
+		}
+
 
 		final ProgressDialog dialog = ProgressDialog.show(this, "", 
 				"Loading. Please wait...", true);
@@ -131,7 +131,13 @@ public class Agenda extends Activity {
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.agenda_menu, menu);
+		if (filter.equals(Filter.NEW)) {
+			inflater.inflate(R.menu.agenda_menu_new, menu);
+		} else if (filter.equals(Filter.ONE_WEEK_OLD)) {
+			inflater.inflate(R.menu.agenda_menu_one_week_old, menu);
+		} else if (filter.equals(Filter.ALL)) {
+			inflater.inflate(R.menu.agenda_menu_all, menu);
+		}
 		return true;
 	}
 
@@ -221,11 +227,11 @@ public class Agenda extends Activity {
 					}
 					temp = (TextView) v.findViewById(R.id.listEventDate);
 					if (temp != null) {
-						SimpleDateFormat formatter = new SimpleDateFormat();
+						SimpleDateFormat formatter = new SimpleDateFormat("h:mm a 'on' MMMM d, yyyy");
 						Date date1 = new Date(event.getLong("startDate"));
 						Date date2 = new Date(event.getLong("endDate"));
 						temp.setText("Start: " + formatter.format(date1) + 
-								", Est. Finish: " + formatter.format(date2));
+								"\nEst. Finish: " + formatter.format(date2));
 					}
 					temp = (TextView) v.findViewById(R.id.listEventDescription);
 					String desc = event.getString("description");
