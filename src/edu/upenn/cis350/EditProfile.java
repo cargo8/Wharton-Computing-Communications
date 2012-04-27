@@ -30,24 +30,24 @@ public class EditProfile extends Activity {
 	private boolean[] groupsChecked;
 	private CharSequence[] systems;
 	private boolean[] systemsChecked;
-	
+
 	/** Called when the activity is first created. */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 		Parse.initialize(this, Settings.APPLICATION_ID, Settings.CLIENT_ID);
-        setContentView(R.layout.edit_profile);
-        
-        ParseUser user = ParseUser.getCurrentUser();
-    	String fname = user.getString("fname");
-    	String lname = user.getString("lname");
-    	String email1 = user.getString("email1");
-    	String email2 = user.getString("email2");
-    	String phone1 = user.getString("phone1");
-    	String phone2 = user.getString("phone2");
-    	
-    	EditText temp = ((EditText)findViewById(R.id.loginUsername));
-    	temp.setText(user.getUsername());
+		setContentView(R.layout.edit_profile);
+
+		ParseUser user = ParseUser.getCurrentUser();
+		String fname = user.getString("fname");
+		String lname = user.getString("lname");
+		String email1 = user.getString("email1");
+		String email2 = user.getString("email2");
+		String phone1 = user.getString("phone1");
+		String phone2 = user.getString("phone2");
+
+		EditText temp = ((EditText)findViewById(R.id.loginUsername));
+		temp.setText(user.getUsername());
 		temp = ((EditText)findViewById(R.id.loginPassword));
 		temp = ((EditText)findViewById(R.id.loginPassword2));
 		temp = ((EditText)findViewById(R.id.registerFname));
@@ -62,22 +62,22 @@ public class EditProfile extends Activity {
 		temp.setText(phone1);
 		temp = ((EditText)findViewById(R.id.registerPhone2));
 		temp.setText(phone2);
-    }
-    
-    private String checkBlank(String input) {
-    	if ("".equals(input))
-    		return "None";
-    	else
-    		return input;
-    }
-    
-    /**
-     * Updates a user's profile in the application
-     * @param view
-     */
-    public void updateUser(View view) {
-    	String uname = ((EditText)findViewById(R.id.loginUsername)).getText().toString().toLowerCase();
-    	uname = checkBlank(uname);
+	}
+
+	private String checkBlank(String input) {
+		if ("".equals(input))
+			return "None";
+		else
+			return input;
+	}
+
+	/**
+	 * Updates a user's profile in the application
+	 * @param view
+	 */
+	public void updateUser(View view) {
+		String uname = ((EditText)findViewById(R.id.loginUsername)).getText().toString().toLowerCase();
+		uname = checkBlank(uname);
 		String pw = ((EditText)findViewById(R.id.loginPassword)).getText().toString();
 		String pw2 = ((EditText)findViewById(R.id.loginPassword2)).getText().toString();
 		String fname = ((EditText)findViewById(R.id.registerFname)).getText().toString();
@@ -90,57 +90,61 @@ public class EditProfile extends Activity {
 		phone1 = checkBlank(phone1);
 		String phone2 = ((EditText)findViewById(R.id.registerPhone2)).getText().toString();
 		phone2 = checkBlank(phone2);
-		
+
 		ParseUser user = ParseUser.getCurrentUser();
-    	user.setUsername(uname);
-    	if (!"".equals(pw) || !"".equals(pw2)) {
-    		if (!pw.equals(pw2)) {
-    			Toast.makeText(this, "Passwords do not match. Try again", Toast.LENGTH_SHORT).show();
-    			return;
-    		} else {
-            	user.setPassword(pw);
-    		}
-    	}
-    	user.put("fname", fname);
-    	user.put("lname", lname);
-    	user.put("fullName", fname + " " + lname);
-    	user.put("email1", email1);
-    	user.put("email2", email2);
-    	user.put("phone1", phone1);
-    	user.put("phone2", phone2);
-    	if(groups != null){
-    		StringBuffer gr = new StringBuffer();
-    		List<String> gl = new ArrayList<String>();
-    		for(int i = 0; i < groups.length; i++){
-    			if(groupsChecked[i]){
-    				gl.add(groups[i].toString());
-    				gr.append(groups[i].toString() + ",");
-    			}
-    		}
-    		gr.replace(gr.length()-1, gr.length(), "");
-    		user.put("groups", gl);
-    		user.put("groups2", gr.toString());
-    	}
-    	if(systems != null){
-    		StringBuffer sys = new StringBuffer();
-    		List<String> sl = new ArrayList<String>();
-    		for(int i = 0; i < systems.length; i++){
-    			if(systemsChecked[i]){
-    				sl.add(systems[i].toString());
-    				sys.append(systems[i].toString() + ",");
-    			}
-    		}
-			sys.replace(sys.length()-1, sys.length(), "");
-    		user.put("systems", sl);
-    		user.put("systems2", sys.toString());
-    	}
-    	
-   	
+		user.setUsername(uname);
+		if (!"".equals(pw) || !"".equals(pw2)) {
+			if (!pw.equals(pw2)) {
+				Toast.makeText(this, "Passwords do not match. Try again", Toast.LENGTH_SHORT).show();
+				return;
+			} else {
+				user.setPassword(pw);
+			}
+		}
+		user.put("fname", fname);
+		user.put("lname", lname);
+		user.put("fullName", fname + " " + lname);
+		user.put("email1", email1);
+		user.put("email2", email2);
+		user.put("phone1", phone1);
+		user.put("phone2", phone2);
+		if(groups != null){
+			StringBuffer gr = new StringBuffer();
+			List<String> gl = new ArrayList<String>();
+			for(int i = 0; i < groups.length; i++){
+				if(groupsChecked[i]){
+					gl.add(groups[i].toString());
+					gr.append(groups[i].toString() + ",");
+				}
+			}
+			if (gr.length() != 0) {
+				gr.replace(gr.length()-1, gr.length(), "");
+			}
+			user.put("groups", gl);
+			user.put("groups2", gr.toString());
+		}
+		if(systems != null){
+			StringBuffer sys = new StringBuffer();
+			List<String> sl = new ArrayList<String>();
+			for(int i = 0; i < systems.length; i++){
+				if(systemsChecked[i]){
+					sl.add(systems[i].toString());
+					sys.append(systems[i].toString() + ",");
+				}
+			}
+			if (sys.length() != 0) {
+				sys.replace(sys.length()-1, sys.length(), "");
+			}
+			user.put("systems", sl);
+			user.put("systems2", sys.toString());
+		}
+
+
 
 		user.saveEventually();
 		finish();
-    }
-    
+	}
+
 	// creates dialogs
 	@Override
 	protected Dialog onCreateDialog(int id) {
@@ -181,7 +185,7 @@ public class EditProfile extends Activity {
 		}
 		return null;
 	}
-	
+
 	// onClick function of pickAffils button
 	public void showPickGroupsDialog(View view){
 		ParseQuery query = new ParseQuery("Group");
@@ -203,7 +207,7 @@ public class EditProfile extends Activity {
 				showDialog(PICK_AFFILS_DIALOG_ID);
 
 			}
-			
+
 		});
 	}
 	// onClick function of pickSys button
@@ -227,7 +231,7 @@ public class EditProfile extends Activity {
 				showDialog(PICK_SYS_DIALOG_ID);
 
 			}
-			
+
 		});
 	}
 }

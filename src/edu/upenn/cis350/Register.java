@@ -68,8 +68,10 @@ public class Register extends Activity {
 		String email2 = ((EditText)findViewById(R.id.registerEmail2)).getText().toString().toLowerCase();
 		email2 = checkBlank(email2);
 		String phone1 = ((EditText)findViewById(R.id.registerPhone1)).getText().toString();
+		phone1 = phone1.replaceAll("\\D", "");
 		phone1 = checkBlank(phone1);
 		String phone2 = ((EditText)findViewById(R.id.registerPhone2)).getText().toString();
+		phone2 = phone2.replaceAll("\\D", "");
 		phone2 = checkBlank(phone2);
     	
 		if ("".equals(uname)) {
@@ -119,6 +121,9 @@ public class Register extends Activity {
     		gr.replace(gr.length()-1, gr.length(), "");
     		user.put("groups", gl);
     		user.put("groups2", gr.toString());
+    	} else {
+    		user.put("groups", new ArrayList<String>());
+    		user.put("groups2", "");
     	}
 		final List<String> sl = new ArrayList<String>();
     	if(systems != null){
@@ -132,6 +137,9 @@ public class Register extends Activity {
 			sys.replace(sys.length()-1, sys.length(), "");
     		user.put("systems", sl);
     		user.put("systems2", sys.toString());
+    	} else {
+    		user.put("systems", new ArrayList<String>());
+    		user.put("systems2", "");
     	}
     	
 

@@ -176,10 +176,10 @@ public class ShowMessage extends Activity {
 
 			@Override
 			public void done(ParseObject arg0, ParseException arg1) {
-				// TODO Auto-generated method stub
 				ParseUser user = (ParseUser)arg0;
 				author.setText(user.getString("fullName") + " ");
 				author.setTypeface(Typeface.DEFAULT_BOLD);
+				author.setTextColor(Color.WHITE);
 			}
 
 		});
@@ -187,17 +187,17 @@ public class ShowMessage extends Activity {
 		TextView timestamp = new TextView(this);
 		long time = comment.getLong("timestamp");
 		SimpleDateFormat formatter = new SimpleDateFormat("MMMM d 'at' h:mm a ");
-		timestamp.setText(formatter.format(new Date(time)));
+		timestamp.setText("at " + formatter.format(new Date(time)));
 
 		TextView commentText = new TextView(this);
 		commentText.setText(comment.getString("text"));
 
 		header.addView(author);
-		header.addView(commentText);
+		header.addView(timestamp);
 		//		header.addView(timestamp);
 
 		commentFrame.addView(header);
-		commentFrame.addView(timestamp);
+		commentFrame.addView(commentText);
 
 		return commentFrame;
 	}

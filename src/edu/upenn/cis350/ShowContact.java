@@ -82,16 +82,20 @@ public class ShowContact extends Activity {
 						items.add(new ListItem("Secondary: " + toSave, ListItem.Type.INFO));
 						listView.setAdapter(new ContactAdapter(getApplicationContext(), items));
 
-						items.add(new ListItem("Groups", ListItem.Type.HEADER));
 						List<String> groups = contact.getList("groups");
-						for (String group : groups) {
-							items.add(new ListItem(group, ListItem.Type.GROUP));
+						if (groups != null && groups.size() != 0) {
+							items.add(new ListItem("Groups", ListItem.Type.HEADER));
+							for (String group : groups) {
+								items.add(new ListItem(group, ListItem.Type.GROUP));
+							}
 						}
 
-						items.add(new ListItem("Systems", ListItem.Type.HEADER));
 						List<String> systems = contact.getList("systems");
-						for (String system : systems) {
-							items.add(new ListItem(system, ListItem.Type.SYSTEM));
+						if (systems != null && systems.size() != 0) {
+							items.add(new ListItem("Systems", ListItem.Type.HEADER));
+							for (String system : systems) {
+								items.add(new ListItem(system, ListItem.Type.SYSTEM));
+							}
 						}
 					} else {
 						Toast.makeText(getApplicationContext(), "Could not load contact", Toast.LENGTH_SHORT);
@@ -168,10 +172,10 @@ public class ShowContact extends Activity {
 					/* This is a real list item */
 					final String groupName = (String) item.getData();
 					v = vi.inflate(R.layout.list_item, null);
-					
+
 					final TextView temp = (TextView) v;
 					temp.setText(groupName);
-					
+
 					temp.setOnClickListener(new OnClickListener() {
 
 						@Override
@@ -181,16 +185,16 @@ public class ShowContact extends Activity {
 							i.putExtra("groupName", temp.getText());
 							startActivity(i);
 						}
-						
+
 					});
 				} else if (ListItem.Type.SYSTEM.equals(item.getType())) {
 					/* This is a real list item */
 					final String groupName = (String) item.getData();
 					v = vi.inflate(R.layout.list_item, null);
-					
+
 					final TextView temp = (TextView) v;
 					temp.setText(groupName);
-					
+
 					temp.setOnClickListener(new OnClickListener() {
 
 						@Override
@@ -200,7 +204,7 @@ public class ShowContact extends Activity {
 							i.putExtra("groupName", temp.getText());
 							startActivity(i);
 						}
-						
+
 					});
 				}
 			}
