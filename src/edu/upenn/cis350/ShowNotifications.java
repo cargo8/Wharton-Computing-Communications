@@ -40,6 +40,7 @@ public class ShowNotifications extends ListActivity {
 		ParseQuery query = new ParseQuery("Notification");
 		query.whereEqualTo("user", user.getObjectId());
 		query.addAscendingOrder("isRead");
+		query.setLimit(15);
 
 		query.findInBackground(new FindCallback() {
 
