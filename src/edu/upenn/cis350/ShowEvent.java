@@ -17,12 +17,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnFocusChangeListener;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,7 +44,7 @@ public class ShowEvent extends Activity {
 	private ParseObject event;
 	private ProgressDialog dialog;
 	private List<ListItem> items = new ArrayList<ListItem>();
-
+	private boolean subscribed;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -56,13 +54,17 @@ public class ShowEvent extends Activity {
 		Parse.initialize(this, Settings.APPLICATION_ID, Settings.CLIENT_ID);
 		Bundle extras = this.getIntent().getExtras();
 		if(extras != null){
+			final String eventId = extras.getString("eventKey");
 			ParseQuery query = new ParseQuery("Event");
 
 			final Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
 			dialog = ProgressDialog.show(this, "", 
 					"Loading. Please wait...", true);
-			dialog.setCancelable(true);
-			query.getInBackground(extras.getString("eventKey"), new GetCallback() {
+			dialog.setCancelable(true);			
+
+			updateSubscriptionStatus(eventId);
+
+			query.getInBackground(eventId, new GetCallback() {
 
 				@Override
 				public void done(ParseObject event1, ParseException e) {
@@ -72,7 +74,6 @@ public class ShowEvent extends Activity {
 						toast.show();
 					} else {
 						event = event1;
-
 						items.add(new ListItem(event, ListItem.Type.EVENT));
 						if(checkSuperUsers())
 							items.add(new ListItem(event, ListItem.Type.MESSAGEBOX));
@@ -145,15 +146,46 @@ public class ShowEvent extends Activity {
 			return false;
 	}
 
+	/**
+	 * Update subscription status of this user, on this event
+	 * 
+	 * @param eventId The event ID of the event being viewed
+	 */
+	private void updateSubscriptionStatus(final String eventId) {
+		ParseQuery subscription = new ParseQuery("Subscription");
+		subscription.whereEqualTo("userId", ParseUser.getCurrentUser().getObjectId());
+		subscription.findInBackground(new FindCallback() {
+
+			@Override
+			public void done(List<ParseObject> subscriptions, ParseException e) {
+				if (e == null) {
+					for (ParseObject obj : subscriptions) {
+						if (eventId.equals(obj.getString("subscriptionId"))) {
+							subscribed = true;
+						}
+					}
+				}
+			}
+
+		});
+	}
+
+	/**
+	 * Creates menu on menu button press
+	 */
 	public boolean onCreateOptionsMenu(Menu menu) {
 		if(!checkSuperUsers()){
 			MenuInflater inflater = getMenuInflater();
-			inflater.inflate(R.menu.show_event_menu2, menu);
+			if (subscribed) {
+				inflater.inflate(R.menu.show_event_menu_default_subscribed, menu);
+			} else {
+				inflater.inflate(R.menu.show_event_menu_default_unsubscribed, menu);
+			}
 			return true;
 		}
 		else {
 			MenuInflater inflater = getMenuInflater();
-			inflater.inflate(R.menu.show_event_menu, menu);
+			inflater.inflate(R.menu.show_event_menu_primary, menu);
 			return true;
 		}
 	}
@@ -191,7 +223,11 @@ public class ShowEvent extends Activity {
 				subscription.put("subscriptionId", event.getObjectId());
 				subscription.saveEventually();
 			}
+			Intent i = new Intent(this, ShowEvent.class);
+			i.putExtra("eventKey", event.getObjectId());
 			Toast.makeText(this, "Subscribed to event", Toast.LENGTH_SHORT).show();
+			finish();
+			startActivity(i);
 			return true;
 		} else if (item.getItemId() == R.id.eventUnsubscribe) {
 			PushService.unsubscribe(getApplicationContext(), "push_" + event.getObjectId());
@@ -199,7 +235,12 @@ public class ShowEvent extends Activity {
 			subscription.put("userId", ParseUser.getCurrentUser().getObjectId());
 			subscription.put("subscriptionId", event.getObjectId());
 			subscription.deleteEventually();
+			Intent i = new Intent(this, ShowEvent.class);
+			i.putExtra("eventKey", event.getObjectId());
 			Toast.makeText(this, "Unsubscribed from event", Toast.LENGTH_SHORT).show();
+			finish();
+			startActivity(i);
+			return true;
 		}
 		return false;
 	}
@@ -301,13 +342,13 @@ public class ShowEvent extends Activity {
 					}
 
 					temp = (TextView) v.findViewById(R.id.listMessageAuthor);
-					
+
 					if (temp != null) {
 						temp.setText(message.getString("authorName"));
 						temp.setTypeface(Typeface.DEFAULT_BOLD);
 
 					}
-					
+
 					temp = (TextView) v.findViewById(R.id.listMessageTimestamp);
 					if (temp != null) {
 						Long time = message.getLong("timestamp");
@@ -354,15 +395,15 @@ public class ShowEvent extends Activity {
 					if(temp != null){
 						Date date1 = new Date(event.getLong("startDate"));
 						temp.setText(formatter.format(date1));
-						
+
 					}
-					
+
 					temp = (TextView)v.findViewById(R.id.endDateDisplay2);
 					if(temp != null){
 						Date date2 = new Date(event.getLong("endDate"));
 						temp.setText(formatter.format(date2));
 					}
-					
+
 					temp = (TextView)v.findViewById(R.id.affilsText);
 					if(temp != null){
 						List<String> affilList = event.getList("groups");
@@ -374,7 +415,7 @@ public class ShowEvent extends Activity {
 							temp.setText(affilText.toString());
 						}
 					}
-					
+
 					temp = (TextView)v.findViewById(R.id.systemsText);
 					if(temp != null){
 						List<String> systemList = event.getList("systems");
@@ -403,7 +444,7 @@ public class ShowEvent extends Activity {
 					if(temp != null){
 						temp.setBackgroundColor(event.getInt("severity"));
 					}
-					
+
 					temp = (TextView)v.findViewById(R.id.typeText);
 					if(temp != null){
 						temp.setText(event.getString("type"));
