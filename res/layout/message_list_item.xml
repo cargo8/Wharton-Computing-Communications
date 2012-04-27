@@ -3,14 +3,14 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="5sp" >
+    android:padding="4sp" >
 
     <TextView
         android:id="@+id/listMessageText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#ffffff"
-        android:textSize="18.0sp" />
+        android:textSize="17.0sp" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -21,31 +21,31 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Posted by "
-            android:textSize="12.0sp" />
+            android:textSize="12.3sp" />
 
         <TextView
             android:id="@+id/listMessageAuthor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="12.0sp" />
+            android:textSize="12.3sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=" on "
-            android:textSize="12.0sp" />
+            android:textSize="12.3sp" />
 
         <TextView
             android:id="@+id/listMessageTimestamp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="12.0sp" />
+            android:textSize="12.3sp" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/listMessageCommentCounter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="12.0sp" />
+        android:textSize="12.3sp" />
 
 </LinearLayout>
