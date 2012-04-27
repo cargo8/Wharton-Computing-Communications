@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     <item android:id="@+id/editEvent" android:enabled="false" android:visible="true" android:title="Edit Event"></item>
-    <item android:id="@+id/markComplete" android:enabled="false" android:visible="true" android:title="Mark Complete"></item>
+    <item android:id="@+id/markComplete" android:enabled="false" android:visible="true" android:title="Mark as Resolved"></item>
     <item android:id="@+id/eventSubscribe" android:enabled="true" android:visible="true" android:title="Subscribe to Event"></item>
     <item android:id="@+id/eventUnsubscribe" android:enabled="true" android:visible="true" android:title="Unsubscribe from Event"></item>
     
