@@ -422,11 +422,13 @@ public class ShowEvent extends Activity {
 					TextView temp = (TextView) v.findViewById(R.id.eventTitleText);
 					if (temp != null) {
 						temp.setText(event.getString("title"));
+						temp.setTextColor(Color.WHITE);
 					}
 
 					temp = (TextView) v.findViewById(R.id.eventDescText);
 					if (temp != null) {
 						temp.setText("\n" + event.getString("description") + "\n");
+						temp.setTextColor(Color.WHITE);
 					}
 
 					temp = (TextView)v.findViewById(R.id.startDateDisplay2);
