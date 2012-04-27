@@ -26,7 +26,7 @@
     <string name="eventDesc">Event Description</string>
     <string name="eventActions">Action Items</string>
     
-    <string name="pickAffils">Pick Affiliations</string>
+    <string name="pickAffils">Pick Groups</string>
     <string name="pickSys">Pick Affected Systems</string>
     
     <string name="backToHome">Back to Home Screen</string>
@@ -39,7 +39,7 @@
     <string name="red">Red</string>
     <string name="yellow">Yellow</string>
     <string name="green">Green</string>
-    <string name="pickedAffils">Affiliations:</string>
+    <string name="pickedAffils">Groups:</string>
     <string name="pickedSystems">Systems:</string>
     <string name="type">Maintenance Status</string>
     <string name="emergency">Emergency</string>

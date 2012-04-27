@@ -85,7 +85,7 @@
             android:orientation="horizontal" >
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="110dip"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/pickedAffils" />
@@ -104,7 +104,7 @@
             android:orientation="horizontal" >
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="150dip"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/pickedSystems" />
