@@ -377,7 +377,7 @@ public class ShowEvent extends Activity {
 					if (temp != null) {
 						int noOfComments = message.getInt("count");
 						if(noOfComments > 0)
-							temp.setText(noOfComments + " comment" + (noOfComments == 1 ? "" : "s"));
+							temp.setText(noOfComments + " comment" + (noOfComments > 1 ? "s" : ""));
 						else
 							temp.setText("");
 					}
