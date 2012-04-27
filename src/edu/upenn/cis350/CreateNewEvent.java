@@ -312,7 +312,7 @@ public class CreateNewEvent extends Activity {
 					/* Subscribe to push notifications for this event */
 					Context context = getApplicationContext();
 					if (!PushService.getSubscriptions(context).contains("push_" + id)) {
-						PushService.subscribe(context, "push_" + id, Login.class);
+						PushService.subscribe(context, "push_" + id, ShowNotifications.class);
 
 						ParseObject subscription = new ParseObject("Subscription");
 						subscription.put("userId", ParseUser.getCurrentUser().getObjectId());

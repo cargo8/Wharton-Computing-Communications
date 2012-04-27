@@ -140,7 +140,7 @@ public class ShowMessage extends Activity {
 					
 					Context context = getApplicationContext();
 					if (!PushService.getSubscriptions(context).contains("push_" + message.getObjectId())) {
-						PushService.subscribe(context, "push_" + message.getObjectId(), Login.class);
+						PushService.subscribe(context, "push_" + message.getObjectId(), ShowNotifications.class);
 						ParseObject subscription = new ParseObject("Subscription");
 						subscription.put("userId", ParseUser.getCurrentUser().getObjectId());
 						subscription.put("subscriptionId", message.getObjectId());
@@ -251,7 +251,7 @@ public class ShowMessage extends Activity {
 			return true;
 		} else if (id == R.id.messageSubscribe) {
 			if (!PushService.getSubscriptions(this).contains("push_" + message.getObjectId())) {
-				PushService.subscribe(this, "push_" + message.getObjectId(), Login.class);
+				PushService.subscribe(this, "push_" + message.getObjectId(), ShowNotifications.class);
 				ParseObject subscription = new ParseObject("Subscription");
 				subscription.put("userId", ParseUser.getCurrentUser().getObjectId());
 				subscription.put("subscriptionId", message.getObjectId());

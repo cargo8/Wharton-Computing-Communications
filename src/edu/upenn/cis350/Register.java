@@ -136,10 +136,10 @@ public class Register extends Activity {
 					Context context = getApplicationContext();
 					Set<String> mySub = PushService.getSubscriptions(context);
 					if (!mySub.contains("push_" + user.getObjectId())) {
-						PushService.subscribe(context, "user_" + user.getObjectId(), Login.class);
+						PushService.subscribe(context, "user_" + user.getObjectId(), Home.class);
 					}
 					if (!mySub.contains("")) {
-						PushService.subscribe(context, "", Login.class);
+						PushService.subscribe(context, "", Home.class);
 					}
 					successToast.show();
 					finish();

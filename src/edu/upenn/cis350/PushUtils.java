@@ -36,7 +36,7 @@ public abstract class PushUtils {
 		ParsePush userPush = new ParsePush();
 		userPush.setChannel("user_" + userId);
 		String msgText = ParseUser.getCurrentUser().getString("fullName") + " has set you as a Primary Contact for"
-				+ " the event \"" + event.getString("title") +"\". Login to view the event details.";
+				+ " the event \"" + event.getString("title") +"\"";
 		userPush.setMessage(msgText);
 		// expire after 5 minutes
 		userPush.setExpirationTimeInterval(300);
@@ -63,7 +63,7 @@ public abstract class PushUtils {
 					Set<String> mySub = PushService.getSubscriptions(context);
 					for (ParseObject sub : subscriptions) {
 						if (!mySub.contains("push_" + sub.getString("eventID"))) {
-							PushService.subscribe(context, "push_" + sub.getString("eventID"), Login.class);
+							PushService.subscribe(context, "push_" + sub.getString("eventID"), ShowNotifications.class);
 						}
 						sub.deleteEventually();
 					}
@@ -137,7 +137,7 @@ public abstract class PushUtils {
 	public static void createEventChangedPush(Context context, String eventId, ParseObject event) {
 		ParseUser user = ParseUser.getCurrentUser();
 		if (!PushService.getSubscriptions(context).contains("push_" + event.getObjectId())) {
-			PushService.subscribe(context, "push_" + eventId, Login.class);
+			PushService.subscribe(context, "push_" + eventId, ShowNotifications.class);
 
 			ParseObject subscription = new ParseObject("Subscription");
 			subscription.put("userId", user.getObjectId());

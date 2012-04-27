@@ -185,7 +185,7 @@ public class ShowEvent extends Activity {
 			return true;
 		} else if (item.getItemId() == R.id.eventSubscribe) {
 			if (!PushService.getSubscriptions(this).contains("push_" + event.getObjectId())) {
-				PushService.subscribe(this, "push_" + event.getObjectId(), Login.class);
+				PushService.subscribe(this, "push_" + event.getObjectId(), ShowNotifications.class);
 				ParseObject subscription = new ParseObject("Subscription");
 				subscription.put("userId", ParseUser.getCurrentUser().getObjectId());
 				subscription.put("subscriptionId", event.getObjectId());
@@ -234,7 +234,7 @@ public class ShowEvent extends Activity {
 					success.show();
 					Context context = getApplicationContext();
 					if (!PushService.getSubscriptions(context).contains("push_" + msg.getObjectId())) {
-						PushService.subscribe(context, "push_" + msg.getObjectId(), Login.class);
+						PushService.subscribe(context, "push_" + msg.getObjectId(), ShowNotifications.class);
 						ParseObject subscription = new ParseObject("Subscription");
 						subscription.put("userId", ParseUser.getCurrentUser().getObjectId());
 						subscription.put("subscriptionId", msg.getObjectId());

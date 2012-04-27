@@ -12,10 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -83,6 +80,11 @@ public class ShowNotifications extends ListActivity {
 
 	}
 
+	@Override
+	public void onResume() {
+		onCreate(new Bundle());
+	}
+	
 	private class NotificationAdapter extends ArrayAdapter<ListItem> {
 
 		private List<ListItem> notifications;
@@ -127,6 +129,7 @@ public class ShowNotifications extends ListActivity {
 							Intent i = new Intent(getApplicationContext(), ShowEvent.class);
 							i.putExtra("eventKey", notification.getString("id"));
 							notification.put("isRead", true);
+							notification.saveEventually();
 							startActivity(i);
 						}
 
@@ -142,9 +145,10 @@ public class ShowNotifications extends ListActivity {
 
 						@Override
 						public void onClick(View v) {
-							Intent i = new Intent(getApplicationContext(), ShowEvent.class);
+							Intent i = new Intent(getApplicationContext(), ShowMessage.class);
 							i.putExtra("eventKey", notification.getString("id"));
 							notification.put("isRead", true);
+							notification.saveEventually();
 							startActivity(i);
 						}
 
