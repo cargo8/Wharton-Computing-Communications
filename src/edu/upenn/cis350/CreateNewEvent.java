@@ -220,7 +220,7 @@ public class CreateNewEvent extends Activity {
 						adapter2.add(formattedName);
 						contactMap.put(formattedName, obj.getObjectId());
 						contactMap2.put(formattedName, obj.getString("fullName"));
-						if(obj.getString("lname").equals(ParseUser.getCurrentUser().get("lname")))
+						if(obj.getObjectId().equals(ParseUser.getCurrentUser().getObjectId()))
 							found = true;
 						if(!found)
 							pos++;

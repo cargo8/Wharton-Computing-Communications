@@ -13,13 +13,19 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.AdapterView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -29,6 +35,7 @@ import android.widget.Toast;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.Parse;
+import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -46,6 +53,7 @@ public class ShowEvent extends Activity {
 	private ProgressDialog dialog;
 	private List<ListItem> items = new ArrayList<ListItem>();
 	private boolean subscribed;
+	private int pos;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -285,13 +293,18 @@ public class ShowEvent extends Activity {
 		final Toast failure = Toast.makeText(this, "Message NOT posted.", Toast.LENGTH_SHORT);
 
 		final Intent i = new Intent(this, ShowEvent.class);
-
+		/*
+		ParseACL acl = new ParseACL();
+		acl.setPublicReadAccess(true);
+		acl.setWriteAccess(ParseUser.getCurrentUser(), true);
+		msg.setACL(acl);*/
 		msg.saveInBackground(new SaveCallback(){
 
 			@Override
 			public void done(ParseException e) {
 				if(e == null){
 					success.show();
+					
 					Context context = getApplicationContext();
 					if (!PushService.getSubscriptions(context).contains("push_" + msg.getObjectId())) {
 						PushService.subscribe(context, "push_" + msg.getObjectId(), ShowNotifications.class);
@@ -312,7 +325,7 @@ public class ShowEvent extends Activity {
 			}
 		});
 	}
-
+	
 	/**
 	 * Adapter for formatting the ShowEvent view
 	 * 
@@ -327,6 +340,8 @@ public class ShowEvent extends Activity {
 			super(context, 0, items);
 			this.listItems = items;
 		}
+		
+
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
@@ -389,6 +404,13 @@ public class ShowEvent extends Activity {
 							startActivity(i);
 						}
 					});
+					/*
+					ParseACL acl = message.getACL();
+					if(acl != null && acl.getWriteAccess(ParseUser.getCurrentUser())){
+						// if in acl, allow
+						registerForContextMenu(v);
+						pos = position;
+					}*/
 				} else if (item.getType().equals(ListItem.Type.EVENT)){
 					/* This is a real list item */
 					final ParseObject event = (ParseObject) item.getData();
