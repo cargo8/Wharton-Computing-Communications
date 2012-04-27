@@ -129,7 +129,7 @@ public abstract class PushUtils {
 				"the event \"" + event.getString("title") + "\"";
 		pushMessage.setMessage(msgText);
 		// expire after 5 days
-		pushMessage.setExpirationTimeInterval(432000);
+		pushMessage.setExpirationTimeInterval(300);
 		pushMessage.sendInBackground();
 		createNotification("event", event.getObjectId(), msgText);
 	}	
@@ -156,7 +156,7 @@ public abstract class PushUtils {
 		String msgText = user.getString("fullName") + " updated the event \"" + event.getString("title") + "\"";
 		pushMessage.setMessage(msgText);
 		// expire after 5 days
-		pushMessage.setExpirationTimeInterval(432000);
+		pushMessage.setExpirationTimeInterval(300);
 		pushMessage.sendInBackground();
 		createNotification("event", event.getObjectId(), msgText);
 	}
@@ -174,7 +174,7 @@ public abstract class PushUtils {
 		String msgText = user.getString("fullName") + " marked \"" + event.getString("title") + "\" as Resolved.";
 		pushMessage.setMessage(msgText);
 		// expire after 5 days
-		pushMessage.setExpirationTimeInterval(432000);
+		pushMessage.setExpirationTimeInterval(300);
 		pushMessage.sendInBackground();
 		createNotification("event", event.getObjectId(), msgText);
 	}
