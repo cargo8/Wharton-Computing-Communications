@@ -85,12 +85,18 @@ public class EditEvent extends Activity {
 
 		public void onDateSet(DatePicker view, int year, 
 				int monthOfYear, int dayOfMonth) {
-			mYear = year;
-			mMonth = monthOfYear;
-			mDay = dayOfMonth;
-			date1 = new Date(year - 1900, monthOfYear, dayOfMonth);                    
-			showDialog(START_TIME_DIALOG_ID);
-			//updateDisplay();
+			if(date2.before(new Date(year - 1900, monthOfYear, dayOfMonth))){
+				final Toast toast = Toast.makeText(getApplicationContext(), 
+						"Start Date has to be before End Date.", Toast.LENGTH_SHORT);
+				toast.show();
+			}
+			else{
+				mYear = year;
+				mMonth = monthOfYear;
+				mDay = dayOfMonth;
+				date1 = new Date(mYear - 1900, mMonth, mDay);
+				showDialog(START_TIME_DIALOG_ID);
+			}
 		}
 	};
 	// the callback received when the user "sets" the date in the dialog (END DATE)
@@ -99,12 +105,18 @@ public class EditEvent extends Activity {
 
 		public void onDateSet(DatePicker view, int year, 
 				int monthOfYear, int dayOfMonth) {
-			mYear2 = year;
-			mMonth2 = monthOfYear;
-			mDay2 = dayOfMonth;
-			date2 = new Date(year - 1900, monthOfYear, dayOfMonth);
-			showDialog(END_TIME_DIALOG_ID);
-			//updateDisplay();
+			if(new Date(year - 1900, monthOfYear, dayOfMonth).before(date1)){
+				final Toast toast = Toast.makeText(getApplicationContext(), 
+						"End Date has to be after Start Date.", Toast.LENGTH_SHORT);
+				toast.show();
+			}
+			else{
+				mYear2 = year;
+				mMonth2 = monthOfYear;
+				mDay2 = dayOfMonth;
+				date2 = new Date(mYear2 - 1900, mMonth2, mDay2);
+				showDialog(END_TIME_DIALOG_ID);
+			}
 		}
 	};
 	// the callback received when the user "sets" the time in the dialog (start time)      
@@ -517,7 +529,7 @@ public class EditEvent extends Activity {
 
 	// updates the date in the TextView
 	private void updateDisplay() {
-    	SimpleDateFormat formatter = new SimpleDateFormat();
+    	SimpleDateFormat formatter = new SimpleDateFormat("h:mm a 'on' MMMM d, yyyy");
 		if(date1 != null)
 			mDateDisplay.setText(formatter.format(date1));
 		if(date2 != null)

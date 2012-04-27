@@ -96,7 +96,6 @@ public class CreateNewEvent extends Activity {
 				date1 = new Date(mYear - 1900, mMonth, mDay);
 				showDialog(START_TIME_DIALOG_ID);
 			}
-			//updateDisplay();
 		}
 	};
 	// the callback received when the user "sets" the date in the dialog (END DATE)
@@ -105,7 +104,7 @@ public class CreateNewEvent extends Activity {
 
 		public void onDateSet(DatePicker view, int year, 
 				int monthOfYear, int dayOfMonth) {
-			if(date2.before(new Date(year - 1900, monthOfYear, dayOfMonth))){
+			if(new Date(year - 1900, monthOfYear, dayOfMonth).before(date1)){
 				final Toast toast = Toast.makeText(getApplicationContext(), 
 						"End Date has to be after Start Date.", Toast.LENGTH_SHORT);
 				toast.show();
@@ -114,10 +113,9 @@ public class CreateNewEvent extends Activity {
 				mYear2 = year;
 				mMonth2 = monthOfYear;
 				mDay2 = dayOfMonth;
-				date2 = new Date(mYear - 1900, mMonth, mDay);
+				date2 = new Date(mYear2 - 1900, mMonth2, mDay2);
 				showDialog(END_TIME_DIALOG_ID);
 			}
-			//updateDisplay();
 		}
 	};
 	// the callback received when the user "sets" the time in the dialog (start time)      
@@ -141,7 +139,7 @@ public class CreateNewEvent extends Activity {
 			date2.setMinutes(minute);
 			updateDisplay();
 		}
-	};           	
+	};
 
 	/** Called when the activity is first created. */
 	@Override
