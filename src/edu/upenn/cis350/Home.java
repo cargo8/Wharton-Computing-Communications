@@ -173,7 +173,7 @@ public class Home extends Activity {
 				if (e == null) {
 					TextView notify = (TextView) findViewById(R.id.homeNotifications);
 					if (count > 0) {
-						notify.setText("You have " + count + " new notifications");
+						notify.setText("You have " + count + " new notification" + (count > 1 ? "s" : ""));
 						notify.setBackgroundColor(Color.RED);
 						notify.setTextColor(Color.WHITE);
 						notify.setVisibility(View.VISIBLE);
