@@ -182,10 +182,9 @@ public abstract class PushUtils {
 	/**
 	 * Creates a notification to be displayed in the application
 	 * 
-	 * @param user 
-	 * @param type
-	 * @param id
-	 * @param message
+	 * @param type The type of Activity this notification will forward to
+	 * @param id The ID of the activity to be forwarded to
+	 * @param message The messag to be displayed in the notification
 	 */
 	private static void createNotification(final String type, final String id,
 			final String message) {
@@ -194,13 +193,13 @@ public abstract class PushUtils {
 		query.findInBackground(new FindCallback() {
 
 			@Override
-			public void done(List<ParseObject> users, ParseException e) {
+			public void done(List<ParseObject> subscriptions, ParseException e) {
 				if (e != null) {
 					Log.d("createNotification", e.getMessage());
 				} else {
-					for (ParseObject user : users) {
+					for (ParseObject subscription : subscriptions) {
 						ParseObject notification = new ParseObject("Notification");
-						notification.put("user", user);
+						notification.put("user", subscription.getString("userId"));
 						notification.put("type", type);
 						notification.put("id", id);
 						notification.put("text", message);
