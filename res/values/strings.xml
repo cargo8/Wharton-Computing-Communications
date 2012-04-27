@@ -2,9 +2,12 @@
 <resources>
 	
     <!-- General Strings -->
-    <string name="hello">Welcome to Wharton Computing Communications. Please login:</string>
+    <string name="hello">Welcome to WComm, please log in:</string>
     <string name="app_name">WComm</string>
     <string name="createEvent">Create New Event</string>
+    
+    <string name="username">Username: </string>
+    <string name="password">Password: </string>
 
     <string-array name="home_options_array">
         <item>Create New Event</item>
@@ -54,12 +57,6 @@
     <string name="agendaEventActionItem1">- Inform Canvas users of outage</string>
     <string name="agendaEventActionItem2">- Oversee maintenance internally</string>
     <string name="agendaEventActionItem3"> - Deadline by 12:00am 2/27/12</string>
-    <!-- string name="agendaEventTitle1">Instrcutrure Canvas Maintenace Outage</string>
-    <string name="agendaEventTitle1">Instrcutrure Canvas Maintenace Outage</string>
-    <string name="agendaEventTitle1">Instrcutrure Canvas Maintenace Outage</string>
-    <string name="agendaEventTitle1">Instrcutrure Canvas Maintenace Outage</string>
-    <string name="agendaEventTitle1">Instrcutrure Canvas Maintenace Outage</string-->
-
 
     <string name="defaultTitle">This is the Default Event Title</string>
     <string name="defaultDescText">This is the Default Event Description.</string>

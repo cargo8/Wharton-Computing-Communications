@@ -8,7 +8,10 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/hello" />
+        android:text="@string/hello"
+        android:padding="5.0sp"
+        android:textSize="15.0sp"
+        android:gravity="center_horizontal" />
     
     <LinearLayout
         android:layout_width="fill_parent"
@@ -18,8 +21,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Username: "
-            android:textSize="12.0sp" />
+            android:text="@string/username"
+            android:textSize="15.0sp" />
 
         <EditText
             android:id="@+id/loginUsername"
@@ -36,8 +39,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Password: "
-            android:textSize="12.0sp" />
+            android:text="@string/password"
+            android:textSize="15.0sp" />
 
         <EditText
             android:id="@+id/loginPassword"
@@ -50,13 +53,13 @@
         android:id="@+id/loginButton"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Login"
+        android:text="Log In"
         android:onClick="login" />
     
     <Button 
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Create a New Account"
+        android:text="Register"
         android:onClick="clickRegister" />
 
 </LinearLayout>
