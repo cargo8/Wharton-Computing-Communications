@@ -119,7 +119,7 @@ public class EditProfile extends Activity {
     		}
     		gr.replace(gr.length()-1, gr.length(), "");
     		user.put("groups", gl);
-    		user.put("groups2", gr);
+    		user.put("groups2", gr.toString());
     	}
     	if(systems != null){
     		StringBuffer sys = new StringBuffer();
@@ -134,6 +134,9 @@ public class EditProfile extends Activity {
     		user.put("systems", sl);
     		user.put("systems2", sys.toString());
     	}
+    	
+    	// save user in group/system
+    	
 
 		user.saveEventually();
 		finish();

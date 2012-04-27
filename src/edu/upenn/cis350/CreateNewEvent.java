@@ -394,13 +394,14 @@ public class CreateNewEvent extends Activity {
 			@Override
 			public void done(List<ParseObject> groupList, ParseException arg1) {
 				// TODO Auto-generated method stub
-				groups = new CharSequence[groupList.size()];
-				groupsChecked = new boolean[groupList.size()];
-				for(int i = 0; i < groupList.size(); i++){
-					groups[i] = groupList.get(i).getString("name");
-				}
-				showDialog(PICK_AFFILS_DIALOG_ID);
-
+				if(groupList != null){
+					groups = new CharSequence[groupList.size()];
+					groupsChecked = new boolean[groupList.size()];
+					for(int i = 0; i < groupList.size(); i++){
+						groups[i] = groupList.get(i).getString("name");
+					}
+					showDialog(PICK_AFFILS_DIALOG_ID);
+			}
 			}
 
 		});
@@ -414,13 +415,14 @@ public class CreateNewEvent extends Activity {
 			@Override
 			public void done(List<ParseObject> systemList, ParseException arg1) {
 				// TODO Auto-generated method stub
-				systems = new CharSequence[systemList.size()];
-				systemsChecked = new boolean[systemList.size()];
-				for(int i = 0; i < systemList.size(); i++){
-					systems[i] = systemList.get(i).getString("name");
+				if(systemList != null){
+					systems = new CharSequence[systemList.size()];
+					systemsChecked = new boolean[systemList.size()];
+					for(int i = 0; i < systemList.size(); i++){
+						systems[i] = systemList.get(i).getString("name");
+					}
+					showDialog(PICK_SYS_DIALOG_ID);
 				}
-				showDialog(PICK_SYS_DIALOG_ID);
-
 			}
 
 		});
