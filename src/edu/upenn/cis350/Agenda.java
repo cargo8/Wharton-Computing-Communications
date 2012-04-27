@@ -219,14 +219,6 @@ public class Agenda extends Activity {
 					if (temp != null) {
 						temp.setText(event.getString("title"));
 					}
-					temp = (TextView) v.findViewById(R.id.listEventDate);
-					if (temp != null) {
-						SimpleDateFormat formatter = new SimpleDateFormat();
-						Date date1 = new Date(event.getLong("startDate"));
-						Date date2 = new Date(event.getLong("endDate"));
-						temp.setText("Start: " + formatter.format(date1) + 
-								", Est. Finish: " + formatter.format(date2));
-					}
 					temp = (TextView) v.findViewById(R.id.listEventDescription);
 					String desc = event.getString("description");
 					if (temp != null) {
@@ -237,6 +229,14 @@ public class Agenda extends Activity {
 						} else {
 							temp.setText(desc);
 						}
+					}
+					temp = (TextView) v.findViewById(R.id.listEventDate);
+					if (temp != null) {
+						SimpleDateFormat formatter = new SimpleDateFormat("h:mm a  'on' MMMM d, yyyy");
+						Date date1 = new Date(event.getLong("startDate"));
+						Date date2 = new Date(event.getLong("endDate"));
+						temp.setText("Start: " + formatter.format(date1) + "\n" + 
+								"Est. Finish: " + formatter.format(date2));
 					}
 					temp = (TextView) v.findViewById(R.id.listEventSeverity);
 					if (temp != null) {
