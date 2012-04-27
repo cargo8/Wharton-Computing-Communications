@@ -7,6 +7,7 @@ import java.util.Set;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -57,6 +58,10 @@ public class Register extends Activity {
      * @param view
      */
     public void newUser(View view) {
+    	final ProgressDialog dialog = ProgressDialog.show(this, "", 
+				"Loading. Please wait...", true);
+    	dialog.setCancelable(true);
+    	
     	String uname = ((EditText)findViewById(R.id.loginUsername)).getText().toString().toLowerCase();
     	uname = checkBlank(uname);
 		String pw = ((EditText)findViewById(R.id.loginPassword)).getText().toString();
@@ -160,13 +165,14 @@ public class Register extends Activity {
 					if (!mySub.contains("")) {
 						PushService.subscribe(context, "", ShowNotifications.class);
 					}				
-					
+					dialog.cancel();
 					successToast.show();
 					finish();
 					startActivity(i);
     	        } else {
     	            // Sign up didn't succeed. Look at the ParseException
     	            // to figure out what went wrong
+    	        	dialog.cancel();
     	        	failToast.setText(e.getMessage());
 					failToast.show();
 					return;
