@@ -41,7 +41,14 @@ public abstract class PushUtils {
 		// expire after 5 minutes
 		userPush.setExpirationTimeInterval(300);
 		userPush.sendInBackground();
-		createNotification("event", event.getObjectId(), msgText);
+
+		ParseObject notification = new ParseObject("Notification");
+		notification.put("user", userId);
+		notification.put("type", "event");
+		notification.put("id", event.getObjectId());
+		notification.put("text", msgText);
+		notification.put("isRead", false);
+		notification.saveEventually();
 		return true;
 	}
 
