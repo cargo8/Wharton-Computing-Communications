@@ -78,19 +78,24 @@ public class CreateNewEvent extends Activity {
 	static final int START_TIME_DIALOG_ID = 4;
 	static final int END_TIME_DIALOG_ID = 5;
 
-
 	// the callback received when the user "sets" the date in the dialog (START DATE)
 	private DatePickerDialog.OnDateSetListener mDateSetListener =
 			new DatePickerDialog.OnDateSetListener() {
 
 		public void onDateSet(DatePicker view, int year, 
 				int monthOfYear, int dayOfMonth) {
-			mYear = year;
-			mMonth = monthOfYear;
-			mDay = dayOfMonth;
-			date1 = new Date(year - 1900, monthOfYear, dayOfMonth);                    
-			showDialog(START_TIME_DIALOG_ID);
-			//updateDisplay();
+			if(date2.before(new Date(year - 1900, monthOfYear, dayOfMonth))){
+				final Toast toast = Toast.makeText(getApplicationContext(), 
+						"Start Date has to be before End Date.", Toast.LENGTH_SHORT);
+				toast.show();
+			}
+			else{
+				mYear = year;
+				mMonth = monthOfYear;
+				mDay = dayOfMonth;
+				date1 = new Date(mYear - 1900, mMonth, mDay);
+				showDialog(START_TIME_DIALOG_ID);
+			}
 		}
 	};
 	// the callback received when the user "sets" the date in the dialog (END DATE)
@@ -99,12 +104,18 @@ public class CreateNewEvent extends Activity {
 
 		public void onDateSet(DatePicker view, int year, 
 				int monthOfYear, int dayOfMonth) {
-			mYear2 = year;
-			mMonth2 = monthOfYear;
-			mDay2 = dayOfMonth;
-			date2 = new Date(year - 1900, monthOfYear, dayOfMonth);
-			showDialog(END_TIME_DIALOG_ID);
-			//updateDisplay();
+			if(new Date(year - 1900, monthOfYear, dayOfMonth).before(date1)){
+				final Toast toast = Toast.makeText(getApplicationContext(), 
+						"End Date has to be after Start Date.", Toast.LENGTH_SHORT);
+				toast.show();
+			}
+			else{
+				mYear2 = year;
+				mMonth2 = monthOfYear;
+				mDay2 = dayOfMonth;
+				date2 = new Date(mYear2 - 1900, mMonth2, mDay2);
+				showDialog(END_TIME_DIALOG_ID);
+			}
 		}
 	};
 	// the callback received when the user "sets" the time in the dialog (start time)      
@@ -128,7 +139,7 @@ public class CreateNewEvent extends Activity {
 			date2.setMinutes(minute);
 			updateDisplay();
 		}
-	};           	
+	};
 
 	/** Called when the activity is first created. */
 	@Override
@@ -154,12 +165,13 @@ public class CreateNewEvent extends Activity {
 
 		mYear2 = mYear;
 		mMonth2 = mMonth;
-		mDay2 = mDay;
+		mDay2 = mDay + 1;
 		mHour2 = mHour;
 		mMinute2 = mMinute;
 		// display the current date (this method is below)
+		long secondsInDay = 60 * 60 * 24 * 1000;
 		date1 = new Date(System.currentTimeMillis());
-		date2 = new Date(System.currentTimeMillis() + 86400000);
+		date2 = new Date(System.currentTimeMillis() + secondsInDay);
 		updateDisplay();
 
 		//populate spinner
@@ -231,8 +243,6 @@ public class CreateNewEvent extends Activity {
 
 	// onClick function of submit button
 	public void onCreateEventSubmit(View view){
-		//TODO closen: Phase out intent stuff - use eventPOJO for everything
-		//Intent i = new Intent(this, WhartonComputingCommunicationsActivity.class);
 
 		final ParseObject event = new ParseObject("Event");
 		EditText temp = (EditText)findViewById(R.id.eventTitle);
@@ -249,19 +259,29 @@ public class CreateNewEvent extends Activity {
 		//TODO: Affils + Systems
 		List<String> affiliations = new ArrayList<String>();
 		if(groups != null){
+			StringBuffer gr = new StringBuffer();
 			for(int x = 0; x < groups.length; x++){				// EVENT
-				if(groupsChecked[x])
+				if(groupsChecked[x]){
 					affiliations.add(groups[x].toString());
+					gr.append(groups[x].toString() + ",");
+				}
 			}
+			gr.replace(gr.length()-1, gr.length(), "");
 			event.put("groups", affiliations);
+			event.put("groups2", gr.toString());
 		}
 		List<String> sys = new ArrayList<String>();
 		if(systems != null){
+			StringBuffer sy = new StringBuffer();
 			for(int x = 0; x < systems.length; x++){
-				if(systemsChecked[x])
+				if(systemsChecked[x]){
 					sys.add(systems[x].toString());
+					sy.append(systems[x].toString() + ",");
+				}
 			}
+			sy.replace(sy.length()-1, sy.length(), "");
 			event.put("systems", sys);
+			event.put("systems2", sy.toString());
 		}
 
 		//TODO: User linking
@@ -384,17 +404,19 @@ public class CreateNewEvent extends Activity {
 			@Override
 			public void done(List<ParseObject> groupList, ParseException arg1) {
 				// TODO Auto-generated method stub
-				groups = new CharSequence[groupList.size()];
-				groupsChecked = new boolean[groupList.size()];
-				for(int i = 0; i < groupList.size(); i++){
-					groups[i] = groupList.get(i).getString("name");
-				}
-				showDialog(PICK_AFFILS_DIALOG_ID);
-
+				if(groupList != null){
+					groups = new CharSequence[groupList.size()];
+					groupsChecked = new boolean[groupList.size()];
+					for(int i = 0; i < groupList.size(); i++){
+						groups[i] = groupList.get(i).getString("name");
+					}
+					showDialog(PICK_AFFILS_DIALOG_ID);
+			}
 			}
 
 		});
 	}
+	
 	// onClick function of pickSys button
 	public void showPickSysDialog(View view){
 		ParseQuery query = new ParseQuery("System");
@@ -404,15 +426,15 @@ public class CreateNewEvent extends Activity {
 			@Override
 			public void done(List<ParseObject> systemList, ParseException arg1) {
 				// TODO Auto-generated method stub
-				systems = new CharSequence[systemList.size()];
-				systemsChecked = new boolean[systemList.size()];
-				for(int i = 0; i < systemList.size(); i++){
-					systems[i] = systemList.get(i).getString("name");
+				if(systemList != null){
+					systems = new CharSequence[systemList.size()];
+					systemsChecked = new boolean[systemList.size()];
+					for(int i = 0; i < systemList.size(); i++){
+						systems[i] = systemList.get(i).getString("name");
+					}
+					showDialog(PICK_SYS_DIALOG_ID);
 				}
-				showDialog(PICK_SYS_DIALOG_ID);
-
 			}
-
 		});
 	}
 
@@ -426,29 +448,11 @@ public class CreateNewEvent extends Activity {
 
 	// updates the date in the TextView
 	private void updateDisplay() {
-		SimpleDateFormat formatter = new SimpleDateFormat();
+		SimpleDateFormat formatter = new SimpleDateFormat("h:mm a 'on' MMMM d, yyyy");
 		if(date1 != null)
 			mDateDisplay.setText(formatter.format(date1));
 		if(date2 != null)
 			mDateDisplay2.setText(formatter.format(date2));
-		/*
-        mDateDisplay.setText(
-            new StringBuilder()
-                    // Month is 0 based so add 1
-                    .append(mMonth + 1).append("-")
-                    .append(mDay).append("-")
-                    .append(mYear).append(" ")
-                    .append(pad(mHour)).append(":")
-                    .append(pad(mMinute)).append(" "));
-        mDateDisplay2.setText(
-                new StringBuilder()
-                        // Month is 0 based so add 1
-                        .append(mMonth2 + 1).append("-")
-                        .append(mDay2).append("-")
-                        .append(mYear2).append(" ")
-                        .append(pad(mHour2)).append(":")
-                        .append(pad(mMinute2)).append(" "));
-		 */
 	}
 
 	private static String pad(int c) {

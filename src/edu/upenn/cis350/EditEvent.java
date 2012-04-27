@@ -85,12 +85,18 @@ public class EditEvent extends Activity {
 
 		public void onDateSet(DatePicker view, int year, 
 				int monthOfYear, int dayOfMonth) {
-			mYear = year;
-			mMonth = monthOfYear;
-			mDay = dayOfMonth;
-			date1 = new Date(year - 1900, monthOfYear, dayOfMonth);                    
-			showDialog(START_TIME_DIALOG_ID);
-			//updateDisplay();
+			if(date2.before(new Date(year - 1900, monthOfYear, dayOfMonth))){
+				final Toast toast = Toast.makeText(getApplicationContext(), 
+						"Start Date has to be before End Date.", Toast.LENGTH_SHORT);
+				toast.show();
+			}
+			else{
+				mYear = year;
+				mMonth = monthOfYear;
+				mDay = dayOfMonth;
+				date1 = new Date(mYear - 1900, mMonth, mDay);
+				showDialog(START_TIME_DIALOG_ID);
+			}
 		}
 	};
 	// the callback received when the user "sets" the date in the dialog (END DATE)
@@ -99,12 +105,18 @@ public class EditEvent extends Activity {
 
 		public void onDateSet(DatePicker view, int year, 
 				int monthOfYear, int dayOfMonth) {
-			mYear2 = year;
-			mMonth2 = monthOfYear;
-			mDay2 = dayOfMonth;
-			date2 = new Date(year - 1900, monthOfYear, dayOfMonth);
-			showDialog(END_TIME_DIALOG_ID);
-			//updateDisplay();
+			if(new Date(year - 1900, monthOfYear, dayOfMonth).before(date1)){
+				final Toast toast = Toast.makeText(getApplicationContext(), 
+						"End Date has to be after Start Date.", Toast.LENGTH_SHORT);
+				toast.show();
+			}
+			else{
+				mYear2 = year;
+				mMonth2 = monthOfYear;
+				mDay2 = dayOfMonth;
+				date2 = new Date(mYear2 - 1900, mMonth2, mDay2);
+				showDialog(END_TIME_DIALOG_ID);
+			}
 		}
 	};
 	// the callback received when the user "sets" the time in the dialog (start time)      
@@ -340,22 +352,32 @@ public class EditEvent extends Activity {
 		temp2 = (TextView)findViewById(R.id.endDateDisplay);
 		event.put("endDate", date2.getTime());
 
-    	List<String> affiliations = new ArrayList<String>();
-    	if(groups != null){
-    		for(int x = 0; x < groups.length; x++){				// EVENT
-    			if(groupsChecked[x])
-    				affiliations.add(groups[x].toString());
-    		}
-    		event.put("groups", affiliations);
-    	}
-    	List<String> sys = new ArrayList<String>();
-    	if(systems != null){
-    		for(int x = 0; x < systems.length; x++){
-    			if(systemsChecked[x])
-    				sys.add(systems[x].toString());
-    		}
-    		event.put("systems", sys);
-    	}
+		List<String> affiliations = new ArrayList<String>();
+		if(groups != null){
+			StringBuffer gr = new StringBuffer();
+			for(int x = 0; x < groups.length; x++){				// EVENT
+				if(groupsChecked[x]){
+					affiliations.add(groups[x].toString());
+					gr.append(groups[x].toString() + ",");
+				}
+			}
+			gr.replace(gr.length()-1, gr.length(), "");
+			event.put("groups", affiliations);
+			event.put("groups2", gr.toString());
+		}
+		List<String> sys = new ArrayList<String>();
+		if(systems != null){
+			StringBuffer sy = new StringBuffer();
+			for(int x = 0; x < systems.length; x++){
+				if(systemsChecked[x]){
+					sys.add(systems[x].toString());
+					sy.append(systems[x].toString() + ",");
+				}
+			}
+			sy.replace(sy.length()-1, sy.length(), "");
+			event.put("systems", sys);
+			event.put("systems2", sy.toString());
+		}
 		
 
 		//TODO: User linking
@@ -481,7 +503,7 @@ public class EditEvent extends Activity {
 			public void done(List<ParseObject> systemList, ParseException arg1) {
 				// TODO Auto-generated method stub
 				List<String> sl = (List<String>) event.get("systems");
-
+				String sl2 = event.getString("systems2");
 				systems = new CharSequence[systemList.size()];
 				systemsChecked = new boolean[systemList.size()];
 				for(int i = 0; i < systemList.size(); i++){
@@ -507,36 +529,11 @@ public class EditEvent extends Activity {
 
 	// updates the date in the TextView
 	private void updateDisplay() {
-    	SimpleDateFormat formatter = new SimpleDateFormat();
+    	SimpleDateFormat formatter = new SimpleDateFormat("h:mm a 'on' MMMM d, yyyy");
 		if(date1 != null)
 			mDateDisplay.setText(formatter.format(date1));
 		if(date2 != null)
 			mDateDisplay2.setText(formatter.format(date2));
-		/*
-        mDateDisplay.setText(
-            new StringBuilder()
-                    // Month is 0 based so add 1
-                    .append(mMonth + 1).append("-")
-                    .append(mDay).append("-")
-                    .append(mYear).append(" ")
-                    .append(pad(mHour)).append(":")
-                    .append(pad(mMinute)).append(" "));
-        mDateDisplay2.setText(
-                new StringBuilder()
-                        // Month is 0 based so add 1
-                        .append(mMonth2 + 1).append("-")
-                        .append(mDay2).append("-")
-                        .append(mYear2).append(" ")
-                        .append(pad(mHour2)).append(":")
-                        .append(pad(mMinute2)).append(" "));
-		 */
-	}
-
-	private static String pad(int c) {
-		if (c >= 10)
-			return String.valueOf(c);
-		else
-			return "0" + String.valueOf(c);
 	}
 
 	// creates dialogs
