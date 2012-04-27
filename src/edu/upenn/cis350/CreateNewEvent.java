@@ -78,18 +78,24 @@ public class CreateNewEvent extends Activity {
 	static final int START_TIME_DIALOG_ID = 4;
 	static final int END_TIME_DIALOG_ID = 5;
 
-
 	// the callback received when the user "sets" the date in the dialog (START DATE)
 	private DatePickerDialog.OnDateSetListener mDateSetListener =
 			new DatePickerDialog.OnDateSetListener() {
 
 		public void onDateSet(DatePicker view, int year, 
 				int monthOfYear, int dayOfMonth) {
-			mYear = year;
-			mMonth = monthOfYear;
-			mDay = dayOfMonth;
-			date1 = new Date(year - 1900, monthOfYear, dayOfMonth);                    
-			showDialog(START_TIME_DIALOG_ID);
+			if(date2.before(new Date(year - 1900, monthOfYear, dayOfMonth))){
+				final Toast toast = Toast.makeText(getApplicationContext(), 
+						"Start Date has to be before End Date.", Toast.LENGTH_SHORT);
+				toast.show();
+			}
+			else{
+				mYear = year;
+				mMonth = monthOfYear;
+				mDay = dayOfMonth;
+				date1 = new Date(mYear - 1900, mMonth, mDay);
+				showDialog(START_TIME_DIALOG_ID);
+			}
 			//updateDisplay();
 		}
 	};
@@ -99,11 +105,18 @@ public class CreateNewEvent extends Activity {
 
 		public void onDateSet(DatePicker view, int year, 
 				int monthOfYear, int dayOfMonth) {
-			mYear2 = year;
-			mMonth2 = monthOfYear;
-			mDay2 = dayOfMonth;
-			date2 = new Date(year - 1900, monthOfYear, dayOfMonth);
-			showDialog(END_TIME_DIALOG_ID);
+			if(date2.before(new Date(year - 1900, monthOfYear, dayOfMonth))){
+				final Toast toast = Toast.makeText(getApplicationContext(), 
+						"End Date has to be after Start Date.", Toast.LENGTH_SHORT);
+				toast.show();
+			}
+			else{
+				mYear2 = year;
+				mMonth2 = monthOfYear;
+				mDay2 = dayOfMonth;
+				date2 = new Date(mYear - 1900, mMonth, mDay);
+				showDialog(END_TIME_DIALOG_ID);
+			}
 			//updateDisplay();
 		}
 	};
@@ -154,12 +167,13 @@ public class CreateNewEvent extends Activity {
 
 		mYear2 = mYear;
 		mMonth2 = mMonth;
-		mDay2 = mDay;
+		mDay2 = mDay + 1;
 		mHour2 = mHour;
 		mMinute2 = mMinute;
 		// display the current date (this method is below)
+		long secondsInDay = 60 * 60 * 24 * 1000;
 		date1 = new Date(System.currentTimeMillis());
-		date2 = new Date(System.currentTimeMillis() + 86400000);
+		date2 = new Date(System.currentTimeMillis() + secondsInDay);
 		updateDisplay();
 
 		//populate spinner
@@ -231,8 +245,6 @@ public class CreateNewEvent extends Activity {
 
 	// onClick function of submit button
 	public void onCreateEventSubmit(View view){
-		//TODO closen: Phase out intent stuff - use eventPOJO for everything
-		//Intent i = new Intent(this, WhartonComputingCommunicationsActivity.class);
 
 		final ParseObject event = new ParseObject("Event");
 		EditText temp = (EditText)findViewById(R.id.eventTitle);
@@ -395,6 +407,7 @@ public class CreateNewEvent extends Activity {
 
 		});
 	}
+	
 	// onClick function of pickSys button
 	public void showPickSysDialog(View view){
 		ParseQuery query = new ParseQuery("System");
@@ -412,7 +425,6 @@ public class CreateNewEvent extends Activity {
 				showDialog(PICK_SYS_DIALOG_ID);
 
 			}
-
 		});
 	}
 
@@ -426,7 +438,7 @@ public class CreateNewEvent extends Activity {
 
 	// updates the date in the TextView
 	private void updateDisplay() {
-		SimpleDateFormat formatter = new SimpleDateFormat();
+		SimpleDateFormat formatter = new SimpleDateFormat("h:mm a 'on' MMMM d, yyyy");
 		if(date1 != null)
 			mDateDisplay.setText(formatter.format(date1));
 		if(date2 != null)
