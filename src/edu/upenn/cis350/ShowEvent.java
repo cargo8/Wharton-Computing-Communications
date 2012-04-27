@@ -74,7 +74,8 @@ public class ShowEvent extends Activity {
 						event = event1;
 
 						items.add(new ListItem(event, ListItem.Type.EVENT));
-						items.add(new ListItem(event, ListItem.Type.MESSAGEBOX));
+						if(checkSuperUsers())
+							items.add(new ListItem(event, ListItem.Type.MESSAGEBOX));
 						populateMessages();
 					}
 				}
@@ -134,11 +135,27 @@ public class ShowEvent extends Activity {
 		startActivity(i);
 	}
 
+	public boolean checkSuperUsers(){
+		String user1 = event.getString("contact1");
+		String user2 = event.getString("contact2");
+		String thisUser = ParseUser.getCurrentUser().getString("fullName");
+		if(user1.equals(thisUser) || user2.equals(thisUser))
+			return true;
+		else
+			return false;
+	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.show_event_menu, menu);
-		return true;
+		if(!checkSuperUsers()){
+			MenuInflater inflater = getMenuInflater();
+			inflater.inflate(R.menu.show_event_menu2, menu);
+			return true;
+		}
+		else {
+			MenuInflater inflater = getMenuInflater();
+			inflater.inflate(R.menu.show_event_menu, menu);
+			return true;
+		}
 	}
 
 	/**
