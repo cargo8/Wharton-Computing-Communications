@@ -7,6 +7,7 @@ import java.util.List;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -37,6 +38,7 @@ public class ShowMessage extends Activity {
 	private String msgId;
 	private ParseObject message;
 	private ProgressDialog dialog;
+	private boolean subscribed;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -57,6 +59,9 @@ public class ShowMessage extends Activity {
 			dialog = ProgressDialog.show(this, "", 
 					"Loading. Please wait...", true);
 			dialog.setCancelable(true);
+
+			updateSubscriptionStatus(msgId);
+
 			msgQuery.getInBackground(msgId, new GetCallback() {
 
 				@Override
@@ -137,7 +142,7 @@ public class ShowMessage extends Activity {
 					toast.show();
 					PushUtils.createCommentPush(message, comment);
 					commentText.setText("");
-					
+
 					Context context = getApplicationContext();
 					if (!PushService.getSubscriptions(context).contains("push_" + message.getObjectId())) {
 						PushService.subscribe(context, "push_" + message.getObjectId(), ShowNotifications.class);
@@ -186,10 +191,10 @@ public class ShowMessage extends Activity {
 
 		TextView commentText = new TextView(this);
 		commentText.setText(comment.getString("text"));
-		
+
 		header.addView(author);
 		header.addView(commentText);
-//		header.addView(timestamp);
+		//		header.addView(timestamp);
 
 		commentFrame.addView(header);
 		commentFrame.addView(timestamp);
@@ -232,11 +237,39 @@ public class ShowMessage extends Activity {
 	}
 
 	/**
+	 * Update subscription status of this user, on this message
+	 * 
+	 * @param messageId The message ID of the event being viewed
+	 */
+	private void updateSubscriptionStatus(final String msgId) {
+		ParseQuery subscription = new ParseQuery("Subscription");
+		subscription.whereEqualTo("userId", ParseUser.getCurrentUser().getObjectId());
+		subscription.findInBackground(new FindCallback() {
+
+			@Override
+			public void done(List<ParseObject> subscriptions, ParseException e) {
+				if (e == null) {
+					for (ParseObject obj : subscriptions) {
+						if (msgId.equals(obj.getString("subscriptionId"))) {
+							subscribed = true;
+						}
+					}
+				}
+			}
+
+		});
+	}
+
+	/**
 	 * Method that gets called when Menu is created
 	 */
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.show_message_menu, menu);
+		if (subscribed) {
+			inflater.inflate(R.menu.show_message_menu_subscribed, menu);
+		} else {
+			inflater.inflate(R.menu.show_message_menu_unsubscribed, menu);
+		}
 		return true;
 	}
 
@@ -256,15 +289,36 @@ public class ShowMessage extends Activity {
 				subscription.put("userId", ParseUser.getCurrentUser().getObjectId());
 				subscription.put("subscriptionId", message.getObjectId());
 				subscription.saveEventually();
-				return true;
 			}
-			return false;
+			Intent i = new Intent(this, ShowMessage.class);
+			i.putExtra("messageID", message.getObjectId());
+			Toast.makeText(this, "Subscribed to message", Toast.LENGTH_SHORT).show();
+			finish();
+			startActivity(i);
+			return true;
 		} else if (id == R.id.messageUnsubscribe) {
 			PushService.unsubscribe(this, "push_" + message.getObjectId());
-			ParseObject subscription = new ParseObject("Subscription");
-			subscription.put("userId", ParseUser.getCurrentUser().getObjectId());
-			subscription.put("subscriptionId", message.getObjectId());
-			subscription.deleteEventually();
+			ParseQuery subscription = new ParseQuery("Subscription");
+			subscription.whereEqualTo("subscriptionId", message.getObjectId());
+			subscription.whereEqualTo("userId", ParseUser.getCurrentUser().getObjectId());
+			subscription.findInBackground(new FindCallback() {
+
+				@Override
+				public void done(List<ParseObject> subscriptions,
+						ParseException e2) {
+					if (e2 == null) {
+						for (ParseObject obj : subscriptions) {
+							obj.deleteEventually();
+						}
+					}
+				}
+
+			});
+			Intent i = new Intent(this, ShowMessage.class);
+			i.putExtra("messageID", message.getObjectId());
+			Toast.makeText(this, "Unsubscribed from event", Toast.LENGTH_SHORT).show();
+			finish();
+			startActivity(i);
 			return true;
 		}
 		return false;

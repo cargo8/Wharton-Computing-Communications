@@ -194,7 +194,6 @@ public class ShowEvent extends Activity {
 	/**
 	 * Method that gets called when the menuitem is clicked
 	 */
-	@SuppressWarnings("rawtypes")
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if(item.getItemId() == R.id.editEvent){
