@@ -55,12 +55,16 @@ public class ShowNotifications extends ListActivity {
 								newNotifications.add(new ListItem(n, ListItem.Type.EVENT));								
 							} else if ("message".equals(n.getString("type"))) {
 								newNotifications.add(new ListItem(n, ListItem.Type.MESSAGE));
+							} else {
+								newNotifications.add(new ListItem(n, ListItem.Type.NONE));
 							}
 						} else {
 							if ("event".equals(n.getString("type"))) {
 								readNotifications.add(new ListItem(n, ListItem.Type.EVENT));								
 							} else if ("message".equals(n.getString("type"))) {
 								readNotifications.add(new ListItem(n, ListItem.Type.MESSAGE));
+							} else {
+								readNotifications.add(new ListItem(n, ListItem.Type.NONE));
 							}
 						}
 					}
@@ -154,6 +158,16 @@ public class ShowNotifications extends ListActivity {
 						}
 
 					});
+				} else if (ListItem.Type.NONE.equals(item.getType())) {
+					final ParseObject notification = (ParseObject) item.getData();
+					v = vi.inflate(R.layout.notification_list_item, null);
+
+					TextView text = (TextView) v.findViewById(R.id.notificationText);
+					text.setText(notification.getString("text"));
+
+					v.setOnClickListener(null);
+					v.setOnLongClickListener(null);
+					v.setLongClickable(false);
 				}
 			}
 			return v;
