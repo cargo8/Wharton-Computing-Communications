@@ -302,7 +302,6 @@ public class ShowEvent extends Activity {
 					}
 					PushUtils.createMessagePush(event, msg);
 					i.putExtra("eventKey", event.getObjectId());
-					//TODO(kuyumcu): Replace starting the activity over with just refetching the messages.
 					finish();
 					startActivity(i);
 				}
