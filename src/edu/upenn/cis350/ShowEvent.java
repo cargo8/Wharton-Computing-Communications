@@ -219,8 +219,7 @@ public class ShowEvent extends Activity {
 				@Override
 				public void done(ParseException arg0) {
 					PushUtils.createEventResolvedPush(event.getObjectId(), event);
-					Toast temp = Toast.makeText(getApplicationContext(), "Marked as Resolved", Toast.LENGTH_SHORT);
-					temp.show();
+					Toast.makeText(getApplicationContext(), "Marked as Resolved", Toast.LENGTH_SHORT).show();
 				}
 
 			});

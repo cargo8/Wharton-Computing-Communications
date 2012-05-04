@@ -48,8 +48,6 @@ public class Agenda extends Activity {
 		setContentView(R.layout.agenda);
 		Parse.initialize(this, Settings.APPLICATION_ID, Settings.CLIENT_ID);
 
-		final ListView eventList = (ListView) findViewById(R.id.eventList);
-
 		Bundle extras = getIntent().getExtras();
 		ParseQuery query;
 		
@@ -69,8 +67,11 @@ public class Agenda extends Activity {
 			// TODO: Other filters
 			query = getQuery(Filter.NEW);
 		}
-
-
+		populateEvents(query);
+	}
+	
+	public void populateEvents(ParseQuery query) {
+		final ListView eventList = (ListView) findViewById(R.id.eventList);
 		final ProgressDialog dialog = ProgressDialog.show(this, "", 
 				"Loading. Please wait...", true);
 		dialog.setCancelable(true);
@@ -224,33 +225,38 @@ public class Agenda extends Activity {
 					/* This is a real list item */
 					final ParseObject event = (ParseObject) item.getData();
 					v = vi.inflate(R.layout.event_list_item, null);
-					TextView temp = (TextView) v.findViewById(R.id.listEventTitle);
-					if (temp != null) {
-						temp.setText(event.getString("title"));
+					
+					TextView eventTitle = (TextView) v.findViewById(R.id.listEventTitle);
+					if (eventTitle != null) {
+						eventTitle.setText(event.getString("title"));
 					}
-					temp = (TextView) v.findViewById(R.id.listEventDate);
-					if (temp != null) {
+					
+					TextView eventDate = (TextView) v.findViewById(R.id.listEventDate);
+					if (eventDate != null) {
 						SimpleDateFormat formatter = new SimpleDateFormat("h:mm a 'on' MMMM d, yyyy");
 						Date date1 = new Date(event.getLong("startDate"));
 						Date date2 = new Date(event.getLong("endDate"));
-						temp.setText("Start: " + formatter.format(date1) + 
+						eventDate.setText("Start: " + formatter.format(date1) + 
 								"\nEst. Finish: " + formatter.format(date2));
 					}
-					temp = (TextView) v.findViewById(R.id.listEventDescription);
+					
+					TextView eventDescription = (TextView) v.findViewById(R.id.listEventDescription);
 					String desc = event.getString("description");
-					if (temp != null) {
+					if (eventDescription != null) {
 						if (desc.length() == 0) {
-							temp.setText("No Description");
+							eventDescription.setText("No Description");
 						} else if (desc.length() > 140) {
-							temp.setText(desc.substring(0, 140) + "...");
+							eventDescription.setText(desc.substring(0, 140) + "...");
 						} else {
-							temp.setText(desc);
+							eventDescription.setText(desc);
 						}
 					}
-					temp = (TextView) v.findViewById(R.id.listEventSeverity);
-					if (temp != null) {
-						temp.setBackgroundColor(event.getInt("severity"));
+					
+					TextView eventSeverity = (TextView) v.findViewById(R.id.listEventSeverity);
+					if (eventSeverity != null) {
+						eventSeverity.setBackgroundColor(event.getInt("severity"));
 					}
+					
 					v.setOnClickListener(new OnClickListener() {
 
 						@Override
