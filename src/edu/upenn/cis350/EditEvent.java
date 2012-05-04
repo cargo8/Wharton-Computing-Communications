@@ -330,7 +330,9 @@ public class EditEvent extends Activity {
 					gr.append(groups[x].toString() + ",");
 				}
 			}
-			gr.replace(gr.length()-1, gr.length(), "");
+			if(gr.length() > 0){
+				gr.replace(gr.length()-1, gr.length(), "");
+			}
 			event.put("groups", affiliations);
 			event.put("groups2", gr.toString());
 		}
@@ -345,7 +347,9 @@ public class EditEvent extends Activity {
 					sy.append(systems[x].toString() + ",");
 				}
 			}
-			sy.replace(sy.length()-1, sy.length(), "");
+			if(sy.length() > 0){
+				sy.replace(sy.length()-1, sy.length(), "");
+			}
 			event.put("systems", sys);
 			event.put("systems2", sy.toString());
 		}
