@@ -11,21 +11,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
-import android.widget.Adapter;
-import android.widget.AdapterView;
-import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -35,7 +28,6 @@ import android.widget.Toast;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.Parse;
-import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -53,7 +45,6 @@ public class ShowEvent extends Activity {
 	private ProgressDialog dialog;
 	private List<ListItem> items = new ArrayList<ListItem>();
 	private boolean subscribed;
-	private int pos;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -340,8 +331,6 @@ public class ShowEvent extends Activity {
 			this.listItems = items;
 		}
 		
-
-
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View v = convertView;
@@ -367,32 +356,32 @@ public class ShowEvent extends Activity {
 					final ParseObject message = (ParseObject) item.getData();
 					v = vi.inflate(R.layout.message_list_item, null);
 
-					TextView temp = (TextView) v.findViewById(R.id.listMessageText);
-					if (temp != null) {
-						temp.setText(message.getString("text"));
+					TextView messageText = (TextView) v.findViewById(R.id.listMessageText);
+					if (messageText != null) {
+						messageText.setText(message.getString("text"));
 					}
 
-					temp = (TextView) v.findViewById(R.id.listMessageAuthor);
-
-					if (temp != null) {
-						temp.setText(message.getString("authorName"));
-						temp.setTypeface(Typeface.DEFAULT_BOLD);
+					TextView messageAuthor = (TextView) v.findViewById(R.id.listMessageAuthor);
+					if (messageAuthor != null) {
+						messageAuthor.setText(message.getString("authorName"));
+						messageAuthor.setTypeface(Typeface.DEFAULT_BOLD);
 
 					}
 
-					temp = (TextView) v.findViewById(R.id.listMessageTimestamp);
-					if (temp != null) {
+					TextView messageTimestamp = (TextView) v.findViewById(R.id.listMessageTimestamp);
+					if (messageTimestamp != null) {
 						Long time = message.getLong("timestamp");
 						final SimpleDateFormat formatter = new SimpleDateFormat("MMMM d 'at' h:mm a ");
-						temp.setText(formatter.format(new Date(time)));
+						messageTimestamp.setText(formatter.format(new Date(time)));
 					}
-					temp = (TextView) v.findViewById(R.id.listMessageCommentCounter);
-					if (temp != null) {
+					
+					TextView commentCounter = (TextView) v.findViewById(R.id.listMessageCommentCounter);
+					if (commentCounter != null) {
 						int noOfComments = message.getInt("count");
 						if(noOfComments > 0)
-							temp.setText(noOfComments + " comment" + (noOfComments > 1 ? "s" : ""));
+							commentCounter.setText(noOfComments + " comment" + (noOfComments > 1 ? "s" : ""));
 						else
-							temp.setText("");
+							commentCounter.setText("");
 					}
 
 					v.setOnClickListener(new OnClickListener() {
@@ -403,6 +392,7 @@ public class ShowEvent extends Activity {
 							startActivity(i);
 						}
 					});
+					//TODO: Implement real security through ParseACLs
 					/*
 					ParseACL acl = message.getACL();
 					if(acl != null && acl.getWriteAccess(ParseUser.getCurrentUser())){
@@ -418,34 +408,34 @@ public class ShowEvent extends Activity {
 					v.setOnLongClickListener(null);
 					v.setLongClickable(false);
 
-					TextView temp = (TextView) v.findViewById(R.id.eventTitleText);
-					if (temp != null) {
-						temp.setText(event.getString("title"));
-						temp.setTextColor(Color.WHITE);
+					TextView eventTitle = (TextView) v.findViewById(R.id.eventTitleText);
+					if (eventTitle != null) {
+						eventTitle.setText(event.getString("title"));
+						eventTitle.setTextColor(Color.WHITE);
 					}
 
-					temp = (TextView) v.findViewById(R.id.eventDescText);
-					if (temp != null) {
-						temp.setText("\n" + event.getString("description") + "\n");
-						temp.setTextColor(Color.WHITE);
+					TextView eventDescription = (TextView) v.findViewById(R.id.eventDescText);
+					if (eventDescription != null) {
+						eventDescription.setText("\n" + event.getString("description") + "\n");
+						eventDescription.setTextColor(Color.WHITE);
 					}
 
-					temp = (TextView)v.findViewById(R.id.startDateDisplay2);
+					TextView startDate = (TextView)v.findViewById(R.id.startDateDisplay2);
 					SimpleDateFormat formatter = new SimpleDateFormat("h:mm a 'on' MMMM d, yyyy");
-					if(temp != null){
+					if(startDate != null){
 						Date date1 = new Date(event.getLong("startDate"));
-						temp.setText(formatter.format(date1));
+						startDate.setText(formatter.format(date1));
 
 					}
 
-					temp = (TextView)v.findViewById(R.id.endDateDisplay2);
-					if(temp != null){
+					TextView endDate = (TextView)v.findViewById(R.id.endDateDisplay2);
+					if(endDate != null){
 						Date date2 = new Date(event.getLong("endDate"));
-						temp.setText(formatter.format(date2));
+						endDate.setText(formatter.format(date2));
 					}
 
-					temp = (TextView)v.findViewById(R.id.affilsText);
-					if(temp != null){
+					TextView groups = (TextView)v.findViewById(R.id.affilsText);
+					if(groups != null){
 						List<String> affilList = event.getList("groups");
 						StringBuilder affilText = new StringBuilder();
 						if(affilList != null){
@@ -454,12 +444,12 @@ public class ShowEvent extends Activity {
 							}
 							int l = affilText.length();
 							affilText = affilText.replace(l - 2, l, "");
-							temp.setText(affilText.toString());
+							groups.setText(affilText.toString());
 						}
 					}
 
-					temp = (TextView)v.findViewById(R.id.systemsText);
-					if(temp != null){
+					TextView systems = (TextView)v.findViewById(R.id.systemsText);
+					if(systems != null){
 						List<String> systemList = event.getList("systems");
 						StringBuilder systemText = new StringBuilder();
 						if(systemList != null){
@@ -468,38 +458,38 @@ public class ShowEvent extends Activity {
 							}
 							int l = systemText.length();
 							systemText = systemText.replace(l - 2, l, "");
-							temp.setText(systemText.toString());
+							systems.setText(systemText.toString());
 						}
 					}
 
-					temp = (TextView)v.findViewById(R.id.personText1);
-					if(temp != null){
-						temp.setText(event.getString("contact1"));
-						temp.setTextColor(Color.WHITE);
+					TextView primaryContact = (TextView)v.findViewById(R.id.personText1);
+					if(primaryContact != null){
+						primaryContact.setText(event.getString("contact1"));
+						primaryContact.setTextColor(Color.WHITE);
 					}
 
-					temp = (TextView)v.findViewById(R.id.personText2);
-					if(temp != null){
-						temp.setText(event.getString("contact2"));
-						temp.setTextColor(Color.WHITE);
+					TextView secondaryContact = (TextView)v.findViewById(R.id.personText2);
+					if(secondaryContact != null){
+						secondaryContact.setText(event.getString("contact2"));
+						secondaryContact.setTextColor(Color.WHITE);
 					}
 
-					temp = (TextView)v.findViewById(R.id.severityText);
-					if(temp != null){
-						temp.setBackgroundColor(event.getInt("severity"));
+					TextView severity = (TextView)v.findViewById(R.id.severityText);
+					if(severity != null){
+						severity.setBackgroundColor(event.getInt("severity"));
 					}
 
-					temp = (TextView)v.findViewById(R.id.typeText);
-					if(temp != null){
-						temp.setText(event.getString("type"));
+					TextView eventType = (TextView)v.findViewById(R.id.typeText);
+					if(eventType != null){
+						eventType.setText(event.getString("type"));
 					}
 				} else if (item.getType().equals(ListItem.Type.MESSAGEBOX)){
 					v = vi.inflate(R.layout.post_message_item, null);
-					EditText temp = (EditText) v.findViewById(R.id.newMessageText);
+					EditText messageText = (EditText) v.findViewById(R.id.newMessageText);
 					//we need to update adapter once we finish with editing
 
-					if (temp != null) {
-						temp.setFocusable(true);
+					if (messageText != null) {
+						messageText.setFocusable(true);
 					}
 				}
 			}
