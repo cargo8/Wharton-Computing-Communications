@@ -150,12 +150,6 @@ public class Register extends Activity {
 			user.put("systems", new ArrayList<String>());
 			user.put("systems2", "");
 		}
-
-
-
-
-		final Toast successToast = Toast.makeText(this, "Registration Pending", Toast.LENGTH_SHORT);
-		final Toast failToast = Toast.makeText(this, "Could not create user. Try again.", Toast.LENGTH_SHORT);
 		final Intent i = new Intent(this, Home.class);
 
 		user.signUpInBackground(new SignUpCallback() {
@@ -170,21 +164,20 @@ public class Register extends Activity {
 						PushService.subscribe(context, "", ShowNotifications.class);
 					}				
 					dialog.cancel();
-					successToast.show();
+					Toast.makeText(getApplicationContext(), "Registration Pending", Toast.LENGTH_SHORT).show();
 					finish();
 					startActivity(i);
 				} else {
 					// Sign up didn't succeed. Look at the ParseException
 					// to figure out what went wrong
 					dialog.cancel();
-					failToast.setText(e.getMessage());
-					failToast.show();
+					Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
 					return;
 				}
 			}
 		});	
 	}
-
+	
 	// creates dialogs
 	@Override
 	protected Dialog onCreateDialog(int id) {
