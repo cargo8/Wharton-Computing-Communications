@@ -25,6 +25,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/**
+ * Activity to manage the groups and systems, as well as add new events
+ * @author nateclose
+ *
+ */
 public class ManageGroups extends Activity {
 
 	/** Called when the activity is first created. */
@@ -46,7 +51,6 @@ public class ManageGroups extends Activity {
 
 			@Override
 			public void done(List<ParseObject> arg0, ParseException arg1) {
-				// TODO Auto-generated method stub
 				if(arg0 != null)
 				for(ParseObject obj : arg0){
 					adapter.add(obj.getString("name"));
@@ -56,13 +60,14 @@ public class ManageGroups extends Activity {
 			
 		});
 		
+		// sets the groups adapter to listen for a selected item
+		// when found, it jumps to the users associated with the group
 		groups.setOnItemSelectedListener(new OnItemSelectedListener(){
 
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
 					int arg2, long arg3) {
 				if(arg0 != null && arg0.getSelectedItemPosition() != 0){
-					//TODO: jump to group's page
 					String name = arg0.getSelectedItem().toString();
 					Intent i = new Intent(getApplicationContext(), ContactList.class);
 					i.putExtra("groupName", name);
@@ -74,7 +79,6 @@ public class ManageGroups extends Activity {
 
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
-				// TODO Auto-generated method stub
 				// no-op
 			}
 			
@@ -90,7 +94,6 @@ public class ManageGroups extends Activity {
 
 				@Override
 				public void done(List<ParseObject> arg0, ParseException arg1) {
-					// TODO Auto-generated method stub
 					if(arg0 != null)
 					for(ParseObject obj : arg0){
 						adapter2.add(obj.getString("name"));
@@ -100,14 +103,14 @@ public class ManageGroups extends Activity {
 				
 			});
 			
+			// sets the systems adapter to listen for a selected item
+			// when found, it jumps to the users associated with the system
 			systems.setOnItemSelectedListener(new OnItemSelectedListener(){
 
 				@Override
 				public void onItemSelected(AdapterView<?> arg0, View arg1,
 						int arg2, long arg3) {
-					// TODO Auto-generated method stub
 					if(arg0 != null && arg0.getSelectedItemPosition() != 0){
-						//TODO: jump to system's page
 						String name = arg0.getSelectedItem().toString();
 						Intent i = new Intent(getApplicationContext(), ContactList.class);
 						i.putExtra("groupName", name);
@@ -119,7 +122,6 @@ public class ManageGroups extends Activity {
 
 				@Override
 				public void onNothingSelected(AdapterView<?> arg0) {
-					// TODO Auto-generated method stub
 					// no-op
 				}
 				
@@ -127,7 +129,10 @@ public class ManageGroups extends Activity {
         
     }
         
-	// onClick function of addGroup button
+	/** onClick function of addGroup button
+	 * 
+	 * @param view
+	 */
 	public void addGroup(View view){
 		EditText text = (EditText) findViewById(R.id.groupText);
 		if(text != null){
@@ -143,7 +148,6 @@ public class ManageGroups extends Activity {
 
 				@Override
 				public void done(List<ParseObject> arg0, ParseException arg1) {
-					// TODO Auto-generated method stub
 					// doesn't exist - add it
 					if(arg0 != null && arg0.size() == 0){
 						ParseObject obj = new ParseObject("Group");
@@ -152,7 +156,6 @@ public class ManageGroups extends Activity {
 
 							@Override
 							public void done(ParseException arg0) {
-								// TODO Auto-generated method stub
 								Intent i = new Intent(getApplicationContext(), ManageGroups.class);
 								finish();
 								startActivity(i);
@@ -170,7 +173,10 @@ public class ManageGroups extends Activity {
 		}
 	}
 	
-	// onClick function of addSystem button
+	/** onClick function of addSystem button
+	 * 
+	 * @param view
+	 */
 	public void addSystem(View view){
 		EditText text = (EditText) findViewById(R.id.systemText);
 		if(text != null){
@@ -186,7 +192,6 @@ public class ManageGroups extends Activity {
 
 				@Override
 				public void done(List<ParseObject> arg0, ParseException arg1) {
-					// TODO Auto-generated method stub
 					// doesn't exist - add it
 					if(arg0 != null && arg0.size() == 0){
 						ParseObject obj = new ParseObject("System");
@@ -195,7 +200,6 @@ public class ManageGroups extends Activity {
 
 							@Override
 							public void done(ParseException arg0) {
-								// TODO Auto-generated method stub
 								Intent i = new Intent(getApplicationContext(), ManageGroups.class);
 								finish();
 								startActivity(i);

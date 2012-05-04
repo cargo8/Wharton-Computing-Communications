@@ -188,14 +188,18 @@ public class CreateNewEvent extends Activity {
 
 	}
 
-	// helper method to populate spinners with dummy info
+	/**
+	 * Populates the two Contact spinners with Users
+	 */
 	private void populateSpinners() {
 
+		//contact 1 spinner
 		final Spinner spinner = (Spinner) findViewById(R.id.personSpinner1);
 		final ArrayAdapter <CharSequence> adapter =
 				new ArrayAdapter <CharSequence> (this, android.R.layout.simple_spinner_item );
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
+		//contact 2 spinner
 		final Spinner spinner2 = (Spinner) findViewById(R.id.personSpinner2);
 		final ArrayAdapter <CharSequence> adapter2 =
 				new ArrayAdapter <CharSequence> (this, android.R.layout.simple_spinner_item );
@@ -241,26 +245,27 @@ public class CreateNewEvent extends Activity {
 
 	}
 
-	// onClick function of submit button
+	/**
+	 * Onclick function of the Submit button
+	 * @param view
+	 */
 	public void onCreateEventSubmit(View view){
 
 		final ParseObject event = new ParseObject("Event");
 		EditText temp = (EditText)findViewById(R.id.eventTitle);
 		event.put("title", temp.getText().toString());
 		temp = (EditText)findViewById(R.id.eventDesc);
-		event.put("description", temp.getText().toString());		// EVENT
-		//temp = (EditText)findViewById(R.id.eventActions);
-		//event.put("actionItems", temp.getText().toString());	// EVENT
+		event.put("description", temp.getText().toString());		
 		TextView temp2 = (TextView)findViewById(R.id.startDateDisplay);
 		event.put("startDate", date1.getTime());
 		temp2 = (TextView)findViewById(R.id.endDateDisplay);
 		event.put("endDate", date2.getTime());
 
-		//TODO: Affils + Systems
+		// populate appropriate groups to add to event
 		List<String> affiliations = new ArrayList<String>();
 		if(groups != null){
 			StringBuffer gr = new StringBuffer();
-			for(int x = 0; x < groups.length; x++){				// EVENT
+			for(int x = 0; x < groups.length; x++){				
 				if(groupsChecked[x]){
 					affiliations.add(groups[x].toString());
 					gr.append(groups[x].toString() + ",");
@@ -270,6 +275,8 @@ public class CreateNewEvent extends Activity {
 			event.put("groups", affiliations);
 			event.put("groups2", gr.toString());
 		}
+		
+		// populate appropriate systems to add to event
 		List<String> sys = new ArrayList<String>();
 		if(systems != null){
 			StringBuffer sy = new StringBuffer();
@@ -284,16 +291,17 @@ public class CreateNewEvent extends Activity {
 			event.put("systems2", sy.toString());
 		}
 
-		//TODO: User linking
+		// gets contacts from spinners
 		Spinner spin1 = (Spinner)findViewById(R.id.personSpinner1);
 		String contact1 = spin1.getSelectedItem().toString();
 		event.put("contact1", contactMap2.get(contact1));
 		event.put("contact1ID", contactMap.get(contact1));
 		spin1 = (Spinner)findViewById(R.id.personSpinner2);
 		String contact2 = spin1.getSelectedItem().toString();
-		event.put("contact2", contactMap2.get(contact2));	// EVENT
+		event.put("contact2", contactMap2.get(contact2));	
 		event.put("contact2ID", contactMap.get(contact2));
 
+		// find the appropriate severity color
 		if(((RadioButton)findViewById(R.id.radioRed)).isChecked()){
 			event.put("severity", Color.RED);
 		}
@@ -307,7 +315,8 @@ public class CreateNewEvent extends Activity {
 			Toast.makeText(this, "Select an severity code.", Toast.LENGTH_SHORT).show();
 			return;
 		}
-
+		
+		// find the appropriate event type
 		if(((RadioButton)findViewById(R.id.radioEmergency)).isChecked()){
 			event.put("type", "Emergency");
 		}
@@ -369,7 +378,7 @@ public class CreateNewEvent extends Activity {
 						subscription.saveEventually();
 					}
 
-					//TODO: Subscribe affiliated groups
+					//TODO: Subscribe affiliated groups (not completed)
 					//					for (String group : ((List<String>) event.get("systems"))) {
 					//						ParseQuery q = new ParseQuery("_User");
 					//						q.whereContains("systems", group);
@@ -385,17 +394,26 @@ public class CreateNewEvent extends Activity {
 		});
 	}
 
-	// onClick function of pickStartDateButton
+	/** onClick function of pickStartDateButton
+	 * 
+	 * @param view
+	 */
 	public void showStartDateDialog(View view){
 		showDialog(START_DATE_DIALOG_ID);
 	}
 
-	// onClick function of pickEndDateButton
+	/** onClick function of pickEndDateButton
+	 * 
+	 * @param view
+	 */
 	public void showEndDateDialog(View view){
 		showDialog(END_DATE_DIALOG_ID);
 	}
 
-	// onClick function of pickAffils button
+	/** onClick function of pickAffils button
+	 * 
+	 * @param view
+	 */
 	public void showPickAffilsDialog(View view){
 		ParseQuery query = new ParseQuery("Group");
 		query.orderByAscending("name");
@@ -417,7 +435,10 @@ public class CreateNewEvent extends Activity {
 		});
 	}
 	
-	// onClick function of pickSys button
+	/** onClick function of pickSys button
+	 * 
+	 * @param view
+	 */
 	public void showPickSysDialog(View view){
 		ParseQuery query = new ParseQuery("System");
 		query.orderByAscending("name");
@@ -438,15 +459,25 @@ public class CreateNewEvent extends Activity {
 		});
 	}
 
+	/**
+	 * shows start time dialog
+	 * @param view
+	 */
 	public void showStartTimeDialog(View view){
 		showDialog(START_TIME_DIALOG_ID);
 	}
 
+	/**
+	 * shows end date dialog
+	 * @param view
+	 */
 	public void showEndTimeDialog(View view){
 		showDialog(END_TIME_DIALOG_ID);
 	}
 
-	// updates the date in the TextView
+	/** updates the date in the TextView
+	 * 
+	 */
 	private void updateDisplay() {
 		SimpleDateFormat formatter = new SimpleDateFormat("h:mm a 'on' MMMM d, yyyy");
 		if(date1 != null)
@@ -455,14 +486,9 @@ public class CreateNewEvent extends Activity {
 			mDateDisplay2.setText(formatter.format(date2));
 	}
 
-	private static String pad(int c) {
-		if (c >= 10)
-			return String.valueOf(c);
-		else
-			return "0" + String.valueOf(c);
-	}
-
-	// creates dialogs
+	/** creates dialogs
+	 * 
+	 */
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		switch (id) {
