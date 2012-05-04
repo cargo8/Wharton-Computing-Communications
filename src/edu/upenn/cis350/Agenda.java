@@ -38,7 +38,7 @@ public class Agenda extends Activity {
 	public enum Filter {
 		NEW, ALL, ONE_WEEK_OLD;
 	}
-	
+
 	private Filter filter;
 
 	/** Called when the activity is first created. */
@@ -50,7 +50,7 @@ public class Agenda extends Activity {
 
 		Bundle extras = getIntent().getExtras();
 		ParseQuery query;
-		
+
 		if (extras != null) {
 			filter = (Filter) extras.get("filter");
 		}
@@ -69,7 +69,7 @@ public class Agenda extends Activity {
 		}
 		populateEvents(query);
 	}
-	
+
 	public void populateEvents(ParseQuery query) {
 		final ListView eventList = (ListView) findViewById(R.id.eventList);
 		final ProgressDialog dialog = ProgressDialog.show(this, "", 
@@ -115,7 +115,7 @@ public class Agenda extends Activity {
 		ParseQuery query = new ParseQuery("Event");
 		query.orderByAscending("startDate");
 		Long now = System.currentTimeMillis();
-				
+
 		if (Filter.NEW.equals(filter)) {
 			// Only show events with end date greater than now
 			query.whereGreaterThanOrEqualTo("endDate", now);
@@ -208,65 +208,67 @@ public class Agenda extends Activity {
 
 			final ListItem item = events.get(position);
 
-			if (item != null) {
-				if (item.getType().equals(ListItem.Type.HEADER)) {
-					/* This is a section header */
-					String title = (String) item.getData();
-					v = vi.inflate(R.layout.list_divider, null);
+			if (item == null) {
+				return v;
+			}
+			
+			if (item.getType().equals(ListItem.Type.HEADER)) {
+				/* This is a section header */
+				String title = (String) item.getData();
+				v = vi.inflate(R.layout.list_divider, null);
 
-					v.setOnClickListener(null);
-					v.setOnLongClickListener(null);
-					v.setLongClickable(false);
+				v.setOnClickListener(null);
+				v.setOnLongClickListener(null);
+				v.setLongClickable(false);
 
-					final TextView sectionView = (TextView) v.findViewById(R.id.list_item_section_text);
-					sectionView.setText(title);
+				final TextView sectionView = (TextView) v.findViewById(R.id.list_item_section_text);
+				sectionView.setText(title);
 
-				} else if (item.getType().equals(ListItem.Type.INFO)){
-					/* This is a real list item */
-					final ParseObject event = (ParseObject) item.getData();
-					v = vi.inflate(R.layout.event_list_item, null);
-					
-					TextView eventTitle = (TextView) v.findViewById(R.id.listEventTitle);
-					if (eventTitle != null) {
-						eventTitle.setText(event.getString("title"));
-					}
-					
-					TextView eventDate = (TextView) v.findViewById(R.id.listEventDate);
-					if (eventDate != null) {
-						SimpleDateFormat formatter = new SimpleDateFormat("h:mm a 'on' MMMM d, yyyy");
-						Date date1 = new Date(event.getLong("startDate"));
-						Date date2 = new Date(event.getLong("endDate"));
-						eventDate.setText("Start: " + formatter.format(date1) + 
-								"\nEst. Finish: " + formatter.format(date2));
-					}
-					
-					TextView eventDescription = (TextView) v.findViewById(R.id.listEventDescription);
-					String desc = event.getString("description");
-					if (eventDescription != null) {
-						if (desc.length() == 0) {
-							eventDescription.setText("No Description");
-						} else if (desc.length() > 140) {
-							eventDescription.setText(desc.substring(0, 140) + "...");
-						} else {
-							eventDescription.setText(desc);
-						}
-					}
-					
-					TextView eventSeverity = (TextView) v.findViewById(R.id.listEventSeverity);
-					if (eventSeverity != null) {
-						eventSeverity.setBackgroundColor(event.getInt("severity"));
-					}
-					
-					v.setOnClickListener(new OnClickListener() {
+			} else if (item.getType().equals(ListItem.Type.INFO)){
+				/* This is a real list item */
+				final ParseObject event = (ParseObject) item.getData();
+				v = vi.inflate(R.layout.event_list_item, null);
 
-						@Override
-						public void onClick(View v) {
-							Intent i = new Intent(getApplicationContext(), ShowEvent.class);
-							i.putExtra("eventKey", event.getObjectId());
-							startActivity(i);
-						}
-					});
+				TextView eventTitle = (TextView) v.findViewById(R.id.listEventTitle);
+				if (eventTitle != null) {
+					eventTitle.setText(event.getString("title"));
 				}
+
+				TextView eventDate = (TextView) v.findViewById(R.id.listEventDate);
+				if (eventDate != null) {
+					SimpleDateFormat formatter = new SimpleDateFormat("h:mm a 'on' MMMM d, yyyy");
+					Date date1 = new Date(event.getLong("startDate"));
+					Date date2 = new Date(event.getLong("endDate"));
+					eventDate.setText("Start: " + formatter.format(date1) + 
+							"\nEst. Finish: " + formatter.format(date2));
+				}
+
+				TextView eventDescription = (TextView) v.findViewById(R.id.listEventDescription);
+				String desc = event.getString("description");
+				if (eventDescription != null) {
+					if (desc.length() == 0) {
+						eventDescription.setText("No Description");
+					} else if (desc.length() > 140) {
+						eventDescription.setText(desc.substring(0, 140) + "...");
+					} else {
+						eventDescription.setText(desc);
+					}
+				}
+
+				TextView eventSeverity = (TextView) v.findViewById(R.id.listEventSeverity);
+				if (eventSeverity != null) {
+					eventSeverity.setBackgroundColor(event.getInt("severity"));
+				}
+
+				v.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						Intent i = new Intent(getApplicationContext(), ShowEvent.class);
+						i.putExtra("eventKey", event.getObjectId());
+						startActivity(i);
+					}
+				});
 			}
 			return v;
 		}
