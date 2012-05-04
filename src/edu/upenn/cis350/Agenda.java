@@ -34,7 +34,8 @@ import com.parse.ParseQuery.CachePolicy;
  */
 public class Agenda extends Activity {
 
-	private enum Filter {
+	/*	Visible for testing	*/
+	public enum Filter {
 		NEW, ALL, ONE_WEEK_OLD;
 	}
 	
@@ -108,7 +109,8 @@ public class Agenda extends Activity {
 		});
 	}
 
-	private ParseQuery getQuery(Filter filter) {
+	/*	VisibleForTesting	*/
+	public ParseQuery getQuery(Filter filter) {
 		ParseQuery query = new ParseQuery("Event");
 		query.orderByAscending("startDate");
 		Long now = System.currentTimeMillis();
