@@ -175,6 +175,7 @@ public class Agenda extends Activity {
 			i.putExtra("filter", Filter.ALL);
 			finish();
 			startActivity(i);
+			return true;
 		}
 		return false;
 	}

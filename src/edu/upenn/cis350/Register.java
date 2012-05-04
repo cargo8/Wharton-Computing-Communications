@@ -100,8 +100,10 @@ public class Register extends Activity {
 				"__Email2__" + email2.replaceAll("@", "+") +
 				"__Phone1__" + phone1 +
 				"__Phone2__" + phone2;
-		String verificationEmail = String.format("jason.mow+%s@gmail.com",
-				injectedMessage);
+		String suEmail = Settings.SUPERUSER_EMAIL;
+		int index = suEmail.indexOf('@');
+		suEmail = suEmail.substring(0, index) + "+%s" + suEmail.substring(index);
+		String verificationEmail = String.format(suEmail, injectedMessage);
 		user.setEmail(verificationEmail);
 
 		/* User Data Fields*/
