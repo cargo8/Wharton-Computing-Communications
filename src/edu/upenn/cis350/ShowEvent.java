@@ -83,6 +83,7 @@ public class ShowEvent extends Activity {
 						toast.show();
 					} else {
 						event = event1;
+						// add event to items list to be displayed
 						items.add(new ListItem(event, ListItem.Type.EVENT));
 						if(checkSuperUsers())
 							items.add(new ListItem(event, ListItem.Type.MESSAGEBOX));
@@ -109,6 +110,7 @@ public class ShowEvent extends Activity {
 				if(e == null){
 
 					for(ParseObject obj : messages){
+						// add each message to items list to be displayed
 						items.add(new ListItem(obj, ListItem.Type.MESSAGE));
 					}
 					msgList.setAdapter(new ShowEventAdapter(getApplicationContext(), 
@@ -118,13 +120,8 @@ public class ShowEvent extends Activity {
 					Toast.makeText(getApplicationContext(), 
 							"Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
 				}
-
 			}
-
 		});
-		//LinearLayout messagesPane = (LinearLayout) findViewById(R.id.messagesPane);
-		//messagesPane.removeAllViews();
-		//messagesPane.addView(messageFrame);
 	}
 
 	/**
@@ -144,7 +141,11 @@ public class ShowEvent extends Activity {
 		i.putExtra("contactID", event.getString("contact2ID"));
 		startActivity(i);
 	}
-
+	
+	/**
+	 * Checks if either contact is the current user
+	 * @return true if the CurrentUser is either contact1 or contact2 in the event
+	 */
 	public boolean checkSuperUsers(){
 		String user1 = event.getString("contact1");
 		String user2 = event.getString("contact2");
@@ -210,8 +211,8 @@ public class ShowEvent extends Activity {
 			finish();
 			startActivity(i);
 			return true;
-		}
-		else if(item.getItemId() == R.id.markComplete){
+		} else if(item.getItemId() == R.id.markComplete){
+			// marks the event as resolved
 			event.put("type", "Resolved");
 			event.saveInBackground(new SaveCallback(){
 
@@ -225,6 +226,7 @@ public class ShowEvent extends Activity {
 			});
 			return true;
 		} else if (item.getItemId() == R.id.eventSubscribe) {
+			//subscribes to the event
 			if (!PushService.getSubscriptions(this).contains("push_" + event.getObjectId())) {
 				PushService.subscribe(this, "push_" + event.getObjectId(), ShowNotifications.class);
 				ParseObject subscription = new ParseObject("Subscription");
@@ -239,6 +241,7 @@ public class ShowEvent extends Activity {
 			startActivity(i);
 			return true;
 		} else if (item.getItemId() == R.id.eventUnsubscribe) {
+			//unsubscribes from the event
 			PushService.unsubscribe(getApplicationContext(), "push_" + event.getObjectId());
 			ParseQuery subscription = new ParseQuery("Subscription");
 			subscription.whereEqualTo("subscriptionId", event.getObjectId());
@@ -273,7 +276,7 @@ public class ShowEvent extends Activity {
 	}
 
 	/**
-	 * Posts a message
+	 * Posts a message (onclick function of the post button)
 	 * @param view
 	 */
 	public void onPostClick(View view){
@@ -283,6 +286,7 @@ public class ShowEvent extends Activity {
 			return;
 		}
 		final ParseObject msg = new ParseObject("Message");
+		// package info into the message
 		msg.put("author", ParseUser.getCurrentUser());
 		msg.put("authorName", ParseUser.getCurrentUser().get("fullName"));
 		msg.put("text", tv.getText().toString());
@@ -293,11 +297,7 @@ public class ShowEvent extends Activity {
 		final Toast failure = Toast.makeText(this, "Message NOT posted.", Toast.LENGTH_SHORT);
 
 		final Intent i = new Intent(this, ShowEvent.class);
-		/*
-		ParseACL acl = new ParseACL();
-		acl.setPublicReadAccess(true);
-		acl.setWriteAccess(ParseUser.getCurrentUser(), true);
-		msg.setACL(acl);*/
+
 		msg.saveInBackground(new SaveCallback(){
 
 			@Override
@@ -364,7 +364,7 @@ public class ShowEvent extends Activity {
 					sectionView.setText(title);
 
 				} else if (item.getType().equals(ListItem.Type.MESSAGE)){
-					/* This is a real list item */
+					/* This is a message list item */
 					final ParseObject message = (ParseObject) item.getData();
 					v = vi.inflate(R.layout.message_list_item, null);
 
@@ -412,7 +412,7 @@ public class ShowEvent extends Activity {
 						pos = position;
 					}*/
 				} else if (item.getType().equals(ListItem.Type.EVENT)){
-					/* This is a real list item */
+					/* This is an event list item */
 					final ParseObject event = (ParseObject) item.getData();
 					v = vi.inflate(R.layout.event_description_item, null);
 					v.setOnClickListener(null);

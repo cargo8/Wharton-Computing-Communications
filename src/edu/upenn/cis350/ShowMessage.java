@@ -30,7 +30,7 @@ import com.parse.ParseUser;
 import com.parse.PushService;
 import com.parse.SaveCallback;
 
-/* This activity displays the comments related to a particular message.
+/** This activity displays the comments related to a particular message.
  * Each message has its own comments related to it.
  */
 public class ShowMessage extends Activity {
@@ -194,7 +194,6 @@ public class ShowMessage extends Activity {
 
 		header.addView(author);
 		header.addView(timestamp);
-		//		header.addView(timestamp);
 
 		commentFrame.addView(header);
 		commentFrame.addView(commentText);
